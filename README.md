@@ -1,0 +1,1 @@
+PKE系统源码，包括基站及应答器源码，含电路图。应答器采用PIC16F639,基站采用PIC18F458.-PKE system source code, including base station and transponder code, including the circuit diagram. Transponders with PIC16F639, the base station using PIC18F458
