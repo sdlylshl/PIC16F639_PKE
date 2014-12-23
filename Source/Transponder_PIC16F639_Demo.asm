@@ -25,7 +25,7 @@
 ;		 Software License Agreement
 ;
 ; The software supplied herewith by Microchip Technology Incorporated 
-; (the "Company") for its PICmicro® Microcontroller is intended and 
+; (the "Company") for its PICmicroï¿½ Microcontroller is intended and 
 ; supplied to you, the Company's customer, for use solely and 
 ; exclusively on Microchip PICmicro Microcontroller products. The 
 ; software is owned by the Company and/or its supplier, and is 
@@ -114,18 +114,20 @@
 #define	REC_EVENT	4		; The number of the PORTA pin the LFDATA output is connected to
 #define	IDLE		6
 #define START_RF	7
-	ifndef TIMEOUT
-	#define	TIMEOUT		0x30
-	endif
-	ifndef MSG_INTERRUPT
-	#define	MSG_INTERRUPT	(1<<REC_EVENT)
-	endif
+    ifndef TIMEOUT
+    #define	TIMEOUT		0x30
+    endif
+    ifndef MSG_INTERRUPT
+    #define	MSG_INTERRUPT	(1<<REC_EVENT)
+    endif
+;uninitialized data
 u_3	udata
 PORTA_LAST		res 1
 PORTA_NOW		res 1
 Button_Counter	res 1
 Button_old		res 1
 Button_new		res 1
+;shared uninitialized data
 u_1	udata_shr
 W_TEMP			res 1
 STATUS_TEMP		res 1
@@ -134,8 +136,10 @@ FSR_TEMP		res 1
 EVENT_REG		res 1
 IDLE_COUNTER	res 1
 BUTTON_DELAY	res 1
+;overlayed uninitialized data
 flag_ovr	udata_ovr
 flag	res 1			;using bit 4
+
 	global	EVENT_REG, Button_old, BUTTON_DELAY
 	global	EE_DATA, EE_USER
 ; ***********************************************************************
@@ -148,12 +152,12 @@ RESET  code		0x00
 ; ***********************************************************************
 INT	code	0x04
 	movwf   W_TEMP	        ; Save off current W register contents
-	movf	STATUS,w
+	movf	STATUS,W
 	clrf	STATUS			; Force to page0
 	movwf	STATUS_TEMP									 
-	movf	PCLATH,w
+	movf	PCLATH,W
 	movwf	PCLATH_TEMP		; Save PCLATH
-	movf	FSR,w
+	movf	FSR,W
 	movwf	FSR_TEMP		; Save FSR
 	GOTO	INTERRUPT_SERVICE_ROUTINE
 	code
@@ -188,33 +192,33 @@ TIMER1_INT
 	banksel	PIR1
 	btfss	PIR1,TMR1IF			; Check if Timer 1 Interrupt Flag Set?
 	goto	PORTA_INT			; ... No, then continue search
-	decf	IDLE_COUNTER,f		; decrement Idle counter
+	decf	IDLE_COUNTER,F		; decrement Idle counter
 	btfsc	STATUS,Z			; idle counter == 0 ?
 	bsf		EVENT_REG,IDLE		; yes, then set idle event
 	banksel	flag
 	btfss	flag,4				; is debounce event set?
 	goto	BUTTON_TIMER1		; no, then finalize Timer 1 interrupt
 	banksel	Button_Counter		; Debouncing button (32-64ms), if button event occured
-	decfsz	Button_Counter,f	; decrement debounce counter, is counter 0?
+	decfsz	Button_Counter,F	; decrement debounce counter, is counter 0?
 	goto	BUTTON_TIMER1		; no, then finalize interrupt
 	banksel	PORTA				; yes, then compute button events
-	movf	PORTA,w				; read port A
+	movf	PORTA,W				; read port A
 	banksel	Button_new
 	movwf	Button_new			; save to register (to prevent loss of button changes)
-	xorwf	Button_old,w		; compare with old value
-	andwf	Button_old,w		; Compute falling edges only
+	xorwf	Button_old,W		; compare with old value
+	andwf	Button_old,W		; Compute falling edges only
 	andlw	BUTTON_MASK			; Mask pins not of interrest
-	iorwf	EVENT_REG,f			; Set events (should be cleared in the handler routines)
+	iorwf	EVENT_REG,F			; Set events (should be cleared in the handler routines)
 	btfsc	STATUS,Z			; was there an event?
 	goto	$+3					; no, then don't reset IDLE_COUNTER
 	movlw	TIMEOUT				; yes, then reset IDLE_COUNTER
 	movwf	IDLE_COUNTER
-	movf	Button_new,w		; move new button value to old button value (for next event check)
+	movf	Button_new,W		; move new button value to old button value (for next event check)
 	movwf	Button_old
 	banksel flag
 	bcf		flag,4				; clear debounce flag
 BUTTON_TIMER1
-	decfsz	BUTTON_DELAY,f
+	decfsz	BUTTON_DELAY,F
 	goto	END_TIMER1
 	bsf		EVENT_REG, START_RF
 END_TIMER1
@@ -227,11 +231,11 @@ PORTA_INT
 	btfss	INTCON,RAIF						; Check if PORTA Interrupt Flag Set
 	goto	EndIsr							; ... No, then end search
 	banksel PORTA
-	movf	PORTA,w							; store Port A value (to prevent missing events)
+	movf	PORTA,W							; store Port A value (to prevent missing events)
 	andlw	(BUTTON_MASK | MSG_INTERRUPT)	; Masking floating or unused (input) port pins
 	banksel	PORTA_NOW
 	movwf	PORTA_NOW
-	xorwf	PORTA_LAST,w					; compare current value of Port A with Last value
+	xorwf	PORTA_LAST,W					; compare current value of Port A with Last value
 	andlw	(~MSG_INTERRUPT)				; was there another change, than the Rx line?
 	btfss	STATUS,Z
 	goto	IS_BUTTON						; yes, then check whether it was an button
@@ -247,7 +251,7 @@ IS_BUTTON
 	bsf		flag,4							; set debounce flag
 END_PORTA
 	banksel PORTA_NOW
-	movf	PORTA_NOW,w
+	movf	PORTA_NOW,W
 	movwf	PORTA_LAST						; write new value to last value
 	movlw	TIMEOUT							
 	movwf	IDLE_COUNTER					;reset idle counter
@@ -256,14 +260,14 @@ END_PORTA
 ; *** End of Interrupt Handler -- Recover Registers *************
 EndIsr	
 	clrf	STATUS			;Select Bank0
-	movf	FSR_TEMP,w
+	movf	FSR_TEMP,W
 	movwf	FSR				;Restore FSR
-	movf	PCLATH_TEMP,w
+	movf	PCLATH_TEMP,W
 	movwf	PCLATH			;Restore PCLATH
-	movf	STATUS_TEMP,w
+	movf	STATUS_TEMP,W
 	movwf	STATUS			;Restore STATUS
-	swapf	W_TEMP,f			  
-	swapf	W_TEMP,w		;Restore W without corrupting STATUS bits
+	swapf	W_TEMP,F			  
+	swapf	W_TEMP,W		;Restore W without corrupting STATUS bits
 	RETFIE
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -351,7 +355,7 @@ MAIN
 	movlw	b'11011111'		; RA1 & RA5 outputs, Reset Inputs
 	movwf	TRISA			; 
 	movlw	(BUTTON_MASK | MSG_INTERRUPT)
-	iorwf	TRISA,f			;ensure buttons and msg interrupt are set as Input
+	iorwf	TRISA,F			;ensure buttons and msg interrupt are set as Input
 	banksel	Button_old
 	movlw	0x0f
 	movwf	Button_old
@@ -393,7 +397,7 @@ MAIN
 M_LOOP
 	btfsc	EVENT_REG,REC_EVENT			; receive event occurred?
 	call	MESSAGE_HANDLER				; yes, then call receive handler
-	movf	EVENT_REG,w
+	movf	EVENT_REG,W
 	andlw	BUTTON_MASK					; any button event set?
 	btfss	STATUS,Z					; has button event occured?
 	call	Button_Handler				; yes, then call button handler

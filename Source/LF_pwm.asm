@@ -136,7 +136,7 @@
 	udata
 LF__Buffer		res 1
 LF__COUNTER		res 1
-LF__TEMP			res 1
+LF__TEMP		res 1
 Counter			res 1
 Time			res 1
 LF__Parity		res 1
@@ -278,14 +278,14 @@ ReceiveNext2
 	btfsc	INTCON,T0IF
 	goto	Return.Fail
 	movlw	(3*LF__T_PERIOD_MAX)/(4*PRESCALER*LF__T_INST);0x9C			; Determine Bit value Time>156, then Zero else One
-	subwf	Time,w
+	subwf	Time,W
 	banksel LF__Buffer	
-	movf	LF__COUNTER,w
+	movf	LF__COUNTER,W
 	btfsc	STATUS,Z
 	goto	ParityCheck
 	btfsc	STATUS,C
-	incf	LF__Parity,f
-	rrf		LF__Buffer,f		; Rotate bit received bit, now in carry, into receive buffer
+	incf	LF__Parity,F
+	rrf		LF__Buffer,F		; Rotate bit received bit, now in carry, into receive buffer
 ;	banksel LF__COUNTER
 	decf	LF__COUNTER, f		; Decrement receive count register by one
 	goto	ReceiveNext		; ... no, then receive next bit
@@ -303,7 +303,7 @@ Receive.ParityZero
 	goto	Return.Fail
 ;	banksel LF__Buffer
 Receive.Success
-	movf 	LF__Buffer,w		; Move received data byte into WREG
+	movf 	LF__Buffer,W		; Move received data byte into WREG
 	bcf		STATUS,Z
 	return					
 ;------------------------------------------------------------------------------+
@@ -354,8 +354,8 @@ LF__ReadBuffer.loop
 	goto	Return.Fail
 	bankisel	PORTA
 	movwf	INDF
-	incf	FSR,f
-	decfsz	LF__TEMP,f
+	incf	FSR,F
+	decfsz	LF__TEMP,F
 	goto	LF__ReadBuffer.loop
 	bcf		STATUS,Z
 	return
@@ -465,10 +465,10 @@ LF__SendBuffer
 	movwf	LF__TEMP
 LF__SendBuffer.loop
 	bankisel	PORTA
-	movf	INDF,w
+	movf	INDF,W
 	call	LF__Send8
-	incf	FSR,f
-	decfsz	LF__TEMP,f
+	incf	FSR,F
+	decfsz	LF__TEMP,F
 	goto	LF__SendBuffer.loop
 	return
 ;------------------------------------------------------------------------------+
@@ -495,7 +495,7 @@ LF__DetectFalling
 		movwf	Counter								; initialize debounce counter
 		movlw	(.115*LF__T_PERIOD_MAX/(.100*LF__T_INST*PRESCALER))+1	; 
 		banksel TMR0
-		subwf	TMR0,w								; over maximum period time?
+		subwf	TMR0,W								; over maximum period time?
 		btfsc	STATUS,C
 		goto	Return.Fail							; yes, then return 0
 		btfsc	INTCON,T0IF							; As there is a resonant frequency in this routine
@@ -505,10 +505,10 @@ LF__DetectFalling.Debounce
 		btfsc	LFDATA								; is pin low?
 		goto	LF__DetectFalling					; no, then start from beginning
 		banksel Counter
-		decfsz	Counter,f							; was the pin low for T_NOISE_MAX?
+		decfsz	Counter,F							; was the pin low for T_NOISE_MAX?
 		goto	LF__DetectFalling.Debounce			; no, then test again
 		banksel TMR0
-		movf	TMR0,w								; store TMR0 value
+		movf	TMR0,W								; store TMR0 value
 		banksel Time
 		movwf	Time
 		bcf		STATUS,Z
@@ -537,7 +537,7 @@ LF__DetectRising
 		movwf	Counter								; initialize debounce counter
 		movlw	(.115*LF__T_PERIOD_MAX/(.100*LF__T_INST*PRESCALER))+1	; 
 		banksel TMR0
-		subwf	TMR0,w								; over maximum period time?
+		subwf	TMR0,W								; over maximum period time?
 		btfsc	STATUS,C
 		goto	Return.Fail							; yes, then return 0
 		btfsc	INTCON,T0IF							; As there is a resonant frequency in this routine
@@ -547,10 +547,10 @@ LF__DetectRising.Debounce
 		btfss	LFDATA								; is pin low?
 		goto	LF__DetectRising						; no, then start from beginning
 		banksel Counter
-		decfsz	Counter,f							; was the pin low for T_NOISE_MAX?
+		decfsz	Counter,F							; was the pin low for T_NOISE_MAX?
 		goto	LF__DetectRising.Debounce			; no, then test again
 		banksel TMR0
-		movf	TMR0,w								; store TMR0 value
+		movf	TMR0,W								; store TMR0 value
 		clrf	TMR0
 		banksel Time
 		movwf	Time

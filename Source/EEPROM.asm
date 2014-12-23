@@ -172,12 +172,12 @@ EEPROM__WriteBytes
 	movwf	EEPROM__ByteCount
 EEPROM__WriteBytes.loop
 	bankisel	PORTA
-	movf 	INDF,w
+	movf 	INDF,W
 	goto	EEPROM__Write
 return_write
-	incf	FSR,f
+	incf	FSR,F
 	banksel	EEPROM__ByteCount
-	decfsz	EEPROM__ByteCount,f
+	decfsz	EEPROM__ByteCount,F
 	goto	EEPROM__WriteBytes.loop
 	banksel	flag
 	bcf		flag,1
@@ -280,9 +280,9 @@ EEPROM__ReadBytes.loop
 return_read
 	bankisel	PORTA
 	movwf 	INDF
-	incf	FSR,f
+	incf	FSR,F
 	banksel	EEPROM__ByteCount
-	decfsz	EEPROM__ByteCount,f
+	decfsz	EEPROM__ByteCount,F
 	goto	EEPROM__ReadBytes.loop
 	banksel	flag
 	bcf		flag,1

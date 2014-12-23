@@ -26,7 +26,7 @@
 ;		 Software License Agreement
 ;
 ; The software supplied herewith by Microchip Technology Incorporated 
-; (the "Company") for its PICmicro® Microcontroller is intended and 
+; (the "Company") for its PICmicroï¿½Microcontroller is intended and 
 ; supplied to you, the Company's customer, for use solely and 
 ; exclusively on Microchip PICmicro Microcontroller products. The 
 ; software is owned by the Company and/or its supplier, and is 
@@ -62,10 +62,12 @@
 #include Delay.inc
 #include SPI.inc
 #include EEPROM.inc
-AFE__ReadCMD			equ	0xC0
+AFE__ReadCMD		equ	0xC0
 AFE__WriteCMD		equ	0xE0
-AFE_ovr	udata
+
+AFE_ovr	udata_ovr
 AFE__ConfMap	res 8
+
 COUNTER		res 1
 TEMP		res 1
 TEMP1		res 1
@@ -215,27 +217,27 @@ AFE__WriteRegister
 	movwf	TEMP
 	addlw	AFE__ConfMap
 	movwf	FSR
-	rlf		TEMP,w
+	rlf		TEMP,W
 	addlw	AFE__WriteCMD
 	banksel SPI__BufferH
 	movwf	SPI__BufferH
 	bankisel	AFE__ConfMap
-	rlf		INDF,w
+	rlf		INDF,W
 	banksel SPI__BufferH
 	btfss	STATUS,C		
 	bcf		SPI__BufferH,0		
 	btfsc	STATUS,C		
 	bsf		SPI__BufferH,0
 	bankisel	AFE__ConfMap
-	rlf		INDF,w
+	rlf		INDF,W
 	banksel	SPI__BufferH
 	movwf	SPI__BufferL
 	bcf		SPI__BufferL,0
 	bankisel	AFE__ConfMap
-	movf	INDF,w
+	movf	INDF,W
 	call	AFE__CalcParity
 	banksel	SPI__BufferH
-	iorwf	SPI__BufferL,f
+	iorwf	SPI__BufferL,F
 	call	SPI__Write
 	retlw	0x00				;Debug only
 ;------------------------------------------------------------------------------+
@@ -282,14 +284,14 @@ AFE__ReadRegister
 	movwf	TEMP
 	addlw	AFE__ConfMap
 	movwf	FSR
-	rlf		TEMP,w
+	rlf		TEMP,W
 	addlw	AFE__ReadCMD
 	banksel	SPI__BufferH
 	movwf	SPI__BufferH
 	call	SPI__Read
 	banksel	SPI__BufferH
-	rrf		SPI__BufferH,w	;Shift bit 0 in Carry
-	rrf		SPI__BufferL,w
+	rrf		SPI__BufferH,W	;Shift bit 0 in Carry
+	rrf		SPI__BufferL,W
 	bankisel	AFE__ConfMap
 	movwf	INDF			;synchronizing memory map with device
 	return
@@ -345,14 +347,14 @@ AFE__WriteNVerifyRegister
 	banksel	TEMP2
 	movwf	TEMP2
 	call	AFE__WriteRegister
-	movf	INDF,w
+	movf	INDF,W
 	banksel AFE__Buffer
 	movwf	AFE__Buffer
 	banksel	TEMP2
-	movf	TEMP2,w
+	movf	TEMP2,W
 	call	AFE__ReadRegister
 	banksel AFE__Buffer
-	xorwf	AFE__Buffer,w
+	xorwf	AFE__Buffer,W
 	btfss	STATUS,Z
 	retlw	0x01
 	banksel	flag
@@ -403,14 +405,14 @@ AFE__WriteCfg
 AFE__WriteCfg.loop
 	banksel	TEMP3
 	bankisel	AFE__ConfMap
-	decf	TEMP3,w
+	decf	TEMP3,W
 	goto	AFE__WriteNVerifyRegister	;reducing stacklevel
 return_write_cfg
 	banksel	TEMP3
 	andlw	0xff
 	btfss	STATUS,Z
 	retlw	0x01
-	decfsz	TEMP3,f
+	decfsz	TEMP3,F
 	goto	AFE__WriteCfg.loop
 	bcf		flag,2
 	
@@ -450,10 +452,10 @@ AFE__ReadCfg
 	movlw	0x07
 	movwf	TEMP3
 AFE__ReadCfg.loop
-	decf	TEMP3,w
+	decf	TEMP3,W
 	call	AFE__ReadRegister
 	banksel TEMP3
-	decfsz	TEMP3,f
+	decfsz	TEMP3,F
 	goto	AFE__ReadCfg.loop
 	
 	return
@@ -503,10 +505,10 @@ AFE__CalcParity
 	movlw	0x08
 	movwf	COUNTER
 BeginParityCalc
-	rrf		TEMP1,f
+	rrf		TEMP1,F
 	btfsc	STATUS,C
-	incf	TEMP,f
-	decfsz	COUNTER,f
+	incf	TEMP,F
+	decfsz	COUNTER,F
 	goto 	BeginParityCalc
 	btfsc	TEMP,0
 	retlw	0x00
@@ -543,7 +545,7 @@ BeginParityCalc
 ;------------------------------------------------------------------------------+
 AFE__CalcColumnParity
 	banksel AFE__ConfMap
-	movf	AFE__ConfMap,w
+	movf	AFE__ConfMap,W
 	xorwf	(AFE__ConfMap+1),w
 	xorwf	(AFE__ConfMap+2),w
 	xorwf	(AFE__ConfMap+3),w

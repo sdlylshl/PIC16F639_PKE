@@ -16,21 +16,22 @@
 ;                                                                              |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-	extern AFE__ConfMap
-	extern AFE__Buffer
-	extern AFE__LoadCfg, AFE__SafeCfg, AFE__ReadCfg, AFE__WriteCfg, AFE__WriteRegister, AFE__ReadRegister, AFE__WriteNVerifyRegister
-	extern AFE__CalcColumnParity
-	#define	AFE__Alert			PORTC,2		; SPI Clock Output
-	#define	AFE__CMDClampOn		B'00000000'
-	#define AFE__CMDClampOff		B'00100000'
-	#define AFE__CMDSleep		B'01000000'
-	#define AFE__CMDAGCOn		B'01100000'
-	#define AFE__CMDAGCOff		B'10000000'
-	#define	AFE__CMDSR			B'10100000'
-	#define AFE__ModDepth12		B'00110000'
-	#define AFE__ModDepth25		B'00100000'
-	#define AFE__ModDepth75		B'00010000'
-	#define AFE__ModDepth50		B'00000000'
+    extern AFE__ConfMap
+    extern AFE__Buffer
+    extern AFE__LoadCfg, AFE__SafeCfg, AFE__ReadCfg, AFE__WriteCfg, AFE__WriteRegister, AFE__ReadRegister, AFE__WriteNVerifyRegister
+    extern AFE__CalcColumnParity
+	
+#define	AFE__Alert			PORTC,2		; SPI Clock Output
+#define	AFE__CMDClampOn		B'00000000'
+#define AFE__CMDClampOff		B'00100000'
+#define AFE__CMDSleep		B'01000000'
+#define AFE__CMDAGCOn		B'01100000'
+#define AFE__CMDAGCOff		B'10000000'
+#define	AFE__CMDSR			B'10100000'
+#define AFE__ModDepth12		B'00110000'
+#define AFE__ModDepth25		B'00100000'
+#define AFE__ModDepth75		B'00010000'
+#define AFE__ModDepth50		B'00000000'
 ;------------------------------------------------------------------------------+
 ;                                                                              |
 ;    AFE__Init()                                                                |
@@ -48,7 +49,7 @@ AFE__Init macro
 	AFE__SendCMDSoftReset
 	banksel	PORTA			;just debugging
 	btfss	AFE__Alert
-	goto	$-1
+	;goto	$-1				;执行从当前地址往后偏移1个或3个地址的指令
 	endm
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -301,7 +302,7 @@ AFE__SendCMDSoftReset macro
 ;------------------------------------------------------------------------------+
 AFE__EnableChannelX macro
 	banksel	AFE__ConfMap
-	movf	AFE__ConfMap,w
+	movf	AFE__ConfMap,W
 	andlw	b'11111110'
 	movwf	AFE__ConfMap
 	movlw	0x00
@@ -345,7 +346,7 @@ AFE__EnableChannelX macro
 ;------------------------------------------------------------------------------+
 AFE__EnableChannelY macro
 	banksel	AFE__ConfMap
-	movf	AFE__ConfMap,w
+	movf	AFE__ConfMap,W
 	andlw	b'11111101'
 	movwf	AFE__ConfMap
 	movlw	0x00
@@ -389,7 +390,7 @@ AFE__EnableChannelY macro
 ;------------------------------------------------------------------------------+
 AFE__EnableChannelZ macro
 	banksel	AFE__ConfMap
-	movf	AFE__ConfMap,w
+	movf	AFE__ConfMap,W
 	andlw	b'11111011'
 	movwf	AFE__ConfMap
 	movlw	0x00
@@ -433,7 +434,7 @@ AFE__EnableChannelZ macro
 ;------------------------------------------------------------------------------+
 AFE__DisableChannelX macro
 	banksel	AFE__ConfMap
-	movf	AFE__ConfMap,w
+	movf	AFE__ConfMap,W
 	iorlw	0x01
 	movwf	AFE__ConfMap
 	movlw	0x00
@@ -477,7 +478,7 @@ AFE__DisableChannelX macro
 ;------------------------------------------------------------------------------+
 AFE__AGCActive macro
 	banksel	AFE__ConfMap
-	movf	AFE__ConfMap+6,w
+	movf	AFE__ConfMap+6,W
 	iorlw	0x10
 	movwf	AFE__ConfMap+6
 	movlw	0x06
@@ -521,7 +522,7 @@ AFE__AGCActive macro
 ;------------------------------------------------------------------------------+
 AFE__AGCDeactive macro
 	banksel	AFE__ConfMap
-	movf	AFE__ConfMap+6,w
+	movf	AFE__ConfMap+6,W
 	andlw	0xef
 	movwf	AFE__ConfMap+6
 	movlw	0x06
@@ -568,7 +569,7 @@ AFE__AGCDeactive macro
 ;------------------------------------------------------------------------------+
 AFE__DisableChannelY macro
 	banksel	AFE__ConfMap
-	movf	AFE__ConfMap,w
+	movf	AFE__ConfMap,W
 	iorlw	0x02
 	movwf	AFE__ConfMap
 	movlw	0x00
@@ -612,7 +613,7 @@ AFE__DisableChannelY macro
 ;------------------------------------------------------------------------------+
 AFE__DisableChannelZ macro	;save some code with bsf :)
 	banksel	AFE__ConfMap
-	movf	AFE__ConfMap,w
+	movf	AFE__ConfMap,W
 	iorlw	0x04
 	movwf	AFE__ConfMap
 	movlw	0x00
@@ -796,7 +797,7 @@ AFE__setXTuningCap	macro	;make function out of it? Let's have a look at the runn
 	movwf	AFE__Buffer
 	movf	(AFE__ConfMap+1),w
 	andlw	B'11000000'
-	iorwf	AFE__Buffer,w
+	iorwf	AFE__Buffer,W
 	movwf	(AFE__ConfMap+1)
 	movlw	0x01
 	call	AFE__WriteRegister
@@ -848,7 +849,7 @@ AFE__setYTuningCap	macro
 	movwf	AFE__Buffer
 	movf	(AFE__ConfMap+2),w
 	andlw	B'11000000'
-	iorwf	AFE__Buffer,w
+	iorwf	AFE__Buffer,W
 	movwf	(AFE__ConfMap+2)
 	movlw	0x02
 	call	AFE__WriteRegister
@@ -900,7 +901,7 @@ AFE__setZTuningCap	macro
 	movwf	AFE__Buffer
 	movf	(AFE__ConfMap+3),w
 	andlw	B'11000000'
-	iorwf	AFE__Buffer,w
+	iorwf	AFE__Buffer,W
 	movwf	(AFE__ConfMap+3)
 	movlw	0x03
 	call	AFE__WriteRegister
@@ -950,10 +951,10 @@ AFE__setZTuningCap	macro
 AFE__setXSensitivity	macro
 	banksel AFE__Buffer
 	movwf	AFE__Buffer
-	swapf	AFE__Buffer,f
+	swapf	AFE__Buffer,F
 	movf	(AFE__ConfMap+4),w
 	andlw	B'00001111'
-	iorwf	AFE__Buffer,w
+	iorwf	AFE__Buffer,W
 	movwf	(AFE__ConfMap+4)
 	movlw	0x04
 	call	AFE__WriteRegister
@@ -1005,7 +1006,7 @@ AFE__setYSensitivity	macro
 	movwf	AFE__Buffer
 	movf	(AFE__ConfMap+4),w
 	andlw	B'11110000'
-	iorwf	AFE__Buffer,w
+	iorwf	AFE__Buffer,W
 	movwf	(AFE__ConfMap+4)
 	movlw	0x04
 	call	AFE__WriteRegister
@@ -1057,7 +1058,7 @@ AFE__setZSensitivity	macro
 	movwf	AFE__Buffer
 	movf	(AFE__ConfMap+5),w
 	andlw	B'11110000'
-	iorwf	AFE__Buffer,w
+	iorwf	AFE__Buffer,W
 	movwf	(AFE__ConfMap+5)
 	movlw	0x05
 	call	AFE__WriteRegister
@@ -1106,10 +1107,10 @@ AFE__setZSensitivity	macro
 AFE__setModDepth macro
 	banksel AFE__Buffer
 	movwf	AFE__Buffer
-	swapf	AFE__Buffer,f
+	swapf	AFE__Buffer,F
 	movf	(AFE__ConfMap+5),w
 	andlw	B'11001111'
-	iorwf	AFE__Buffer,w
+	iorwf	AFE__Buffer,W
 	movwf	(AFE__ConfMap+5)
 	movlw	0x05
 	call	AFE__WriteRegister
@@ -1158,7 +1159,7 @@ AFE__setModDepth macro
 ;------------------------------------------------------------------------------+
 AFE__confOEFilter macro	TOEH, TOEL
 	banksel AFE__ConfMap
-	movf	AFE__ConfMap,w
+	movf	AFE__ConfMap,W
 	andlw	B'00001111'
 	iorlw	(((TOEH<<6)&&B'11000000')||((TOEL<<4)&&B'00110000'))	;ensure that he does what I want
 	movwf	AFE__ConfMap

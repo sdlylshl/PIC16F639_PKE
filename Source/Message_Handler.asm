@@ -125,7 +125,7 @@ MESSAGE_HANDLER
 	movwf	COUNTER
 NOISE
 	banksel	COUNTER
-	decf	COUNTER,f
+	decf	COUNTER,F
 	btfsc	STATUS,Z
 	goto	M_END_IMMEDIATE		; Prevent deadlocks because of noise on the line
 	banksel	PORTC
@@ -138,25 +138,25 @@ NOISE
 	movwf	LF_CMD				; Store Command
 ; ****** LF Command Handler *****************************
 	movlw	0x5A			; Check for IFF Command
-	xorwf	LF_CMD,w		; Compare with received command byte
+	xorwf	LF_CMD,W		; Compare with received command byte
 	btfsc	STATUS,Z		; Equal?
 	goto	IFF_CMD			; ... Yes, then execute IFF Command
 	movlw	0x69			; Check for Read Serial Number Command
-	xorwf	LF_CMD,w		; Compare with received command byte
+	xorwf	LF_CMD,W		; Compare with received command byte
 	btfsc	STATUS,Z		; Equal?
 	goto	READ_SERIAL		; ... Yes, then execute Get Serial Number Command
 	movlw	0x7E			; Check for RSSI Command
-	xorwf	LF_CMD,w		; Compare with received command byte
+	xorwf	LF_CMD,W		; Compare with received command byte
 	btfsc	STATUS,Z		; Equal?
 	goto	RSSI_CMD			; ... Yes, then execute Get RSSI Reading Command
 	movlw	0x9C			; USER EEPROM Read Command
-	xorwf	LF_CMD,w		; Compare with received command byte
+	xorwf	LF_CMD,W		; Compare with received command byte
 	andlw	0xFC			; Mask out Address bits
 	btfsc	STATUS,Z		; Equal?
 	goto	READ_USR		; ... Yes, then execute READ_USR Command
 ; disabled to prevent accidenial writes
 ;	movlw	0x6C			; USER EEPROM Write Command
-;	xorwf	LF_CMD,w		; Compare with received command byte
+;	xorwf	LF_CMD,W		; Compare with received command byte
 ;	andlw	0xFC			; Mask out Address bits
 ;	btfsc	STATUS,Z		; Equal?
 ;	goto	WRITE_USR		; ... Yes, then execute WRITE_USR Command
@@ -176,8 +176,8 @@ M_Failed
 ;	You may switch some options to improve signal here
 ;	AFE__SendCMDAGCPresON 
 ;	banksel MOD_DEPTH
-;	decf	MOD_DEPTH,f
-;	swapf	MOD_DEPTH,w
+;	decf	MOD_DEPTH,F
+;	swapf	MOD_DEPTH,W
 ;	andlw	0x30
 ;	AFE__setModDepth
 ;	AFE__AGCActive
@@ -203,23 +203,23 @@ WRITE_USR2
 ; ******* Calculate EEPROM Offset & Write 16-bits ********
 WRITE_USR3
 	banksel LF_CMD
-	movf	LF_CMD,w			; Get LF Command Byte
+	movf	LF_CMD,W			; Get LF Command Byte
 	andlw	0x3					; Mask Lower 2 bits = Address
 	addlw	EE_USER				; Add to User Memory Offset
 	banksel	EEPROM__ADDRESS			
 	movwf	EEPROM__ADDRESS		; Load offset into ADDRESS register
 	banksel DAT0
-	movf	DAT0,w
+	movf	DAT0,W
 	nop
 	Call	EEPROM__Write		; Write byte to EEPROM
 	banksel DAT1
-	movf	DAT1,w			
+	movf	DAT1,W			
 	nop
 	Call	EEPROM__Write		; Write byte to EEPROM
 ; ******* Calculate EEPROM Offset & Read 16-bits ********
 WRITE_USR4
 	banksel LF_CMD
-	movf	LF_CMD,w			; Get LF Command Byte
+	movf	LF_CMD,W			; Get LF Command Byte
 	andlw	0x3					; Mask Lower 2 bits = Address
 	addlw	EE_USER				; Add to User Memory Offset
 	banksel	EEPROM__ADDRESS			
@@ -257,7 +257,7 @@ WRITE_USR6
 ; ***********************************************************************
 READ_USR
 	banksel LF_CMD
-	movf	LF_CMD,w			; Get LF Command Byte
+	movf	LF_CMD,W			; Get LF Command Byte
 	andlw	0x3					; Mask Lower 2 bits = Address
 	addlw	EE_USER				; Add to User Memory Offset
 	banksel	EEPROM__ADDRESS			
@@ -393,7 +393,7 @@ READ_SERIAL2
 ;waitForLFEndNoC
 ;	btfsc	LF__DATAIN
 ;	goto	waitForLFEnd
-;	decfsz	COUNTER,f
+;	decfsz	COUNTER,F
 ;	goto	waitForLFEndNoC
 ;	return
 	

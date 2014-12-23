@@ -17,13 +17,17 @@
 #define	AFECS		PORTC,1		; Chip select output
 #define	SCK			PORTC,2		; SPI Clock Output
 #define	SDIO		PORTC,3		; Serial output
+	
 	udata
 SPI__BufferH res 1
 SPI__BufferL res 1
+
 SPI_ovr	udata_ovr
 Count00 res 1
+
 flag_ovr	udata_ovr
 flag	res 1		;using bit 0
+
 	global SPI__BufferH, SPI__BufferL
 	global SPI__Read, SPI__Write
 	code
@@ -150,7 +154,7 @@ SPI__Write
 ;
 SPI__ShiftOutBuffer	
 	banksel TRISC
-	movf	TRISC,w
+	movf	TRISC,W
 	andlw	b'11110001'
 	movwf	TRISC
 	movlw	.16
@@ -212,11 +216,11 @@ ShiftOutLoop
 ;	@example
 ;	call	SPI__ShiftInBuffer
 ;	banksel SPI__BufferH
-;	movf	SPI__BufferH,w
+;	movf	SPI__BufferH,W
 ;	banksel RegH
 ;	movwf	RegH
 ;	banksel SPI__BufferH
-;	movf	SPI__BufferL,w
+;	movf	SPI__BufferL,W
 ;	banksel RegL
 ;	movwf	RegL
 ;	@end-ex
@@ -256,7 +260,7 @@ ShiftInLoop
 	bsf		SCK
 SPI__end
 	banksel TRISC
-	movf	TRISC,w
+	movf	TRISC,W
 	iorlw	b'00001110'
 	movwf	TRISC	
 	

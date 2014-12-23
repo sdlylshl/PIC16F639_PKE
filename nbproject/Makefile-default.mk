@@ -78,7 +78,7 @@ endif
 	${MAKE}  -f nbproject/Makefile-default.mk dist/${CND_CONF}/${IMAGE_TYPE}/PIC16F639_PKE.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
 
 MP_PROCESSOR_OPTION=16f639
-MP_LINKER_DEBUG_OPTION=-r=ROM@0x700:0x7FE -r=RAM@GPR:0x65:0x6F -r=RAM@SHARE:0x70:0x70 -r=RAM@SHARE:0xF0:0xF0 -r=RAM@SHARE:0x170:0x170 -r=RAM@SHARE:0x1F0:0x1F0
+MP_LINKER_DEBUG_OPTION= 
 # ------------------------------------------------------------------------------------
 # Rules for buildStep: assemble
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
@@ -86,7 +86,7 @@ ${OBJECTDIR}/Source/Button_Handler.o: Source/Button_Handler.asm  nbproject/Makef
 	@${MKDIR} ${OBJECTDIR}/Source 
 	@${RM} ${OBJECTDIR}/Source/Button_Handler.o.d 
 	@${RM} ${OBJECTDIR}/Source/Button_Handler.o 
-	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/Source/Button_Handler.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG -d__MPLAB_DEBUGGER_ICD3=1 -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/Source/Button_Handler.lst\" -e\"${OBJECTDIR}/Source/Button_Handler.err\" $(ASM_OPTIONS)   -o\"${OBJECTDIR}/Source/Button_Handler.o\" \"Source/Button_Handler.asm\" 
+	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/Source/Button_Handler.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG  -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/Source/Button_Handler.lst\" -e\"${OBJECTDIR}/Source/Button_Handler.err\" $(ASM_OPTIONS)   -o\"${OBJECTDIR}/Source/Button_Handler.o\" \"Source/Button_Handler.asm\" 
 	@${DEP_GEN} -d "${OBJECTDIR}/Source/Button_Handler.o"
 	@${FIXDEPS} "${OBJECTDIR}/Source/Button_Handler.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
 	
@@ -94,7 +94,7 @@ ${OBJECTDIR}/Source/DELAY.o: Source/DELAY.asm  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/Source 
 	@${RM} ${OBJECTDIR}/Source/DELAY.o.d 
 	@${RM} ${OBJECTDIR}/Source/DELAY.o 
-	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/Source/DELAY.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG -d__MPLAB_DEBUGGER_ICD3=1 -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/Source/DELAY.lst\" -e\"${OBJECTDIR}/Source/DELAY.err\" $(ASM_OPTIONS)   -o\"${OBJECTDIR}/Source/DELAY.o\" \"Source/DELAY.asm\" 
+	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/Source/DELAY.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG  -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/Source/DELAY.lst\" -e\"${OBJECTDIR}/Source/DELAY.err\" $(ASM_OPTIONS)   -o\"${OBJECTDIR}/Source/DELAY.o\" \"Source/DELAY.asm\" 
 	@${DEP_GEN} -d "${OBJECTDIR}/Source/DELAY.o"
 	@${FIXDEPS} "${OBJECTDIR}/Source/DELAY.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
 	
@@ -102,7 +102,7 @@ ${OBJECTDIR}/Source/EEPROM.o: Source/EEPROM.asm  nbproject/Makefile-${CND_CONF}.
 	@${MKDIR} ${OBJECTDIR}/Source 
 	@${RM} ${OBJECTDIR}/Source/EEPROM.o.d 
 	@${RM} ${OBJECTDIR}/Source/EEPROM.o 
-	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/Source/EEPROM.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG -d__MPLAB_DEBUGGER_ICD3=1 -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/Source/EEPROM.lst\" -e\"${OBJECTDIR}/Source/EEPROM.err\" $(ASM_OPTIONS)   -o\"${OBJECTDIR}/Source/EEPROM.o\" \"Source/EEPROM.asm\" 
+	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/Source/EEPROM.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG  -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/Source/EEPROM.lst\" -e\"${OBJECTDIR}/Source/EEPROM.err\" $(ASM_OPTIONS)   -o\"${OBJECTDIR}/Source/EEPROM.o\" \"Source/EEPROM.asm\" 
 	@${DEP_GEN} -d "${OBJECTDIR}/Source/EEPROM.o"
 	@${FIXDEPS} "${OBJECTDIR}/Source/EEPROM.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
 	
@@ -110,7 +110,7 @@ ${OBJECTDIR}/Source/LF_pwm.o: Source/LF_pwm.asm  nbproject/Makefile-${CND_CONF}.
 	@${MKDIR} ${OBJECTDIR}/Source 
 	@${RM} ${OBJECTDIR}/Source/LF_pwm.o.d 
 	@${RM} ${OBJECTDIR}/Source/LF_pwm.o 
-	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/Source/LF_pwm.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG -d__MPLAB_DEBUGGER_ICD3=1 -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/Source/LF_pwm.lst\" -e\"${OBJECTDIR}/Source/LF_pwm.err\" $(ASM_OPTIONS)   -o\"${OBJECTDIR}/Source/LF_pwm.o\" \"Source/LF_pwm.asm\" 
+	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/Source/LF_pwm.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG  -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/Source/LF_pwm.lst\" -e\"${OBJECTDIR}/Source/LF_pwm.err\" $(ASM_OPTIONS)   -o\"${OBJECTDIR}/Source/LF_pwm.o\" \"Source/LF_pwm.asm\" 
 	@${DEP_GEN} -d "${OBJECTDIR}/Source/LF_pwm.o"
 	@${FIXDEPS} "${OBJECTDIR}/Source/LF_pwm.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
 	
@@ -118,7 +118,7 @@ ${OBJECTDIR}/Source/Message_Handler.o: Source/Message_Handler.asm  nbproject/Mak
 	@${MKDIR} ${OBJECTDIR}/Source 
 	@${RM} ${OBJECTDIR}/Source/Message_Handler.o.d 
 	@${RM} ${OBJECTDIR}/Source/Message_Handler.o 
-	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/Source/Message_Handler.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG -d__MPLAB_DEBUGGER_ICD3=1 -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/Source/Message_Handler.lst\" -e\"${OBJECTDIR}/Source/Message_Handler.err\" $(ASM_OPTIONS)   -o\"${OBJECTDIR}/Source/Message_Handler.o\" \"Source/Message_Handler.asm\" 
+	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/Source/Message_Handler.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG  -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/Source/Message_Handler.lst\" -e\"${OBJECTDIR}/Source/Message_Handler.err\" $(ASM_OPTIONS)   -o\"${OBJECTDIR}/Source/Message_Handler.o\" \"Source/Message_Handler.asm\" 
 	@${DEP_GEN} -d "${OBJECTDIR}/Source/Message_Handler.o"
 	@${FIXDEPS} "${OBJECTDIR}/Source/Message_Handler.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
 	
@@ -126,7 +126,7 @@ ${OBJECTDIR}/Source/RF.o: Source/RF.asm  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/Source 
 	@${RM} ${OBJECTDIR}/Source/RF.o.d 
 	@${RM} ${OBJECTDIR}/Source/RF.o 
-	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/Source/RF.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG -d__MPLAB_DEBUGGER_ICD3=1 -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/Source/RF.lst\" -e\"${OBJECTDIR}/Source/RF.err\" $(ASM_OPTIONS)   -o\"${OBJECTDIR}/Source/RF.o\" \"Source/RF.asm\" 
+	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/Source/RF.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG  -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/Source/RF.lst\" -e\"${OBJECTDIR}/Source/RF.err\" $(ASM_OPTIONS)   -o\"${OBJECTDIR}/Source/RF.o\" \"Source/RF.asm\" 
 	@${DEP_GEN} -d "${OBJECTDIR}/Source/RF.o"
 	@${FIXDEPS} "${OBJECTDIR}/Source/RF.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
 	
@@ -134,7 +134,7 @@ ${OBJECTDIR}/Source/SPI.o: Source/SPI.asm  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/Source 
 	@${RM} ${OBJECTDIR}/Source/SPI.o.d 
 	@${RM} ${OBJECTDIR}/Source/SPI.o 
-	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/Source/SPI.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG -d__MPLAB_DEBUGGER_ICD3=1 -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/Source/SPI.lst\" -e\"${OBJECTDIR}/Source/SPI.err\" $(ASM_OPTIONS)   -o\"${OBJECTDIR}/Source/SPI.o\" \"Source/SPI.asm\" 
+	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/Source/SPI.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG  -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/Source/SPI.lst\" -e\"${OBJECTDIR}/Source/SPI.err\" $(ASM_OPTIONS)   -o\"${OBJECTDIR}/Source/SPI.o\" \"Source/SPI.asm\" 
 	@${DEP_GEN} -d "${OBJECTDIR}/Source/SPI.o"
 	@${FIXDEPS} "${OBJECTDIR}/Source/SPI.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
 	
@@ -142,7 +142,7 @@ ${OBJECTDIR}/Source/Transponder_AFE.o: Source/Transponder_AFE.asm  nbproject/Mak
 	@${MKDIR} ${OBJECTDIR}/Source 
 	@${RM} ${OBJECTDIR}/Source/Transponder_AFE.o.d 
 	@${RM} ${OBJECTDIR}/Source/Transponder_AFE.o 
-	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/Source/Transponder_AFE.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG -d__MPLAB_DEBUGGER_ICD3=1 -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/Source/Transponder_AFE.lst\" -e\"${OBJECTDIR}/Source/Transponder_AFE.err\" $(ASM_OPTIONS)   -o\"${OBJECTDIR}/Source/Transponder_AFE.o\" \"Source/Transponder_AFE.asm\" 
+	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/Source/Transponder_AFE.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG  -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/Source/Transponder_AFE.lst\" -e\"${OBJECTDIR}/Source/Transponder_AFE.err\" $(ASM_OPTIONS)   -o\"${OBJECTDIR}/Source/Transponder_AFE.o\" \"Source/Transponder_AFE.asm\" 
 	@${DEP_GEN} -d "${OBJECTDIR}/Source/Transponder_AFE.o"
 	@${FIXDEPS} "${OBJECTDIR}/Source/Transponder_AFE.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
 	
@@ -150,7 +150,7 @@ ${OBJECTDIR}/Source/Transponder_PIC16F639_Demo.o: Source/Transponder_PIC16F639_D
 	@${MKDIR} ${OBJECTDIR}/Source 
 	@${RM} ${OBJECTDIR}/Source/Transponder_PIC16F639_Demo.o.d 
 	@${RM} ${OBJECTDIR}/Source/Transponder_PIC16F639_Demo.o 
-	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/Source/Transponder_PIC16F639_Demo.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG -d__MPLAB_DEBUGGER_ICD3=1 -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/Source/Transponder_PIC16F639_Demo.lst\" -e\"${OBJECTDIR}/Source/Transponder_PIC16F639_Demo.err\" $(ASM_OPTIONS)   -o\"${OBJECTDIR}/Source/Transponder_PIC16F639_Demo.o\" \"Source/Transponder_PIC16F639_Demo.asm\" 
+	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/Source/Transponder_PIC16F639_Demo.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG  -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/Source/Transponder_PIC16F639_Demo.lst\" -e\"${OBJECTDIR}/Source/Transponder_PIC16F639_Demo.err\" $(ASM_OPTIONS)   -o\"${OBJECTDIR}/Source/Transponder_PIC16F639_Demo.o\" \"Source/Transponder_PIC16F639_Demo.asm\" 
 	@${DEP_GEN} -d "${OBJECTDIR}/Source/Transponder_PIC16F639_Demo.o"
 	@${FIXDEPS} "${OBJECTDIR}/Source/Transponder_PIC16F639_Demo.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
 	
@@ -234,7 +234,7 @@ endif
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
 dist/${CND_CONF}/${IMAGE_TYPE}/PIC16F639_PKE.${IMAGE_TYPE}.${OUTPUT_SUFFIX}: ${OBJECTFILES}  nbproject/Makefile-${CND_CONF}.mk    
 	@${MKDIR} dist/${CND_CONF}/${IMAGE_TYPE} 
-	${MP_LD} $(MP_EXTRA_LD_PRE)   -p$(MP_PROCESSOR_OPTION)  -w -x -u_DEBUG -z__ICD2RAM=1 -m"${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map"   -z__MPLAB_BUILD=1  -z__MPLAB_DEBUG=1 -z__MPLAB_DEBUGGER_ICD3=1 $(MP_LINKER_DEBUG_OPTION) -odist/${CND_CONF}/${IMAGE_TYPE}/PIC16F639_PKE.${IMAGE_TYPE}.${OUTPUT_SUFFIX}  ${OBJECTFILES_QUOTED_IF_SPACED}     
+	${MP_LD} $(MP_EXTRA_LD_PRE)   -p$(MP_PROCESSOR_OPTION)  -w -x -u_DEBUG -z__ICD2RAM=1 -m"${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map"   -z__MPLAB_BUILD=1  -z__MPLAB_DEBUG=1 $(MP_LINKER_DEBUG_OPTION) -odist/${CND_CONF}/${IMAGE_TYPE}/PIC16F639_PKE.${IMAGE_TYPE}.${OUTPUT_SUFFIX}  ${OBJECTFILES_QUOTED_IF_SPACED}     
 else
 dist/${CND_CONF}/${IMAGE_TYPE}/PIC16F639_PKE.${IMAGE_TYPE}.${OUTPUT_SUFFIX}: ${OBJECTFILES}  nbproject/Makefile-${CND_CONF}.mk   
 	@${MKDIR} dist/${CND_CONF}/${IMAGE_TYPE} 

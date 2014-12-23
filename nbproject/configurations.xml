@@ -41,7 +41,7 @@
         <targetDevice>PIC16F639</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
-        <platformTool>ICD3PlatformTool</platformTool>
+        <platformTool>Simulator</platformTool>
         <languageToolchain>MPASMWIN</languageToolchain>
         <languageToolchainVersion>5.59</languageToolchainVersion>
         <platform>3</platform>

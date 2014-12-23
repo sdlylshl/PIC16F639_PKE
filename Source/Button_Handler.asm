@@ -27,9 +27,12 @@
 #include Project.inc
 #include PIC16F639.inc
 #include RF.inc
+
 	global Button_Handler, Button_Handler_Init
+
 #define Delay	0x03
 #define Retry	0x0f
+
 Button_Handler_VAR	udata
 Counter		res 1
 	code
@@ -77,7 +80,7 @@ Button_Handler_Init
 ;------------------------------------------------------------------------------+
 Button_Handler
 	banksel	Counter
-	movf	Counter,f
+	movf	Counter,F
 	btfss	STATUS,Z				; is counter zero?
 	goto	Button_Count			; no, then count down
 	movlw	Retry					; yes, then load counter (first call after button has been pressed)
@@ -87,10 +90,10 @@ Button_Handler
 Button_Count
 	btfss	EVENT_REG, RF_START
 	goto	END_BUTTON_HANDLER
-	decfsz	Counter,f				; is Counter one?
+	decfsz	Counter,F				; is Counter one?
 	goto	Button_Exec				; no, then transmit RF
 	movlw	(~BUTTON_MASK)			; yes, then clear all button events
-	andwf	EVENT_REG,f
+	andwf	EVENT_REG,F
 	goto	END_BUTTON_HANDLER
 Button_Exec
 	movlw	Delay					; load delay counter again

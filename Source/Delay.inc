@@ -110,12 +110,12 @@ DELAY__WaitFor macro time, unit
 ;    Example:                                                                  |
 ;    INT code    0x04                                                          |
 ;        movwf   W_TEMP          ; Save off current W register contents        |
-;        movf    STATUS,w                                                      |
+;        movf    STATUS,W                                                      |
 ;        clrf    STATUS          ; Force to page0                              |
 ;        movwf   STATUS_TEMP                                                   |
-;        movf    PCLATH,w                                                      |
+;        movf    PCLATH,W                                                      |
 ;        movwf   PCLATH_TEMP     ; Save PCLATH                                 |
-;        movf    FSR,w                                                         |
+;        movf    FSR,W                                                         |
 ;        movwf   FSR_TEMP        ; Save FSR                                    |
 ;        GOTO    INT_SERV                                                      |
 ;    INT_SERV                                                                  |
@@ -133,14 +133,14 @@ DELAY__WaitFor macro time, unit
 ;        ; ***You may place other Interrupt Handlers here***                   |
 ;    EndIsr                                                                    |
 ;        clrf    STATUS          ;Select Bank0                                 |
-;        movf    FSR_TEMP,w                                                    |
+;        movf    FSR_TEMP,W                                                    |
 ;        movwf   FSR             ;Restore FSR                                  |
-;        movf    PCLATH_TEMP,w                                                 |
+;        movf    PCLATH_TEMP,W                                                 |
 ;        movwf   PCLATH          ;Restore PCLATH                               |
-;        movf    STATUS_TEMP,w                                                 |
+;        movf    STATUS_TEMP,W                                                 |
 ;        movwf   STATUS          ;Restore STATUS                               |
-;        swapf   W_TEMP,f                                                      |
-;        swapf   W_TEMP,w        ;Restore W without corrupting STATUS bits     |
+;        swapf   W_TEMP,F                                                      |
+;        swapf   W_TEMP,W        ;Restore W without corrupting STATUS bits     |
 ;        RETFIE                                                                |
 ;                                                                              |
 ;                                                                              |

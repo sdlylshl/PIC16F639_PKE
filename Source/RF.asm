@@ -150,11 +150,11 @@ RF__SendBuffer
 	call	RF__Send_Header
 RF__SendBuffer.loop
 	bankisel	PORTA
-	movf	INDF,w
+	movf	INDF,W
 	call	RF__Send_Data
-	incf	FSR,f
+	incf	FSR,F
 	banksel RF__Byte_Counter
-	decfsz	RF__Byte_Counter,f
+	decfsz	RF__Byte_Counter,F
 	goto	RF__SendBuffer.loop
 	return
 	
@@ -235,11 +235,11 @@ SendOne
 	movlw	((2*RF__T_STEP)/.50)
 	call 	DELAY__start
 	banksel	Parity
-	incf	Parity,f
+	incf	Parity,F
 ;	goto	SendNextBit		; send next bit
 SendNextBit	
 	banksel RF__COUNTER
-	movf	RF__COUNTER,f
+	movf	RF__COUNTER,F
 	btfsc	STATUS,Z
 	goto	EndTX
 	decfsz	RF__COUNTER, f	; decrement counter register

@@ -67,6 +67,7 @@ wait macro Cyc
 tmp -= .1
 	endw
 	endm
+	
 Delay_ovr	udata_ovr	;May do some overlay
 DELAY__Counter	res 1
 DELAY__TEMP2	res 1
@@ -128,14 +129,14 @@ DELAY__wait_w_x_50us
 BaseDelay
 	call	Delay50us				;see Delay50us
 	movlw	0x01					;1 Cycle				(TEMP2)
-	subwf	DELAY__TEMP2,w			;1 Cycle				(TEMP2)
+	subwf	DELAY__TEMP2,W			;1 Cycle				(TEMP2)
 	btfsc	STATUS,Z				;1 Cycle				(TEMP2)
 									;2 Cycles				(TEMP2-1)
 	goto	lastloop				;2 Cycles				(1)
 	wait 	.11						;n Cycles				(TEMP2-1)
 lastloop
 	wait 	.2						;m Cycles				(TEMP2)
-	decfsz	DELAY__TEMP2,f			;1 Cycle				(TEMP2)
+	decfsz	DELAY__TEMP2,F			;1 Cycle				(TEMP2)
 	goto	BaseDelay				;2 Cycles				(TEMP2)
 	banksel	DELAY__flag
 	bsf		DELAY__Returned			;1 Cycle  + 1 Cycle nop	(1)
