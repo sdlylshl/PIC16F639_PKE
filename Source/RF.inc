@@ -3,11 +3,11 @@
 #define RF_INC
 
 
-#ifndef RF.PIN
-	#define RF.PIN		5		; RF Modulation Output
-	#define RF.PORT		PORTC
+#ifndef RF__PIN
+	#define RF__PIN		5		; RF Modulation Output
+	#define RF__PORT		PORTC
 #endif
-	extern RF.Send_Header, RF.Send_Data, RF.SendBuffer
+	extern RF__Send_Header, RF__Send_Data, RF__SendBuffer
 
 
 
@@ -34,8 +34,8 @@
 ;        ___|         |_______|             |____________|                     |
 ;        XXXXXXXXXXXXXXXXXXXXXXXXX____                                         |
 ;------------------------------------------------------------------------------+
-RF.Init	macro
+RF__Init	macro
 	banksel TRISA
-	bcf		RF.PORT,RF.PIN
+	bcf		RF__PORT,RF__PIN
 	endm
 #endif

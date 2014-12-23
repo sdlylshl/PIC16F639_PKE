@@ -1,5 +1,5 @@
 ;------------------------------------------------------------------------------
-;	Transponder_AFE.ASM 
+;	Transponder_AFE__ASM 
 ;
 ;	Jan Ornter
 ;
@@ -62,36 +62,36 @@
 #include Delay.inc
 #include SPI.inc
 #include EEPROM.inc
-AFE.ReadCMD			equ	0xC0
-AFE.WriteCMD		equ	0xE0
+AFE__ReadCMD			equ	0xC0
+AFE__WriteCMD		equ	0xE0
 AFE_ovr	udata
-AFE.ConfMap	res 8
+AFE__ConfMap	res 8
 COUNTER		res 1
 TEMP		res 1
 TEMP1		res 1
 TEMP2		res 1
 TEMP3		res 1
-AFE.Buffer	res 1
-	global AFE.ConfMap, AFE.Buffer
-	global AFE.LoadCfg, AFE.SafeCfg, AFE.ReadCfg, AFE.WriteCfg, AFE.WriteRegister, AFE.ReadRegister, AFE.WriteNVerifyRegister
-	global AFE.CalcColumnParity
+AFE__Buffer	res 1
+	global AFE__ConfMap, AFE__Buffer
+	global AFE__LoadCfg, AFE__SafeCfg, AFE__ReadCfg, AFE__WriteCfg, AFE__WriteRegister, AFE__ReadRegister, AFE__WriteNVerifyRegister
+	global AFE__CalcColumnParity
 flag_ovr	udata_ovr
 flag	res	1		;using bit 2
 ;-------------------------------------------
 ; Default Configuration stored in EEPROM
 ;-------------------------------------------
 EE_SEC	code 
-AFE.EEConfig0	DE	b'10100000'	; Wakeup => High = 2ms, Low = 2ms
-AFE.EEConfig1	DE	b'00000000'	; Demodulator output
-AFE.EEConfig2	DE	b'00000000'
-AFE.EEConfig3	DE	b'00000000'
-AFE.EEConfig4	DE	b'00000000'
-AFE.EEConfig5	DE	b'00000000'	; modulation depth = 50 % for new device
-AFE.EEConfig6	DE	b'01011111'	; column parity at defalt mode (50%)
+AFE__EEConfig0	DE	b'10100000'	; Wakeup => High = 2ms, Low = 2ms
+AFE__EEConfig1	DE	b'00000000'	; Demodulator output
+AFE__EEConfig2	DE	b'00000000'
+AFE__EEConfig3	DE	b'00000000'
+AFE__EEConfig4	DE	b'00000000'
+AFE__EEConfig5	DE	b'00000000'	; modulation depth = 50 % for new device
+AFE__EEConfig6	DE	b'01011111'	; column parity at defalt mode (50%)
 	code
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    AFE.LoadCfg()                                                             |
+;    AFE__LoadCfg()                                                             |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -104,14 +104,14 @@ AFE.EEConfig6	DE	b'01011111'	; column parity at defalt mode (50%)
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |
-;    EEPROM.ReadBytes                                                          |
+;    EEPROM__ReadBytes                                                          |
 ;                                                                              |
 ;                                                                              |
 ;    Stacklevel: 1                                                             |
 ;                                                                              |
 ;                                                                              |
 ;    Example:                                                                  |
-;        call    AFE.LoadCfg                                                   |
+;        call    AFE__LoadCfg                                                   |
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
@@ -119,23 +119,23 @@ AFE.EEConfig6	DE	b'01011111'	; column parity at defalt mode (50%)
 ;        data EEPROM                                                           |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-AFE.LoadCfg
-	bankisel	AFE.ConfMap
-	movlw	AFE.ConfMap
+AFE__LoadCfg
+	bankisel	AFE__ConfMap
+	movlw	AFE__ConfMap
 	movwf	FSR
-	movlw	AFE.EEConfig0
-	banksel EEPROM.ADDRESS
-	movwf	EEPROM.ADDRESS
+	movlw	AFE__EEConfig0
+	banksel EEPROM__ADDRESS
+	movwf	EEPROM__ADDRESS
 	movlw	0x7
-	call	EEPROM.ReadBytes
+	call	EEPROM__ReadBytes
 	return
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    AFE.SafeCfg()                                                             |
+;    AFE__SafeCfg()                                                             |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    This function saves the configuration from the RAM into the EEPROM.       |
+;    This function saves the configuration from the RAM into the EEPROM__       |
 ;                                                                              |
 ;                                                                              |
 ;                                                                              |
@@ -143,14 +143,14 @@ AFE.LoadCfg
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |
-;    EEPROM.WriteBytes                                                         |
+;    EEPROM__WriteBytes                                                         |
 ;                                                                              |
 ;                                                                              |
 ;    Stacklevel: 2                                                             |
 ;                                                                              |
 ;                                                                              |
 ;    Example:                                                                  |
-;        call    AFE.SafeCfg                                                   |
+;        call    AFE__SafeCfg                                                   |
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
@@ -158,23 +158,23 @@ AFE.LoadCfg
 ;        your device                                                           |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-AFE.SafeCfg
-	bankisel	AFE.ConfMap
-	movlw	AFE.ConfMap
+AFE__SafeCfg
+	bankisel	AFE__ConfMap
+	movlw	AFE__ConfMap
 	movwf	FSR
-	movlw	AFE.EEConfig0
-	banksel EEPROM.ADDRESS
-	movwf	EEPROM.ADDRESS
+	movlw	AFE__EEConfig0
+	banksel EEPROM__ADDRESS
+	movwf	EEPROM__ADDRESS
 	movlw	0x7
-	call	EEPROM.WriteBytes
+	call	EEPROM__WriteBytes
 	return
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    AFE.WriteRegister( w  AFE.ConfMap[x] )                                    |
+;    AFE__WriteRegister( w  AFE__ConfMap[x] )                                    |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    This function writes to one register file in the AFE.                     |
+;    This function writes to one register file in the AFE__                     |
 ;    The row parity will be calculated internally.                             |
 ;    The column parity will be written to the configuration map in RAM.        |
 ;    NOT to the device.                                                        |
@@ -182,7 +182,7 @@ AFE.SafeCfg
 ;                                                                              |
 ;    Parameters:                                                               |
 ;    w - The AFE-Register to write                                             |
-;    AFE.ConfMap[x] - The value that should be written to the AFE-Register     |
+;    AFE__ConfMap[x] - The value that should be written to the AFE-Register     |
 ;                                                                              |
 ;                                                                              |
 ;                                                                              |
@@ -190,19 +190,19 @@ AFE.SafeCfg
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |
-;    AFE.CalcParity                                                            |
-;    SPI.Write                                                                 |
+;    AFE__CalcParity                                                            |
+;    SPI__Write                                                                 |
 ;                                                                              |
 ;                                                                              |
 ;    Stacklevel: 2                                                             |
 ;                                                                              |
 ;                                                                              |
 ;    Example:                                                                  |
-;        movlw   0xff                        ;move value to AFE.Buffer         |
-;        banksel AFE.ConfMap                                                   |
-;        movwf   AFE.ConfMap+4                                                 |
+;        movlw   0xff                        ;move value to AFE__Buffer         |
+;        banksel AFE__ConfMap                                                   |
+;        movwf   AFE__ConfMap+4                                                 |
 ;        movlw   0x04                        ;move register address to w       |
-;        call    AFE.WriteRegister           ;writes the register              |
+;        call    AFE__WriteRegister           ;writes the register              |
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
@@ -210,41 +210,41 @@ AFE.SafeCfg
 ;         Y (Register 4)to the maximum.                                        |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-AFE.WriteRegister
+AFE__WriteRegister
 	banksel	TEMP
 	movwf	TEMP
-	addlw	AFE.ConfMap
+	addlw	AFE__ConfMap
 	movwf	FSR
 	rlf		TEMP,w
-	addlw	AFE.WriteCMD
-	banksel SPI.BufferH
-	movwf	SPI.BufferH
-	bankisel	AFE.ConfMap
+	addlw	AFE__WriteCMD
+	banksel SPI__BufferH
+	movwf	SPI__BufferH
+	bankisel	AFE__ConfMap
 	rlf		INDF,w
-	banksel SPI.BufferH
+	banksel SPI__BufferH
 	btfss	STATUS,C		
-	bcf		SPI.BufferH,0		
+	bcf		SPI__BufferH,0		
 	btfsc	STATUS,C		
-	bsf		SPI.BufferH,0
-	bankisel	AFE.ConfMap
+	bsf		SPI__BufferH,0
+	bankisel	AFE__ConfMap
 	rlf		INDF,w
-	banksel	SPI.BufferH
-	movwf	SPI.BufferL
-	bcf		SPI.BufferL,0
-	bankisel	AFE.ConfMap
+	banksel	SPI__BufferH
+	movwf	SPI__BufferL
+	bcf		SPI__BufferL,0
+	bankisel	AFE__ConfMap
 	movf	INDF,w
-	call	AFE.CalcParity
-	banksel	SPI.BufferH
-	iorwf	SPI.BufferL,f
-	call	SPI.Write
+	call	AFE__CalcParity
+	banksel	SPI__BufferH
+	iorwf	SPI__BufferL,f
+	call	SPI__Write
 	retlw	0x00				;Debug only
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;     w  AFE.ConfMap[x] AFE.ReadRegister( w )                                  |
+;     w  AFE__ConfMap[x] AFE__ReadRegister( w )                                  |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    This function reads one register file in the AFE.                         |
+;    This function reads one register file in the AFE__                         |
 ;                                                                              |
 ;                                                                              |
 ;    Parameters:                                                               |
@@ -253,14 +253,14 @@ AFE.WriteRegister
 ;                                                                              |
 ;    Returns:                                                                  |
 ;    w - The value in the register (without parity)                            |
-;        AFE.ConfMap[x]  Writes - the value to the configuration map in RAM    |
+;        AFE__ConfMap[x]  Writes - the value to the configuration map in RAM    |
 ;                                                                              |
 ;                                                                              |
 ;    Used SFRs:  FSR                                                           |
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |
-;    SPI.Read                                                                  |
+;    SPI__Read                                                                  |
 ;                                                                              |
 ;                                                                              |
 ;    Stacklevel: 2                                                             |
@@ -268,7 +268,7 @@ AFE.WriteRegister
 ;                                                                              |
 ;    Example:                                                                  |
 ;        movlw   0x04                ;load address of AFE register to w        |
-;        call    AFE.ReadRegister    ;read register                            |
+;        call    AFE__ReadRegister    ;read register                            |
 ;        ;now the value of the register is in w                                |
 ;                                                                              |
 ;                                                                              |
@@ -277,34 +277,34 @@ AFE.WriteRegister
 ;        (Register 4) to w                                                     |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-AFE.ReadRegister
+AFE__ReadRegister
 	banksel	TEMP
 	movwf	TEMP
-	addlw	AFE.ConfMap
+	addlw	AFE__ConfMap
 	movwf	FSR
 	rlf		TEMP,w
-	addlw	AFE.ReadCMD
-	banksel	SPI.BufferH
-	movwf	SPI.BufferH
-	call	SPI.Read
-	banksel	SPI.BufferH
-	rrf		SPI.BufferH,w	;Shift bit 0 in Carry
-	rrf		SPI.BufferL,w
-	bankisel	AFE.ConfMap
+	addlw	AFE__ReadCMD
+	banksel	SPI__BufferH
+	movwf	SPI__BufferH
+	call	SPI__Read
+	banksel	SPI__BufferH
+	rrf		SPI__BufferH,w	;Shift bit 0 in Carry
+	rrf		SPI__BufferL,w
+	bankisel	AFE__ConfMap
 	movwf	INDF			;synchronizing memory map with device
 	return
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;     w AFE.WriteNVerifyRegister( w  AFE.ConfMap[x] )                          |
+;     w AFE__WriteNVerifyRegister( w  AFE__ConfMap[x] )                          |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    This function writes and verifies one register file in the AFE.           |
+;    This function writes and verifies one register file in the AFE__           |
 ;                                                                              |
 ;                                                                              |
 ;    Parameters:                                                               |
 ;    w - The AFE-Register to write                                             |
-;    AFE.ConfMap[x] - The value that should be written to the AFE-Register     |
+;    AFE__ConfMap[x] - The value that should be written to the AFE-Register     |
 ;                                                                              |
 ;                                                                              |
 ;    Returns:                                                                  |
@@ -315,22 +315,22 @@ AFE.ReadRegister
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |
-;    AFE.WriteRegister                                                         |
-;        AFE.CalcParity                                                        |
-;        SPI.Write                                                             |
-;    AFE.ReadRegister                                                          |
-;        SPI.Read                                                              |
+;    AFE__WriteRegister                                                         |
+;        AFE__CalcParity                                                        |
+;        SPI__Write                                                             |
+;    AFE__ReadRegister                                                          |
+;        SPI__Read                                                              |
 ;                                                                              |
 ;                                                                              |
 ;    Stacklevel: 3                                                             |
 ;                                                                              |
 ;                                                                              |
 ;    Example:                                                                  |
-;        movlw   0xff                        ;move value to AFE.Buffer         |
-;        banksel AFE.Buffer                                                    |
-;        movwf   AFE.Buffer                                                    |
+;        movlw   0xff                        ;move value to AFE__Buffer         |
+;        banksel AFE__Buffer                                                    |
+;        movwf   AFE__Buffer                                                    |
 ;        movlw   0x04                        ;move register address to w       |
-;        call    AFE.WriteNVerifyRegister    ;writes and verifies the register |
+;        call    AFE__WriteNVerifyRegister    ;writes and verifies the register |
 ;        andlw   0xff                        ;update status register           |
 ;        btfss   STATUS,Z                    ;was there an error               |
 ;        goto    errorOccured                ;yes, the goto error handler      |
@@ -341,18 +341,18 @@ AFE.ReadRegister
 ;         Y (Register 4)to the maximum.                                        |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-AFE.WriteNVerifyRegister
+AFE__WriteNVerifyRegister
 	banksel	TEMP2
 	movwf	TEMP2
-	call	AFE.WriteRegister
+	call	AFE__WriteRegister
 	movf	INDF,w
-	banksel AFE.Buffer
-	movwf	AFE.Buffer
+	banksel AFE__Buffer
+	movwf	AFE__Buffer
 	banksel	TEMP2
 	movf	TEMP2,w
-	call	AFE.ReadRegister
-	banksel AFE.Buffer
-	xorwf	AFE.Buffer,w
+	call	AFE__ReadRegister
+	banksel AFE__Buffer
+	xorwf	AFE__Buffer,w
 	btfss	STATUS,Z
 	retlw	0x01
 	banksel	flag
@@ -361,12 +361,12 @@ AFE.WriteNVerifyRegister
 	return
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    AFE.WriteCfg()                                                            |
+;    AFE__WriteCfg()                                                            |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
 ;    This function writes and verifies the whole register map in the RAM to the|
-;     AFE.                                                                     |
+;     AFE__                                                                     |
 ;                                                                              |
 ;                                                                              |
 ;                                                                              |
@@ -374,50 +374,50 @@ AFE.WriteNVerifyRegister
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |
-;    AFE.WriteNVerifyRegister                                                  |
-;        AFE.WriteRegister                                                     |
-;            AFE.CalcParity                                                    |
-;            SPI.Write                                                         |
-;        AFE.ReadRegister                                                      |
-;            SPI.Read                                                          |
+;    AFE__WriteNVerifyRegister                                                  |
+;        AFE__WriteRegister                                                     |
+;            AFE__CalcParity                                                    |
+;            SPI__Write                                                         |
+;        AFE__ReadRegister                                                      |
+;            SPI__Read                                                          |
 ;                                                                              |
 ;                                                                              |
 ;    Stacklevel: 3                                                             |
 ;                                                                              |
 ;                                                                              |
 ;    Example:                                                                  |
-;        call    AFE.writeCfg                                                  |
+;        call    AFE__writeCfg                                                  |
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
 ;        Now the configuration has been written from your RAM to the AFE       |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-AFE.WriteCfg
-	call	AFE.CalcColumnParity		;Ensure parity bits are correct
+AFE__WriteCfg
+	call	AFE__CalcColumnParity		;Ensure parity bits are correct
 	banksel	flag
 	bsf		flag,2
 	banksel TEMP3
 	movlw	0x07
 	movwf	TEMP3
-AFE.WriteCfg.loop
+AFE__WriteCfg.loop
 	banksel	TEMP3
-	bankisel	AFE.ConfMap
+	bankisel	AFE__ConfMap
 	decf	TEMP3,w
-	goto	AFE.WriteNVerifyRegister	;reducing stacklevel
+	goto	AFE__WriteNVerifyRegister	;reducing stacklevel
 return_write_cfg
 	banksel	TEMP3
 	andlw	0xff
 	btfss	STATUS,Z
 	retlw	0x01
 	decfsz	TEMP3,f
-	goto	AFE.WriteCfg.loop
+	goto	AFE__WriteCfg.loop
 	bcf		flag,2
 	
 	retlw	0x00
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    AFE.ReadCfg()                                                             |
+;    AFE__ReadCfg()                                                             |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -429,37 +429,37 @@ return_write_cfg
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |
-;    AFE.ReadRegister                                                          |
-;        SPI.Read                                                              |
+;    AFE__ReadRegister                                                          |
+;        SPI__Read                                                              |
 ;                                                                              |
 ;                                                                              |
 ;    Stacklevel: 3                                                             |
 ;                                                                              |
 ;                                                                              |
 ;    Example:                                                                  |
-;        call AFE.ReadConfig                                                   |
+;        call AFE__ReadConfig                                                   |
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
 ;        That's it. The configuration is now in your RAM at the address        |
-;        AFE.ConfMap                                                           |
+;        AFE__ConfMap                                                           |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-AFE.ReadCfg
+AFE__ReadCfg
 	banksel TEMP3
 	movlw	0x07
 	movwf	TEMP3
-AFE.ReadCfg.loop
+AFE__ReadCfg.loop
 	decf	TEMP3,w
-	call	AFE.ReadRegister
+	call	AFE__ReadRegister
 	banksel TEMP3
 	decfsz	TEMP3,f
-	goto	AFE.ReadCfg.loop
+	goto	AFE__ReadCfg.loop
 	
 	return
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;     w AFE.CalcParity( w )                                                    |
+;     w AFE__CalcParity( w )                                                    |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -480,7 +480,7 @@ AFE.ReadCfg.loop
 ;    Example:                                                                  |
 ;        movlw   0x02                    ;move the byte the parity should be   |
 ;        calculated from in w                                                  |
-;        call    AFE.CalcParity      ;returns the paritybit in w               |
+;        call    AFE__CalcParity      ;returns the paritybit in w               |
 ;        andlw   0xff                ;setting the STATUS register              |
 ;        banksel TransmitBuffer                                                |
 ;        btfss   STATUS,Z            ;next if Parity is one                    |
@@ -495,7 +495,7 @@ AFE.ReadCfg.loop
 ;        (TransmitBuffer,0) appropriate                                        |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-AFE.CalcParity
+AFE__CalcParity
 	banksel	TEMP1
 	movwf	TEMP1
 	movlw	0x00
@@ -513,7 +513,7 @@ BeginParityCalc
 	retlw	0x01
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;     w AFE.CalcColumnParity()                                                 |
+;     w AFE__CalcColumnParity()                                                 |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -528,12 +528,12 @@ BeginParityCalc
 ;                                                                              |
 ;                                                                              |
 ;    Example:                                                                  |
-;        call    AFE.CalcColumnParity        ;Calculate the column parity      |
-;        banksel AFE.Buffer                                                    |
-;        movwf   AFE.Buffer          ;move parity to transmitbuffer            |
+;        call    AFE__CalcColumnParity        ;Calculate the column parity      |
+;        banksel AFE__Buffer                                                    |
+;        movwf   AFE__Buffer          ;move parity to transmitbuffer            |
 ;        movlw   0x6                 ;move address of column parity register to|
 ;         w                                                                    |
-;        call    AFE.WriteRegister   ;write the column parity to the AFE       |
+;        call    AFE__WriteRegister   ;write the column parity to the AFE       |
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
@@ -541,16 +541,16 @@ BeginParityCalc
 ;        (TransmitBuffer,0) appropriate                                        |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-AFE.CalcColumnParity
-	banksel AFE.ConfMap
-	movf	AFE.ConfMap,w
-	xorwf	(AFE.ConfMap+1),w
-	xorwf	(AFE.ConfMap+2),w
-	xorwf	(AFE.ConfMap+3),w
-	xorwf	(AFE.ConfMap+4),w
-	xorwf	(AFE.ConfMap+5),w
+AFE__CalcColumnParity
+	banksel AFE__ConfMap
+	movf	AFE__ConfMap,w
+	xorwf	(AFE__ConfMap+1),w
+	xorwf	(AFE__ConfMap+2),w
+	xorwf	(AFE__ConfMap+3),w
+	xorwf	(AFE__ConfMap+4),w
+	xorwf	(AFE__ConfMap+5),w
 	xorlw	0xff
-	movwf	(AFE.ConfMap+6)
+	movwf	(AFE__ConfMap+6)
 	return
 ;****************************************************** 
 ;	END OF FILE : AFE_639.ASM

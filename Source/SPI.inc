@@ -15,10 +15,10 @@
 ;                                                                              |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-	extern SPI.BufferH
+	extern SPI__BufferH
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    Field SPI.BufferL                                                         |
+;    Field SPI__BufferL                                                         |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -26,12 +26,12 @@
 ;                                                                              |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-	extern SPI.BufferL
-	extern SPI.Read, SPI.Write
-	;extern SPI.ShiftOutBuffer, SPI.ShiftInBuffer
+	extern SPI__BufferL
+	extern SPI__Read, SPI__Write
+	;extern SPI__ShiftOutBuffer, SPI__ShiftInBuffer
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    SPI.Init()                                                                |
+;    SPI__Init()                                                                |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -39,7 +39,7 @@
 ;                                                                              |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-SPI.Init macro
+SPI__Init macro
 	banksel TRISC
 	movlw	b'11001110'		; Set LFDATA,ALERT, and CS as inputs 
 	movwf	TRISC			; 
@@ -50,16 +50,16 @@ SPI.Init macro
 ;	This macro shifts data out of the MCU through the SPI-Interface.
 ;
 ;
-;	@param SPI.BufferH The most significant Byte of the Data
-;	@param SPI.BufferL The least significant Byte of the Data
+;	@param SPI__BufferH The most significant Byte of the Data
+;	@param SPI__BufferL The least significant Byte of the Data
 ;
 ;	@example
-;	pagesel SPI.BufferH
+;	pagesel SPI__BufferH
 ;	movlw	0xf0
-;	movwf	SPI.BufferH
+;	movwf	SPI__BufferH
 ;	movlw	0x0f
-;	movwf	SPI.BufferL
-;	call	SPI.Write
+;	movwf	SPI__BufferL
+;	call	SPI__Write
 ;	@end-ex
 ;	@ex-desc This sends 0xf00f over the SPI-Bus
 ;
@@ -69,32 +69,32 @@ SPI.Init macro
 ;
 ;
 ;
-;SPI.Write macro
-;	call	SPI.ShiftOutBuffer
+;SPI__Write macro
+;	call	SPI__ShiftOutBuffer
 ;	endm
 ;
 ;	This macro reads two Bytes from the SPI-Bus.
-;	Put the Read command and the address in the SPI.BufferH and SPI.BufferL Registers.
-;	Then call SPI.Read.
-;	Then read the returned values in SPI.BufferH and SPI.BufferL.
+;	Put the Read command and the address in the SPI__BufferH and SPI__BufferL Registers.
+;	Then call SPI__Read.
+;	Then read the returned values in SPI__BufferH and SPI__BufferL.
 ;
 ;
-;	@param SPI.BufferH The most significant Byte of the Data
-;	@param SPI.BufferL The least significant Byte of the Data
+;	@param SPI__BufferH The most significant Byte of the Data
+;	@param SPI__BufferL The least significant Byte of the Data
 ;
 ;
-;	@return SPI.BufferH The most significant Byte of the Data
-;	@return SPI.BufferL The least significant Byte of the Data
+;	@return SPI__BufferH The most significant Byte of the Data
+;	@return SPI__BufferL The least significant Byte of the Data
 ;
 ;	@example
-;	pagesel SPI.BufferH
+;	pagesel SPI__BufferH
 ;	movlw	0xf0
-;	movwf	SPI.BufferH
+;	movwf	SPI__BufferH
 ;	movlw	0x0f
-;	movwf	SPI.BufferL
-;	call	SPI.Read
+;	movwf	SPI__BufferL
+;	call	SPI__Read
 ;	@end-ex
-;	@ex-desc This sends 0xf00f over the SPI-Bus, and reads the answer to SPI.BufferH and SPI.BufferL.
+;	@ex-desc This sends 0xf00f over the SPI-Bus, and reads the answer to SPI__BufferH and SPI__BufferL.
 ;
 ;	@status Written
 ;
@@ -102,8 +102,8 @@ SPI.Init macro
 ;
 ;
 ;
-;SPI.Read macro
-;	call	SPI.ShiftOutBuffer
-;	call	SPI.ShiftInBuffer
+;SPI__Read macro
+;	call	SPI__ShiftOutBuffer
+;	call	SPI__ShiftInBuffer
 ;	endm
 	endif

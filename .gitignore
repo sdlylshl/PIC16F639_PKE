@@ -90,11 +90,12 @@ output
 *.sct
 *.map
 #Microchip
+dist
 build
 *.err
 *.lst
 *.cof
-
+*.fil
 ###VS2013
 #智能提示
 *.sdf

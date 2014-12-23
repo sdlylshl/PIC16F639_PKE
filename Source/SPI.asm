@@ -18,62 +18,62 @@
 #define	SCK			PORTC,2		; SPI Clock Output
 #define	SDIO		PORTC,3		; Serial output
 	udata
-SPI.BufferH res 1
-SPI.BufferL res 1
+SPI__BufferH res 1
+SPI__BufferL res 1
 SPI_ovr	udata_ovr
 Count00 res 1
 flag_ovr	udata_ovr
 flag	res 1		;using bit 0
-	global SPI.BufferH, SPI.BufferL
-	global SPI.Read, SPI.Write
+	global SPI__BufferH, SPI__BufferL
+	global SPI__Read, SPI__Write
 	code
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;     SPI.BufferH  SPI.BufferL SPI.Read( SPI.BufferH  SPI.BufferL )            |
+;     SPI__BufferH  SPI__BufferL SPI__Read( SPI__BufferH  SPI__BufferL )            |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
 ;    This macro reads two Bytes from the SPI-Bus.                              |
-;    Put the Read command and the address in the SPI.BufferH and SPI.BufferL   |
+;    Put the Read command and the address in the SPI__BufferH and SPI__BufferL   |
 ;    Registers.                                                                |
-;    Then call SPI.Read.                                                       |
-;    Then read the returned values in SPI.BufferH and SPI.BufferL.             |
+;    Then call SPI__Read.                                                       |
+;    Then read the returned values in SPI__BufferH and SPI__BufferL.             |
 ;                                                                              |
 ;                                                                              |
 ;    Parameters:                                                               |
-;    SPI.BufferH - The most significant Byte of the Data                       |
-;    SPI.BufferL - The least significant Byte of the Data                      |
+;    SPI__BufferH - The most significant Byte of the Data                       |
+;    SPI__BufferL - The least significant Byte of the Data                      |
 ;                                                                              |
 ;                                                                              |
 ;    Returns:                                                                  |
-;    SPI.BufferH - The most significant Byte of the Data                       |
-;    SPI.BufferL - The least significant Byte of the Data                      |
+;    SPI__BufferH - The most significant Byte of the Data                       |
+;    SPI__BufferL - The least significant Byte of the Data                      |
 ;                                                                              |
 ;                                                                              |
 ;    Stacklevel: 1                                                             |
 ;                                                                              |
 ;                                                                              |
 ;    Example:                                                                  |
-;    pagesel SPI.BufferH                                                       |
+;    pagesel SPI__BufferH                                                       |
 ;    movlw   0xf0                                                              |
-;    movwf   SPI.BufferH                                                       |
+;    movwf   SPI__BufferH                                                       |
 ;    movlw   0x0f                                                              |
-;    movwf   SPI.BufferL                                                       |
-;    call    SPI.Read                                                          |
+;    movwf   SPI__BufferL                                                       |
+;    call    SPI__Read                                                          |
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
 ;        This sends 0xf00f over the SPI-Bus, and reads the answer to           |
-;        SPI.BufferH and SPI.BufferL.                                          |
+;        SPI__BufferH and SPI__BufferL.                                          |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-SPI.Read
+SPI__Read
 	banksel	flag
 	bsf		flag,0
-	goto	SPI.ShiftOutBuffer
+	goto	SPI__ShiftOutBuffer
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    SPI.Write( SPI.BufferH  SPI.BufferL )                                     |
+;    SPI__Write( SPI__BufferH  SPI__BufferL )                                     |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -81,8 +81,8 @@ SPI.Read
 ;                                                                              |
 ;                                                                              |
 ;    Parameters:                                                               |
-;    SPI.BufferH - The most significant Byte of the Data                       |
-;    SPI.BufferL - The least significant Byte of the Data                      |
+;    SPI__BufferH - The most significant Byte of the Data                       |
+;    SPI__BufferL - The least significant Byte of the Data                      |
 ;                                                                              |
 ;                                                                              |
 ;                                                                              |
@@ -90,19 +90,19 @@ SPI.Read
 ;                                                                              |
 ;                                                                              |
 ;    Example:                                                                  |
-;    pagesel SPI.BufferH                                                       |
+;    pagesel SPI__BufferH                                                       |
 ;    movlw   0xf0                                                              |
-;    movwf   SPI.BufferH                                                       |
+;    movwf   SPI__BufferH                                                       |
 ;    movlw   0x0f                                                              |
-;    movwf   SPI.BufferL                                                       |
-;    call    SPI.Write                                                         |
+;    movwf   SPI__BufferL                                                       |
+;    call    SPI__Write                                                         |
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
 ;        This sends 0xf00f over the SPI-Bus                                    |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-SPI.Write
+SPI__Write
 	banksel	flag
 	bcf		flag,0
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -129,16 +129,16 @@ SPI.Write
 ;	This method shifts data out of the MCU through the SPI-Interface.
 ;
 ;
-;	@param SPI.BufferH The most significant Byte of the Data
-;	@param SPI.BufferL The least significant Byte of the Data
+;	@param SPI__BufferH The most significant Byte of the Data
+;	@param SPI__BufferL The least significant Byte of the Data
 ;
 ;	@example
-;	pagesel SPI.BufferH
+;	pagesel SPI__BufferH
 ;	movlw	0xf0
-;	movwf	SPI.BufferH
+;	movwf	SPI__BufferH
 ;	movlw	0x0f
-;	movwf	SPI.BufferL
-;	call	SPI.ShiftOutBuffer
+;	movwf	SPI__BufferL
+;	call	SPI__ShiftOutBuffer
 ;	@end-ex
 ;	@ex-desc This sends 0xf00f over the SPI-Bus
 ;
@@ -148,7 +148,7 @@ SPI.Write
 ;
 ;
 ;
-SPI.ShiftOutBuffer	
+SPI__ShiftOutBuffer	
 	banksel TRISC
 	movf	TRISC,w
 	andlw	b'11110001'
@@ -160,9 +160,9 @@ SPI.ShiftOutBuffer
 	bcf		SCK
 	bcf		AFECS
 ShiftOutLoop
-	banksel SPI.BufferH
-	rlf		SPI.BufferL, f
-	rlf		SPI.BufferH, f
+	banksel SPI__BufferH
+	rlf		SPI__BufferL, f
+	rlf		SPI__BufferH, f
 	banksel	PORTC
 	btfss	STATUS,C
 	bcf		SDIO
@@ -181,7 +181,7 @@ ShiftOutLoop
 	bsf		SCK
 	banksel	flag
 	btfss	flag,0
-	goto	SPI.end
+	goto	SPI__end
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; Subroutine: ShiftInSPIBuffer
 ;   
@@ -206,17 +206,17 @@ ShiftOutLoop
 ;	This method shifts data from the SPI-Bus into the MCU
 ;
 ;
-;	@return SPI.BufferH The most significant Byte of the Data
-;	@return SPI.BufferL The least significant Byte of the Data
+;	@return SPI__BufferH The most significant Byte of the Data
+;	@return SPI__BufferL The least significant Byte of the Data
 ;
 ;	@example
-;	call	SPI.ShiftInBuffer
-;	banksel SPI.BufferH
-;	movf	SPI.BufferH,w
+;	call	SPI__ShiftInBuffer
+;	banksel SPI__BufferH
+;	movf	SPI__BufferH,w
 ;	banksel RegH
 ;	movwf	RegH
-;	banksel SPI.BufferH
-;	movf	SPI.BufferL,w
+;	banksel SPI__BufferH
+;	movf	SPI__BufferL,w
 ;	banksel RegL
 ;	movwf	RegL
 ;	@end-ex
@@ -227,7 +227,7 @@ ShiftOutLoop
 ;	@stacklevel 1
 ;
 ;
-SPI.ShiftInBuffer
+SPI__ShiftInBuffer
 	banksel TRISC
 	bsf		TRISC,3			;Set SDIO as an input
 	banksel Count00
@@ -244,9 +244,9 @@ ShiftInLoop
 	btfsc	SDIO			
 	bsf		STATUS, C
 	bcf		SCK
-	banksel SPI.BufferL
-	rlf		SPI.BufferL, f
-	rlf		SPI.BufferH, f
+	banksel SPI__BufferL
+	rlf		SPI__BufferL, f
+	rlf		SPI__BufferH, f
 ;	CLRWDT
 	banksel Count00
 	decfsz	Count00, f
@@ -254,7 +254,7 @@ ShiftInLoop
 	banksel PORTC
 	bsf		AFECS
 	bsf		SCK
-SPI.end
+SPI__end
 	banksel TRISC
 	movf	TRISC,w
 	iorlw	b'00001110'

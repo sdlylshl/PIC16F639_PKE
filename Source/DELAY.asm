@@ -59,7 +59,7 @@
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 #include "Project.inc"
-#define Delay.Returned	Delay.flag,3
+#define DELAY__Returned	DELAY__flag,3
 wait macro Cyc
 	local tmp = Cyc
 	while tmp > .0
@@ -68,17 +68,17 @@ tmp -= .1
 	endw
 	endm
 Delay_ovr	udata_ovr	;May do some overlay
-Delay.Counter	res 1
-Delay.TEMP2	res 1
-Delay.TEMP1	res 1
+DELAY__Counter	res 1
+DELAY__TEMP2	res 1
+DELAY__TEMP1	res 1
 	
-	global Delay.wait_w_x_50us, Delay.Counter
-	global Delay.flag, Delay.start, Delay.Wait
+	global DELAY__wait_w_x_50us, DELAY__Counter
+	global DELAY__flag, DELAY__start, DELAY__Wait
 flag_ovr	udata_ovr
-Delay.flag	res	1			;using bit 3
+DELAY__flag	res	1			;using bit 3
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    Delay.wait_w_x_50us( w )                                                  |
+;    DELAY__wait_w_x_50us( w )                                                  |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -95,7 +95,7 @@ Delay.flag	res	1			;using bit 3
 ;                                                                              |
 ;                                                                              |
 ;                                                                              |
-;    Used SFRs:  Delay.Returned                                                |
+;    Used SFRs:  DELAY__Returned                                                |
 ;                                                                              |
 ;                                                                              |
 ;    Stacklevel: 0                                                             |
@@ -105,7 +105,7 @@ Delay.flag	res	1			;using bit 3
 ;    banksel PORTB                                                             |
 ;    bsf     PORTB,0                                                           |
 ;    movlw   .10                                                               |
-;    call    Delay.wait_w_x_50us                                               |
+;    call    DELAY__wait_w_x_50us                                               |
 ;    banksel PORTB                                                             |
 ;    bcf     PORTB,0                                                           |
 ;                                                                              |
@@ -115,47 +115,47 @@ Delay.flag	res	1			;using bit 3
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 	code
-Delay.wait_w_x_50us					
+DELAY__wait_w_x_50us					
 ;time = ( 9[11] - n + TEMP2 * ( 12 + n + m + TEMP1 * 3 ) ) * ( 4 / Fosc )
 ;so set n equal to constant part (10[12]) depending on the bankselection code for Delay_Returned (see disassembly for exact values)
 ;use m to get an int, when dividing by 3.
 									;2 Cycles for call		(1)
 									;+ 1 Cycle for movlw	(1)
-	banksel Delay.flag				;0-2 Cycles				(1)
-	bcf		Delay.Returned			;1 Cycle				(1)
-	banksel	Delay.TEMP2
-	movwf	Delay.TEMP2				;1 Cycle				(1)
+	banksel DELAY__flag				;0-2 Cycles				(1)
+	bcf		DELAY__Returned			;1 Cycle				(1)
+	banksel	DELAY__TEMP2
+	movwf	DELAY__TEMP2				;1 Cycle				(1)
 BaseDelay
 	call	Delay50us				;see Delay50us
 	movlw	0x01					;1 Cycle				(TEMP2)
-	subwf	Delay.TEMP2,w			;1 Cycle				(TEMP2)
+	subwf	DELAY__TEMP2,w			;1 Cycle				(TEMP2)
 	btfsc	STATUS,Z				;1 Cycle				(TEMP2)
 									;2 Cycles				(TEMP2-1)
 	goto	lastloop				;2 Cycles				(1)
 	wait 	.11						;n Cycles				(TEMP2-1)
 lastloop
 	wait 	.2						;m Cycles				(TEMP2)
-	decfsz	Delay.TEMP2,f			;1 Cycle				(TEMP2)
+	decfsz	DELAY__TEMP2,f			;1 Cycle				(TEMP2)
 	goto	BaseDelay				;2 Cycles				(TEMP2)
-	banksel	Delay.flag
-	bsf		Delay.Returned			;1 Cycle  + 1 Cycle nop	(1)
+	banksel	DELAY__flag
+	bsf		DELAY__Returned			;1 Cycle  + 1 Cycle nop	(1)
 	return							;2 Cycles				(1)
 						
 Delay50us							; time=((X*3)+6)*(1/(Fosc/4))		
 	movlw	.25						; 1 cycle + 2 cycles for CALL		(TEMP2)
-	movwf	Delay.TEMP1				; 1 cycle							(TEMP2)
-	decfsz	Delay.TEMP1, f			; 1 cycle							(TEMP1*TEMP2)
+	movwf	DELAY__TEMP1				; 1 cycle							(TEMP2)
+	decfsz	DELAY__TEMP1, f			; 1 cycle							(TEMP1*TEMP2)
 	goto	$-1						; 2 cycles							((TEMP1-1)*TEMP2)
 	return							; 2 cycles + 1 cyclec for DECFSZ	(TEMP2)
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    Delay.start( w )                                                          |
+;    DELAY__start( w )                                                          |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
 ;    This function starts a counter an initializes it with value in w          |
 ;    multiplied with 50 us.                                                    |
-;    To wait for the counter to finish call Delay.Wait                         |
+;    To wait for the counter to finish call DELAY__Wait                         |
 ;    This function is intended to run at 8 MHz.                                |
 ;    If running other speeds, use the parameters in the source code to adjust  |
 ;    values.                                                                   |
@@ -176,8 +176,8 @@ Delay50us							; time=((X*3)+6)*(1/(Fosc/4))
 ;    banksel PORTB                                                             |
 ;    bsf     PORTB,0                                                           |
 ;    movlw   .10                                                               |
-;    call    Delay.start     ;starts the counter                               |
-;    call    Delay.Wait      ;waits till the 500us are over                    |
+;    call    DELAY__start     ;starts the counter                               |
+;    call    DELAY__Wait      ;waits till the 500us are over                    |
 ;    banksel PORTB                                                             |
 ;    bcf     PORTB,0                                                           |
 ;                                                                              |
@@ -186,9 +186,9 @@ Delay50us							; time=((X*3)+6)*(1/(Fosc/4))
 ;        This sets Pin RB0 high for approx. 500 us                             |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-Delay.start
-	banksel Delay.Counter		;2Cycles	1
-	movwf	Delay.Counter		;1Cycle		1
+DELAY__start
+	banksel DELAY__Counter		;2Cycles	1
+	movwf	DELAY__Counter		;1Cycle		1
 	banksel	OPTION_REG			;2Cycles	1	;setting prescaler to 1:2
 	clrf	OPTION_REG			;1Cycles	1
 	banksel	TMR0				;2Cycles	1
@@ -196,12 +196,12 @@ Delay.start
 	movwf	TMR0				;1Cycles	1
 	bcf		INTCON,T0IF			;this and below: dont't care timer already started
 	bsf		INTCON,T0IE
-	banksel	Delay.flag
-	bcf		Delay.Returned
+	banksel	DELAY__flag
+	bcf		DELAY__Returned
 	return
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    Delay.Wait( w )                                                           |
+;    DELAY__Wait( w )                                                           |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -223,8 +223,8 @@ Delay.start
 ;    banksel PORTB                                                             |
 ;    bsf     PORTB,0                                                           |
 ;    movlw   .10                                                               |
-;    call    Delay.start     ;starts the counter                               |
-;    call    Delay.Wait      ;waits till the 500us are over                    |
+;    call    DELAY__start     ;starts the counter                               |
+;    call    DELAY__Wait      ;waits till the 500us are over                    |
 ;    banksel PORTB                                                             |
 ;    bcf     PORTB,0                                                           |
 ;                                                                              |
@@ -233,9 +233,9 @@ Delay.start
 ;        This sets Pin RB0 high for approx. 500 us                             |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-Delay.Wait
-	banksel	Delay.flag
-	btfss	Delay.Returned
+DELAY__Wait
+	banksel	DELAY__flag
+	btfss	DELAY__Returned
 	goto	$-1				;at least 2 Cycles	1
 	bcf		INTCON,T0IE		;1Cycle				1
 	return

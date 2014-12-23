@@ -14,7 +14,7 @@
 ;    After it is called, the REC_EVENTS will be disabled.                      |
 ;    To ensure that the function is been called at the right time, the         |
 ;    rx line should still be high, if not the function will end without        |
-;    trying to receive more bits. When this is not the case, LF.Receive8       |
+;    trying to receive more bits. When this is not the case, LF__Receive8       |
 ;    will be called, to receive the command from the base station.             |
 ;    The received byte will be interpreted as a command and the command        |
 ;    specific code will be executeted. For a more detailed description of      |
@@ -73,39 +73,39 @@ SER3	res	1
 ;                                                                              |
 ;                                                                              |
 ;                                                                              |
-;    Used SFRs: OPTION_REG INTCON Delay.Returned EECON1 EEADR, EEDATA, TMR0    |
+;    Used SFRs: OPTION_REG INTCON DELAY__Returned EECON1 EEADR, EEDATA, TMR0    |
 ;    PORTC                                                                     |
 ;      ,                                                                       |
 ;     _w_x_50u                                                                 |
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |
-;    LF.Receive8                                                               |
-;    EEPROM.Write                                                              |
-;    EEPROM.Read                                                               |
-;    LF.Send8                                                                  |
-;        LF.Send_Clamp_One                                                     |
-;            AFE.SendCMDClampON                                                |
-;                SPI.Write                                                     |
-;            Delay.WaitFor                                                     |
-;            AFE.SendCMDClampOFF                                               |
-;                SPI.Write                                                     |
-;        LF.Send_Clamp_Zero                                                    |
-;            AFE.SendCMDClampON                                                |
-;                SPI.Write                                                     |
-;            Delay.WaitFor                                                     |
-;            AFE.SendCMDClampOFF                                               |
-;                SPI.Write                                                     |
-;    RF.Send_Header                                                            |
-;        Delay.start                                                           |
-;        Delay.wait                                                            |
-;    RF.Send_Data                                                              |
-;        Delay.start                                                           |
-;        Delay.wait                                                            |
-;    LF.ReadBuffer                                                             |
-;        AFE.Receive8                                                          |
-;    RF.SendBuffer                                                             |
-;    Delay.wait_w_x_50u                                                        |
+;    LF__Receive8                                                               |
+;    EEPROM__Write                                                              |
+;    EEPROM__Read                                                               |
+;    LF__Send8                                                                  |
+;        LF__Send_Clamp_One                                                     |
+;            AFE__SendCMDClampON                                                |
+;                SPI__Write                                                     |
+;            DELAY__WaitFor                                                     |
+;            AFE__SendCMDClampOFF                                               |
+;                SPI__Write                                                     |
+;        LF__Send_Clamp_Zero                                                    |
+;            AFE__SendCMDClampON                                                |
+;                SPI__Write                                                     |
+;            DELAY__WaitFor                                                     |
+;            AFE__SendCMDClampOFF                                               |
+;                SPI__Write                                                     |
+;    RF__Send_Header                                                            |
+;        DELAY__start                                                           |
+;        DELAY__wait                                                            |
+;    RF__Send_Data                                                              |
+;        DELAY__start                                                           |
+;        DELAY__wait                                                            |
+;    LF__ReadBuffer                                                             |
+;        AFE__Receive8                                                          |
+;    RF__SendBuffer                                                             |
+;    DELAY__wait_w_x_50u                                                        |
 ;    _w_x_50u                                                                  |
 ;                                                                              |
 ;                                                                              |
@@ -131,7 +131,7 @@ NOISE
 	banksel	PORTC
 	btfss	LFDATA				; Data still high?
 	goto	NOISE				; Event happened too long ago. Wait for next event
-	Call	LF.Receive8			; Receive Byte From Basestation
+	Call	LF__Receive8			; Receive Byte From Basestation
 	btfsc	STATUS,Z
 	goto	M_Failed
 	banksel LF_CMD
@@ -165,7 +165,7 @@ M_END
 	;Code to indicate correct reception may be placed here
 M_END_IMMEDIATE
 	; Reset the device, to cancel noise and apply output filter again (not necessary)
-	AFE.SendCMDSoftReset
+	AFE__SendCMDSoftReset
 	banksel	IOCA
 	bsf		IOCA,REC_EVENT		; Enable Rx Line interrupt on change
 	banksel	PORTA
@@ -174,15 +174,15 @@ M_END_IMMEDIATE
 	return
 M_Failed
 ;	You may switch some options to improve signal here
-;	AFE.SendCMDAGCPresON 
+;	AFE__SendCMDAGCPresON 
 ;	banksel MOD_DEPTH
 ;	decf	MOD_DEPTH,f
 ;	swapf	MOD_DEPTH,w
 ;	andlw	0x30
-;	AFE.setModDepth
-;	AFE.AGCActive
+;	AFE__setModDepth
+;	AFE__AGCActive
 ;	movlw	0x0f
-;	AFE.setXSensitivity
+;	AFE__setXSensitivity
 	goto	M_END_IMMEDIATE
 ; ***********************************************************************
 ; WRITE_USR()
@@ -190,12 +190,12 @@ M_Failed
 WRITE_USR
 ; ******* Receive 16-bit LF data from Base-station ******
 WRITE_USR2
-	Call	LF.Receive8			; Receive Byte From Basestation
+	Call	LF__Receive8			; Receive Byte From Basestation
 	btfsc	STATUS,Z
 	goto	M_Failed
 	BANKSEL DAT0
 	movwf	DAT0
-	Call	LF.Receive8			; Receive Byte From Basestation
+	Call	LF__Receive8			; Receive Byte From Basestation
 	btfsc	STATUS,Z
 	goto	M_Failed
 	BANKSEL DAT1
@@ -206,51 +206,51 @@ WRITE_USR3
 	movf	LF_CMD,w			; Get LF Command Byte
 	andlw	0x3					; Mask Lower 2 bits = Address
 	addlw	EE_USER				; Add to User Memory Offset
-	banksel	EEPROM.ADDRESS			
-	movwf	EEPROM.ADDRESS		; Load offset into ADDRESS register
+	banksel	EEPROM__ADDRESS			
+	movwf	EEPROM__ADDRESS		; Load offset into ADDRESS register
 	banksel DAT0
 	movf	DAT0,w
 	nop
-	Call	EEPROM.Write		; Write byte to EEPROM
+	Call	EEPROM__Write		; Write byte to EEPROM
 	banksel DAT1
 	movf	DAT1,w			
 	nop
-	Call	EEPROM.Write		; Write byte to EEPROM
+	Call	EEPROM__Write		; Write byte to EEPROM
 ; ******* Calculate EEPROM Offset & Read 16-bits ********
 WRITE_USR4
 	banksel LF_CMD
 	movf	LF_CMD,w			; Get LF Command Byte
 	andlw	0x3					; Mask Lower 2 bits = Address
 	addlw	EE_USER				; Add to User Memory Offset
-	banksel	EEPROM.ADDRESS			
-	movwf	EEPROM.ADDRESS		; Load offset into ADDRESS register
-	Call	EEPROM.Read			; Read byte from EEPROM
+	banksel	EEPROM__ADDRESS			
+	movwf	EEPROM__ADDRESS		; Load offset into ADDRESS register
+	Call	EEPROM__Read			; Read byte from EEPROM
 	banksel DAT0
 	movwf	DAT0
 	nop			
-	Call	EEPROM.Read			; Read byte from EEPROM
+	Call	EEPROM__Read			; Read byte from EEPROM
 	banksel DAT1
 	movwf	DAT1
-	pagesel Delay.wait_w_x_50u
-	Delay.WaitFor .1,'m'
+	pagesel DELAY__wait_w_x_50u
+	DELAY__WaitFor .1,'m'
 	
 ; ******  Send LF Data Transmission back to Basestation ********
 ;WRITE_USR5
 ;	movfw	DAT0
-;	Call	LF.Send8			; Transmit byte using LF Clamping
+;	Call	LF__Send8			; Transmit byte using LF Clamping
 ;	banksel DAT1
 ;	movfw	DAT1
-;	Call	LF.Send8			; Transmit byte using LF Clamping
+;	Call	LF__Send8			; Transmit byte using LF Clamping
 ;	call	waitForLFEnd
 ; ******  Send RF Data Transmission back to Basestation ********
 WRITE_USR6
-	Call	RF.Send_Header		; Send transmission header
+	Call	RF__Send_Header		; Send transmission header
 	banksel DAT0
 	movfw	DAT0
-	Call	RF.Send_Data		; Transmit byte using UHF transmitter
+	Call	RF__Send_Data		; Transmit byte using UHF transmitter
 	banksel DAT1
 	movfw	DAT1
-	Call	RF.Send_Data		; Transmit byte using UHF transmitter
+	Call	RF__Send_Data		; Transmit byte using UHF transmitter
 	goto	M_END
 ; ***********************************************************************
 ; READ_USR()
@@ -260,35 +260,35 @@ READ_USR
 	movf	LF_CMD,w			; Get LF Command Byte
 	andlw	0x3					; Mask Lower 2 bits = Address
 	addlw	EE_USER				; Add to User Memory Offset
-	banksel	EEPROM.ADDRESS			
-	movwf	EEPROM.ADDRESS		; Load offset into ADDRESS register
-	Call	EEPROM.Read			; Read byte from EEPROM
+	banksel	EEPROM__ADDRESS			
+	movwf	EEPROM__ADDRESS		; Load offset into ADDRESS register
+	Call	EEPROM__Read			; Read byte from EEPROM
 	banksel DAT0
 	movwf	DAT0			
-	Call	EEPROM.Read			; Read byte from EEPROM
+	Call	EEPROM__Read			; Read byte from EEPROM
 	banksel DAT1
 	movwf	DAT1
 	
 	
-	pagesel Delay.wait_w_x_50u
-	Delay.WaitFor .1,'m'
+	pagesel DELAY__wait_w_x_50u
+	DELAY__WaitFor .1,'m'
 ; ******  Send LF Data Transmission back to Basestation ********
 ;READ_USR1
 ;	movfw	DAT0
-;	Call	LF.Send8			; Transmit byte using LF Clamping
+;	Call	LF__Send8			; Transmit byte using LF Clamping
 ;	banksel DAT1
 ;	movfw	DAT1
-;	Call	LF.Send8			; Transmit byte using LF Clamping
+;	Call	LF__Send8			; Transmit byte using LF Clamping
 ;	call	waitForLFEnd
 ; ******  Send RF Data Transmission back to Basestation
 READ_USR2
-	Call	RF.Send_Header		; Send transmission header
+	Call	RF__Send_Header		; Send transmission header
 	banksel DAT0
 	movfw	DAT0
-	Call	RF.Send_Data		; Transmit byte using UHF transmitter
+	Call	RF__Send_Data		; Transmit byte using UHF transmitter
 	banksel DAT1
 	movfw	DAT1
-	Call	RF.Send_Data		; Transmit byte using UHF transmitter
+	Call	RF__Send_Data		; Transmit byte using UHF transmitter
 	goto	M_END
 ; ***********************************************************************
 ; IFF_CMD()
@@ -299,11 +299,11 @@ IFF_CMD1
 	movlw	DAT0
 	movwf	FSR
 	movlw	0x04
-	call	LF.ReadBuffer		; Receive challenge from Basestation and store it to DAT
+	call	LF__ReadBuffer		; Receive challenge from Basestation and store it to DAT
 	btfsc	STATUS,Z
 	goto	M_Failed
-	pagesel Delay.wait_w_x_50u
-	Delay.WaitFor .1,'m'		; Wait 1ms for end of LF data transmission
+	pagesel DELAY__wait_w_x_50u
+	DELAY__WaitFor .1,'m'		; Wait 1ms for end of LF data transmission
 ; ******* Calculate 32-bit KeeLoq response ****************
 IFF_CMD2
 	;; Add Call to KeeLoq Code here !!!!
@@ -312,26 +312,26 @@ IFF_CMD3
 	;movlw	DAT0
 	;movwf	FSR
 	;movlw	0x04
-	;call	AFE.SendBuffer
+	;call	AFE__SendBuffer
 ;	banksel DAT0
 ;	movfw	DAT0
-;	Call	LF.Send8		; Transmit byte using LF Clamping
+;	Call	LF__Send8		; Transmit byte using LF Clamping
 ;	banksel DAT1
 ;	movfw	DAT1
-;	Call	LF.Send8		; Transmit byte using LF Clamping
+;	Call	LF__Send8		; Transmit byte using LF Clamping
 ;	banksel DAT2
 ;	movfw	DAT2
-;	Call	LF.Send8		; Transmit byte using LF Clamping	
+;	Call	LF__Send8		; Transmit byte using LF Clamping	
 ;	banksel DAT3
 ;	movfw	DAT3
-;	Call	LF.Send8		; Transmit byte using LF Clamping
+;	Call	LF__Send8		; Transmit byte using LF Clamping
 ;	call	waitForLFEnd
 ; ******  Send UHF Transmission back to Basestation ********
 IFF_CMD4
 	movlw	DAT0
 	movwf	FSR
 	movlw	0x04
-	call	RF.SendBuffer	; Read response from DAT and send it back using the RF Transmitter
+	call	RF__SendBuffer	; Read response from DAT and send it back using the RF Transmitter
 	goto	M_END
 ; ***********************************************************************
 ; RSSI_CMD()
@@ -340,50 +340,50 @@ RSSI_CMD
 ; ******  Send LF Data Transmission back to Basestation ********
 RSSI_CMD1
 	movlw	0x69
-	Call	LF.Send8		; Transmit byte using LF Clamping
+	Call	LF__Send8		; Transmit byte using LF Clamping
 ; ******  Send RF Data Transmission back to Basestation ********
 RSSI_CMD2
-	Call	RF.Send_Header	; Send transmission header
+	Call	RF__Send_Header	; Send transmission header
 	movlw	0x69
-	Call	RF.Send_Data	; Transmit byte using UHF transmitter
+	Call	RF__Send_Data	; Transmit byte using UHF transmitter
 	goto	M_END
 ; ***********************************************************************
 ; READ_SERIAL()
 ; ***********************************************************************
 READ_SERIAL
-	banksel	EEPROM.ADDRESS
+	banksel	EEPROM__ADDRESS
 	movlw	EE_DATA				; Set EEPROM Adress Offset for Serial Number
-	movwf	EEPROM.ADDRESS
+	movwf	EEPROM__ADDRESS
 	movlw	SER0
 	movwf	FSR
 	movlw	0x04
-	call	EEPROM.ReadBytes	; Read Serialnumber to SER
-	pagesel Delay.wait_w_x_50u
-	Delay.WaitFor .1,'m'
+	call	EEPROM__ReadBytes	; Read Serialnumber to SER
+	pagesel DELAY__wait_w_x_50u
+	DELAY__WaitFor .1,'m'
 ; ******  Send LF Data Transmission back to Basestation ********
 ;READ_SERIAL1
 ;	banksel DAT0
 ;	movfw	DAT0
-;	Call	LF.Send8		; Transmit byte using LF Clamping
+;	Call	LF__Send8		; Transmit byte using LF Clamping
 ;	banksel DAT1
 ;	movfw	DAT1
-;	Call	LF.Send8		; Transmit byte using LF Clamping
+;	Call	LF__Send8		; Transmit byte using LF Clamping
 ;	banksel DAT2
 ;	movfw	DAT2
-;	Call	LF.Send8		; Transmit byte using LF Clamping	
+;	Call	LF__Send8		; Transmit byte using LF Clamping	
 ;	banksel DAT3
 ;	movfw	DAT3
-;	Call	LF.Send8		; Transmit byte using LF Clamping
+;	Call	LF__Send8		; Transmit byte using LF Clamping
 ;	call	waitForLFEnd
-	;pagesel Delay.wait_w_x_50u
-	;Delay.WaitFor .10,'m'
+	;pagesel DELAY__wait_w_x_50u
+	;DELAY__WaitFor .10,'m'
 	;Call	Delay10ms		; Wait 10ms for end of LF data transmission
 ; ******  Send RF Data Transmission back to Basestation ********
 READ_SERIAL2
 	movlw	SER0
 	movwf	FSR
 	movlw	0x04
-	call	RF.SendBuffer	; Transmitt SER
+	call	RF__SendBuffer	; Transmitt SER
 	goto	M_END
 	
 ;waitForLFEnd
@@ -391,7 +391,7 @@ READ_SERIAL2
 ;	banksel COUNTER
 ;	movwf	COUNTER
 ;waitForLFEndNoC
-;	btfsc	LF.DATAIN
+;	btfsc	LF__DATAIN
 ;	goto	waitForLFEnd
 ;	decfsz	COUNTER,f
 ;	goto	waitForLFEndNoC

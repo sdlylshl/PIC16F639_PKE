@@ -102,36 +102,36 @@ Button_Exec
 BOOT_BTN
 	btfss	EVENT_REG, RF_Button	; was the button on RA0 pressed?
 	goto	MIDDLE_BTN				; no, then end (the only used button)
-	call	RF.Send_Header			; yes, then send a data packet over the RF-Interface
+	call	RF__Send_Header			; yes, then send a data packet over the RF-Interface
 	movlw	0x64
-	call	RF.Send_Data			;Send a command
+	call	RF__Send_Data			;Send a command
 MIDDLE_BTN	
 ;	btfss	EVENT_REG, 2			; was the button on RA2 pressed?
 ;	goto	LOCK_BTN				; no, then end (the only used button)
-;	call	RF.Send_Header			; yes, then send a data packet over the RF-Interface
+;	call	RF__Send_Header			; yes, then send a data packet over the RF-Interface
 ;	movlw	0x65
-;	call	RF.Send_Data			;Send a command
+;	call	RF__Send_Data			;Send a command
 	
 LOCK_BTN
 ;	btfss	EVENT_REG, 3			; was the button on RA3 pressed?
 ;	goto	UNLOCK_BTN				; no, then end (the only used button)
-;	call	RF.Send_Header			; yes, then send a data packet over the RF-Interface
+;	call	RF__Send_Header			; yes, then send a data packet over the RF-Interface
 ;	movlw	0x66
-;	call	RF.Send_Data			;Send a command
+;	call	RF__Send_Data			;Send a command
 	
 UNLOCK_BTN
 ;	btfss	EVENT_REG, 4			; was the button on RA4 pressed?
 ;	goto	ALERT_BTN				; no, then end (the only used button)
-;	call	RF.Send_Header			; yes, then send a data packet over the RF-Interface
+;	call	RF__Send_Header			; yes, then send a data packet over the RF-Interface
 ;	movlw	0x67
-;	call	RF.Send_Data			;Send a command
+;	call	RF__Send_Data			;Send a command
 	
 ALERT_BTN
 ;	btfss	EVENT_REG, 5			; was the button on RA5 pressed?
 ;	goto	END_BUTTON_HANDLER		; no, then end (the only used button)
-;	call	RF.Send_Header			; yes, then send a data packet over the RF-Interface
+;	call	RF__Send_Header			; yes, then send a data packet over the RF-Interface
 ;	movlw	0x68
-;	call	RF.Send_Data			;Send a command
+;	call	RF__Send_Data			;Send a command
 	
 	
 END_BUTTON_HANDLER

@@ -2,28 +2,29 @@
 #define DELAY_INC
 
 
-#define Delay.Returned	Delay.flag,3
+#define DELAY__Returned	DELAY__flag,3
 
-	extern Delay.wait_w_x_50us, Delay.flag, Delay.Counter
-	extern Delay.start, Delay.Wait
+	extern DELAY__wait_w_x_50us, DELAY__flag, DELAY__Counter
+	extern DELAY__start, DELAY__Wait
 ;
 ;
 ;	This macro initialises the delay module
 ;
 ;
-;Delay.Init macro
+;DELAY__Init macro
 ;	banksel	OPTION_REG
 ;	MOVLW	b'00000000'		; SET UP FOR TMR0'S PRESCALER VALUE TO 1
 ;							; (RAPU, bit7) = 0 to enable weak pull-up for PortA also 
 ;	MOVWF	OPTION_REG		; this is used for Delay loop only
 ;	endm
+;/*
 ;
 ;	This macro waits for up to 12 ms.
 ;	The time has to be a multible of 50us.
 ;	It is just added to enhance readability of the source code.
-;	It calls Delay.wait_w_x_50us with appropriate parameters.
+;	It calls DELAY__wait_w_x_50us with appropriate parameters.
 ;	This function is intended to run at 8 MHz.
-;	If running other speeds, change the Delay.wait_w_x_50us method.
+;	If running other speeds, change the DELAY__wait_w_x_50us method.
 ;
 ;	@param time The value of time
 ;	@param unit The character corresponding to the unit of time (i.e. 'u', 'm')
@@ -31,7 +32,7 @@
 ;	@example
 ;	banksel PORTB
 ;	bsf		PORTB,0
-;	Delay.waitFor .500, 'u'
+;	DELAY__waitFor .500, 'u'
 ;	banksel PORTB
 ;	bcf		PORTB,0
 ;	@end-ex
@@ -41,12 +42,12 @@
 ;
 ;	@stacklevel +1
 ;
-;	@registers Delay.Returned
+;	@registers DELAY__Returned
 ;
 ;*/
 
 
-Delay.WaitFor macro time, unit
+DELAY__WaitFor macro time, unit
 
 	if(unit == 'u')
 	movlw (time/.50)
@@ -55,36 +56,35 @@ Delay.WaitFor macro time, unit
 	movlw ((time*.1000)/.50)
 		endif
 	endif
-	call Delay.wait_w_x_50us
+	call DELAY__wait_w_x_50us
 
 	endm
 
 
-;Delay.start	macro us			;build as function?	Yes, absolutely
+;DELAY__start	macro us			;build as function?	Yes, absolutely
 ;	banksel	OPTION_REG			;2Cycles	1	;setting prescaler to 1:2
 ;	clrf	OPTION_REG			;1Cycles	1
 ;	banksel	TMR0				;2Cycles	1
 ;	movlw	0xEA				;1Cycles	1	;0x100 - 0x32 (50u) + 0x06 (static offset) + 0x07(Interrupt) + 0x0F (n first cycle)= 0xEA to compenste static Offsets
 ;	movwf	TMR0				;1Cycles	1
 ;	bsf		INTCON,T0IE
-;	banksel	Delay.Counter		;don't care timer already started
+;	banksel	DELAY__Counter		;don't care timer already started
 ;	movlw	(us/.50)
-;	movwf	Delay.Counter
-;	banksel	Delay.flag
-;	bcf		Delay.Returned
+;	movwf	DELAY__Counter
+;	banksel	DELAY__flag
+;	bcf		DELAY__Returned
 ;	nop
 ;	endm
 
-;Delay.Wait macro
-;	banksel	Delay.flag
-;	btfss	Delay.Returned
+;DELAY__Wait macro
+;	banksel	DELAY__flag
+;	btfss	DELAY__Returned
 ;	goto	$-1				;at least 1 Cycle
 ;	bcf		INTCON,T0IE
 ;	endm
-
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    Delay.Isr( w )                                                            |
+;    DELAY__Isr( w )                                                            |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -124,9 +124,9 @@ Delay.WaitFor macro time, unit
 ;        goto    NEXT_INT        ; ... No, then continue search                |
 ;        btfss   INTCON,T0IF     ; Check if TMR0 Interrupt Flag Set            |
 ;        goto    NEXT_INT                                                      |
-;        Delay.Isr               ; Handles the delay routines                  |
+;        DELAY__Isr               ; Handles the delay routines                  |
 ;        ; *** If you want to use Timer0 for other Interrupts modify the       |
-;        Delay.start function,                                                 |
+;        DELAY__start function,                                                 |
 ;        ; *** to compensate all instructions, you place here.                 |
 ;        bcf     INTCON,T0IF                                                   |
 ;        goto    EndIsr                                                        |
@@ -148,15 +148,15 @@ Delay.WaitFor macro time, unit
 ;                                                                              |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-Delay.Isr macro
+DELAY__Isr macro
 	banksel	TMR0			;2Cycles	n
 	movlw	0xD8			;1Cycle		n	;so set 0x100-0x32+0x02+0x0E=0xDC
 	movwf	TMR0			;1Cycle		n
-	banksel	Delay.Counter	;2Cycles	1
-	decfsz	Delay.Counter	;1Cycle		1
-	goto	Delay.Isr.End	;2Cycle		0
-	banksel	Delay.flag		;2Cycles	1
-	bsf		Delay.Returned	;1Cycle		1
-Delay.Isr.End
+	banksel	DELAY__Counter	;2Cycles	1
+	decfsz	DELAY__Counter	;1Cycle		1
+	goto	DELAY__Isr.End	;2Cycle		0
+	banksel	DELAY__flag		;2Cycles	1
+	bsf		DELAY__Returned	;1Cycle		1
+DELAY__Isr.End
 	endm
 #endif

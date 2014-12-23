@@ -177,7 +177,7 @@ TIMER0_INT
 	btfss	INTCON,T0IF		; Check if TMR0 Interrupt Flag Set
 	goto	TIMER1_INT		; ... No, then continue search
 	
-	Delay.Isr				;Do delay interrupt service routine
+	DELAY__Isr				;Do delay interrupt service routine
 	
 	bcf		INTCON,T0IF		;clear Timer 0 interrupt flag
 	goto	EndIsr			;end interrupt (to ensure maximum precision delay)
@@ -275,7 +275,7 @@ EndIsr
 ;                                                                              |
 ;                                                                              |
 ;                                                                              |
-;    Used SFRs: OPTION_REG INTCON Delay.Returned EECON1 EEADR, EEDATA, TMR0    |
+;    Used SFRs: OPTION_REG INTCON DELAY__Returned EECON1 EEADR, EEDATA, TMR0    |
 ;      PORTC                                                                   |
 ;      ,                                                                       |
 ;     _w_x_50u                                                                 |
@@ -283,32 +283,32 @@ EndIsr
 ;                                                                              |
 ;    Calls subroutines:                                                        |
 ;    MESSAGE_HANDLER                                                           |
-;        LF.Receive8                                                           |
-;        EEPROM.Write                                                          |
-;        EEPROM.Read                                                           |
-;        LF.Send8                                                              |
-;            LF.Send_Clamp_One                                                 |
-;                AFE.SendCMDClampON                                            |
-;                    SPI.Write                                                 |
-;                Delay.WaitFor                                                 |
-;                AFE.SendCMDClampOFF                                           |
-;                    SPI.Write                                                 |
-;            LF.Send_Clamp_Zero                                                |
-;                AFE.SendCMDClampON                                            |
-;                    SPI.Write                                                 |
-;                Delay.WaitFor                                                 |
-;                AFE.SendCMDClampOFF                                           |
-;                    SPI.Write                                                 |
-;        RF.Send_Header                                                        |
-;            Delay.start                                                       |
-;            Delay.wait                                                        |
-;        RF.Send_Data                                                          |
-;            Delay.start                                                       |
-;            Delay.wait                                                        |
-;        LF.ReadBuffer                                                         |
-;            AFE.Receive8                                                      |
-;        RF.SendBuffer                                                         |
-;        Delay.wait_w_x_50u                                                    |
+;        LF__Receive8                                                           |
+;        EEPROM__Write                                                          |
+;        EEPROM__Read                                                           |
+;        LF__Send8                                                              |
+;            LF__Send_Clamp_One                                                 |
+;                AFE__SendCMDClampON                                            |
+;                    SPI__Write                                                 |
+;                DELAY__WaitFor                                                 |
+;                AFE__SendCMDClampOFF                                           |
+;                    SPI__Write                                                 |
+;            LF__Send_Clamp_Zero                                                |
+;                AFE__SendCMDClampON                                            |
+;                    SPI__Write                                                 |
+;                DELAY__WaitFor                                                 |
+;                AFE__SendCMDClampOFF                                           |
+;                    SPI__Write                                                 |
+;        RF__Send_Header                                                        |
+;            DELAY__start                                                       |
+;            DELAY__wait                                                        |
+;        RF__Send_Data                                                          |
+;            DELAY__start                                                       |
+;            DELAY__wait                                                        |
+;        LF__ReadBuffer                                                         |
+;            AFE__Receive8                                                      |
+;        RF__SendBuffer                                                         |
+;        DELAY__wait_w_x_50u                                                    |
 ;        _w_x_50u                                                              |
 ;    Button_Handler                                                            |
 ;                                                                              |
@@ -358,19 +358,19 @@ MAIN
 	clrf	Button_Counter
 	banksel flag
 	clrf	flag
-	EEPROM.Init
-	RF.Init
-	SPI.Init
-	AFE.Init
-	movlw	AFE.ModDepth12
-	AFE.setModDepth
-;	AFE.SendCMDAGCPresON 
-;	AFE.DisableChannelY
-;	AFE.DisableChannelZ
-;	AFE.DisableChannelX
-;	AFE.AGCActive
+	EEPROM__Init
+	RF__Init
+	SPI__Init
+	AFE__Init
+	movlw	AFE__ModDepth12
+	AFE__setModDepth
+;	AFE__SendCMDAGCPresON 
+;	AFE__DisableChannelY
+;	AFE__DisableChannelZ
+;	AFE__DisableChannelX
+;	AFE__AGCActive
 ;	movlw	0x0f
-;	AFE.setXSensitivity
+;	AFE__setXSensitivity
 	call	Button_Handler_Init
 	banksel	PORTA
 	bcf		ErrorLED		; Turn D6 LED On

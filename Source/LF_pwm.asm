@@ -23,10 +23,10 @@
 #include Delay.inc
 #include SPI.inc
 #include AFE_639.inc
-	ifndef LF.PORT
+	ifndef LF__PORT
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    Constant LF.PORT                                                          |
+;    Constant LF__PORT                                                          |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -37,12 +37,12 @@
 ;                                                                              |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-#define LF.PORT		PORTC
+#define LF__PORT		PORTC
 	endif
-	ifndef LF.PIN
+	ifndef LF__PIN
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    Constant LF.PIN                                                           |
+;    Constant LF__PIN                                                           |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -53,13 +53,13 @@
 ;                                                                              |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-#define LF.PIN		3
+#define LF__PIN		3
 	endif
-#define	LFDATA		LF.PORT,LF.PIN		; Low Frequency Data IN
-	ifndef LF.T_PERIOD_MAX
+#define	LFDATA		LF__PORT,LF__PIN		; Low Frequency Data IN
+	ifndef LF__T_PERIOD_MAX
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    Constant LF.T_PERIOD_MAX                                                  |
+;    Constant LF__T_PERIOD_MAX                                                  |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -71,12 +71,12 @@
 ;                                                                              |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-#define LF.T_PERIOD_MAX	.8000
+#define LF__T_PERIOD_MAX	.8000
 	endif
-	ifndef LF.T_INST
+	ifndef LF__T_INST
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    Constant LF.T_INST                                                        |
+;    Constant LF__T_INST                                                        |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -87,12 +87,12 @@
 ;                                                                              |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-#define LF.T_INST		.5
+#define LF__T_INST		.5
 	endif
-	ifndef LF.T_NOISE_MAX
+	ifndef LF__T_NOISE_MAX
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    Constant LF.T_NOISE_MAX                                                   |
+;    Constant LF__T_NOISE_MAX                                                   |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -110,12 +110,12 @@
 ;           _______________________________________                            |
 ;        __|                         |______|                                  |
 ;------------------------------------------------------------------------------+
-#define LF.T_NOISE_MAX	.200
+#define LF__T_NOISE_MAX	.200
 	endif
-	ifndef LF.T_STEP
+	ifndef LF__T_STEP
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    Constant LF.T_STEP                                                        |
+;    Constant LF__T_STEP                                                        |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -131,18 +131,18 @@
 ;          ____________                                                        |
 ;        _|            |__________________________|                            |
 ;------------------------------------------------------------------------------+
-#define LF.T_STEP		.250
+#define LF__T_STEP		.250
 	endif
 	udata
-LF.Buffer		res 1
-LF.COUNTER		res 1
-LF.TEMP			res 1
+LF__Buffer		res 1
+LF__COUNTER		res 1
+LF__TEMP			res 1
 Counter			res 1
 Time			res 1
-LF.Parity		res 1
-	global	LF.Send8, LF.Receive8, LF.ReadBuffer, LF.SendBuffer
+LF__Parity		res 1
+	global	LF__Send8, LF__Receive8, LF__ReadBuffer, LF__SendBuffer
 	variable PRE_BITS = B'00000000'
-	variable TMP_PRESCALER = ( LF.T_PERIOD_MAX / (.220 * LF.T_INST) ) + .1
+	variable TMP_PRESCALER = ( LF__T_PERIOD_MAX / (.220 * LF__T_INST) ) + .1
 	variable PRESCALER = .2
 	if ( TMP_PRESCALER == .1)
 PRE_BITS = B'00001000'
@@ -164,7 +164,7 @@ PRESCALER*=.2
 ; ***********************************************************************
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    LF.Send_Clamp_One()                                                       |
+;    LF__Send_Clamp_One()                                                       |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -173,32 +173,32 @@ PRESCALER*=.2
 ;                                                                              |
 ;                                                                              |
 ;    Used SFRs:                                                                |
-;    Delay.Returned                                                            |
+;    DELAY__Returned                                                            |
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |
-;    AFE.SendCMDClampON                                                        |
-;        SPI.Write                                                             |
-;    Delay.WaitFor                                                             |
-;    AFE.SendCMDClampOFF                                                       |
-;        SPI.Write                                                             |
+;    AFE__SendCMDClampON                                                        |
+;        SPI__Write                                                             |
+;    DELAY__WaitFor                                                             |
+;    AFE__SendCMDClampOFF                                                       |
+;        SPI__Write                                                             |
 ;                                                                              |
 ;                                                                              |
 ;    Stacklevel: 2                                                             |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-LF.Send_Clamp_One
-	AFE.SendCMDClampON
-	Delay.WaitFor LF.T_STEP,'u'
-	AFE.SendCMDClampOFF
-	Delay.WaitFor LF.T_STEP, 'u'
+LF__Send_Clamp_One
+	AFE__SendCMDClampON
+	DELAY__WaitFor LF__T_STEP,'u'
+	AFE__SendCMDClampOFF
+	DELAY__WaitFor LF__T_STEP, 'u'
 	return
 ; ***********************************************************************	
 ; Send_Clamp_Zero()
 ; ***********************************************************************
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    LF.Send_Clamp_Zero()                                                      |
+;    LF__Send_Clamp_Zero()                                                      |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -207,32 +207,32 @@ LF.Send_Clamp_One
 ;                                                                              |
 ;                                                                              |
 ;    Used SFRs:                                                                |
-;    Delay.Returned                                                            |
+;    DELAY__Returned                                                            |
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |
-;    AFE.SendCMDClampON                                                        |
-;        SPI.Write                                                             |
-;    Delay.WaitFor                                                             |
-;    AFE.SendCMDClampOFF                                                       |
-;        SPI.Write                                                             |
+;    AFE__SendCMDClampON                                                        |
+;        SPI__Write                                                             |
+;    DELAY__WaitFor                                                             |
+;    AFE__SendCMDClampOFF                                                       |
+;        SPI__Write                                                             |
 ;                                                                              |
 ;                                                                              |
 ;    Stacklevel: 2                                                             |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-LF.Send_Clamp_Zero
-	AFE.SendCMDClampON
-	Delay.WaitFor LF.T_STEP, 'u'
-	AFE.SendCMDClampOFF
-	Delay.WaitFor 2*LF.T_STEP, 'u'
+LF__Send_Clamp_Zero
+	AFE__SendCMDClampON
+	DELAY__WaitFor LF__T_STEP, 'u'
+	AFE__SendCMDClampOFF
+	DELAY__WaitFor 2*LF__T_STEP, 'u'
 	return
 ; ***********************************************************************
 ; * AFE Receive Routine 												*
 ; ***********************************************************************
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;     w LF.Receive8()                                                          |
+;     w LF__Receive8()                                                          |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -249,7 +249,7 @@ LF.Send_Clamp_Zero
 ;    Stacklevel: 2                                                             |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-LF.Receive8
+LF__Receive8
 	banksel	OPTION_REG
 	movlw	PRE_BITS		; SET UP FOR TMR0'S PRESCALER VALUE TO 1:8
 							; (RAPU, bit7) = 0 to enable weak pull-up for PortA also 
@@ -258,57 +258,57 @@ LF.Receive8
 	
 	banksel TMR0
 	clrf	TMR0			; Rising edge detected, Reset Timer 
-	banksel	LF.Buffer
-	clrf	LF.Buffer		; clear receive register
-	clrf	LF.Parity
+	banksel	LF__Buffer
+	clrf	LF__Buffer		; clear receive register
+	clrf	LF__Parity
 	
 	bcf		INTCON,T0IF		; Reset Timer #0 Interrupt Flag
 	movlw	.8				; number of bits to receive
-	movwf	LF.COUNTER		; load number of bits into counter register
+	movwf	LF__COUNTER		; load number of bits into counter register
 	
 ReceiveNext
-	call	LF.DetectFalling
+	call	LF__DetectFalling
 	btfsc	STATUS,Z
 	retlw	0x00
 	
 ReceiveNext2
-	call	LF.DetectRising
+	call	LF__DetectRising
 	btfsc	STATUS,Z
 	goto	Return.Fail
 	btfsc	INTCON,T0IF
 	goto	Return.Fail
-	movlw	(3*LF.T_PERIOD_MAX)/(4*PRESCALER*LF.T_INST);0x9C			; Determine Bit value Time>156, then Zero else One
+	movlw	(3*LF__T_PERIOD_MAX)/(4*PRESCALER*LF__T_INST);0x9C			; Determine Bit value Time>156, then Zero else One
 	subwf	Time,w
-	banksel LF.Buffer	
-	movf	LF.COUNTER,w
+	banksel LF__Buffer	
+	movf	LF__COUNTER,w
 	btfsc	STATUS,Z
 	goto	ParityCheck
 	btfsc	STATUS,C
-	incf	LF.Parity,f
-	rrf		LF.Buffer,f		; Rotate bit received bit, now in carry, into receive buffer
-;	banksel LF.COUNTER
-	decf	LF.COUNTER, f		; Decrement receive count register by one
+	incf	LF__Parity,f
+	rrf		LF__Buffer,f		; Rotate bit received bit, now in carry, into receive buffer
+;	banksel LF__COUNTER
+	decf	LF__COUNTER, f		; Decrement receive count register by one
 	goto	ReceiveNext		; ... no, then receive next bit
 ParityCheck
 	btfss	STATUS,C
 	goto	Receive.ParityZero
 ;	goto	Receive.ParityOne
 Receive.ParityOne
-	btfss	LF.Parity,0
+	btfss	LF__Parity,0
 	goto	Receive.Success
 	goto	Return.Fail
 Receive.ParityZero
-	btfsc	LF.Parity,0
+	btfsc	LF__Parity,0
 	goto	Receive.Success
 	goto	Return.Fail
-;	banksel LF.Buffer
+;	banksel LF__Buffer
 Receive.Success
-	movf 	LF.Buffer,w		; Move received data byte into WREG
+	movf 	LF__Buffer,w		; Move received data byte into WREG
 	bcf		STATUS,Z
 	return					
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    LF.ReadBuffer( w  FSR )                                                   |
+;    LF__ReadBuffer( w  FSR )                                                   |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -327,7 +327,7 @@ Receive.Success
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |
-;    AFE.Receive8                                                              |
+;    AFE__Receive8                                                              |
 ;                                                                              |
 ;                                                                              |
 ;    Stacklevel: 1                                                             |
@@ -337,26 +337,26 @@ Receive.Success
 ;    movlw   InputBuffer                                                       |
 ;    movwf   FSR                                                               |
 ;    movlw   0x04                                                              |
-;    call    AFE.ReadBuffer                                                    |
+;    call    AFE__ReadBuffer                                                    |
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
 ;        This reads 4 bytes from the LF-Input to the buffer "InputBuffer"      |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-LF.ReadBuffer
-	banksel	LF.TEMP
-	movwf	LF.TEMP
-	call	LF.DetectRising		;Adjusting delay of first bit
-LF.ReadBuffer.loop
-	call	LF.Receive8
+LF__ReadBuffer
+	banksel	LF__TEMP
+	movwf	LF__TEMP
+	call	LF__DetectRising		;Adjusting delay of first bit
+LF__ReadBuffer.loop
+	call	LF__Receive8
 	btfsc	STATUS,Z
 	goto	Return.Fail
 	bankisel	PORTA
 	movwf	INDF
 	incf	FSR,f
-	decfsz	LF.TEMP,f
-	goto	LF.ReadBuffer.loop
+	decfsz	LF__TEMP,f
+	goto	LF__ReadBuffer.loop
 	bcf		STATUS,Z
 	return
 ; ***********************************************************************
@@ -364,7 +364,7 @@ LF.ReadBuffer.loop
 ; ***********************************************************************
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    LF.Send8()                                                                |
+;    LF__Send8()                                                                |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -372,48 +372,48 @@ LF.ReadBuffer.loop
 ;                                                                              |
 ;                                                                              |
 ;                                                                              |
-;    Used SFRs: Delay.Returned                                                 |
+;    Used SFRs: DELAY__Returned                                                 |
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |
-;    LF.Send_Clamp_One                                                         |
-;        AFE.SendCMDClampON                                                    |
-;            SPI.Write                                                         |
-;        Delay.WaitFor                                                         |
-;        AFE.SendCMDClampOFF                                                   |
-;            SPI.Write                                                         |
-;    LF.Send_Clamp_Zero                                                        |
-;        AFE.SendCMDClampON                                                    |
-;            SPI.Write                                                         |
-;        Delay.WaitFor                                                         |
-;        AFE.SendCMDClampOFF                                                   |
-;            SPI.Write                                                         |
+;    LF__Send_Clamp_One                                                         |
+;        AFE__SendCMDClampON                                                    |
+;            SPI__Write                                                         |
+;        DELAY__WaitFor                                                         |
+;        AFE__SendCMDClampOFF                                                   |
+;            SPI__Write                                                         |
+;    LF__Send_Clamp_Zero                                                        |
+;        AFE__SendCMDClampON                                                    |
+;            SPI__Write                                                         |
+;        DELAY__WaitFor                                                         |
+;        AFE__SendCMDClampOFF                                                   |
+;            SPI__Write                                                         |
 ;                                                                              |
 ;                                                                              |
 ;    Stacklevel: 3                                                             |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-LF.Send8
-	banksel	LF.Buffer
-	movwf	LF.Buffer
+LF__Send8
+	banksel	LF__Buffer
+	movwf	LF__Buffer
 	movlw	.8					; number of bits to receive
-	movwf	LF.COUNTER			; load number of bits into counter register
+	movwf	LF__COUNTER			; load number of bits into counter register
 SendNext
-	btfsc	LF.Buffer,0			; Check if Data Bit = 1
-	Call	LF.Send_Clamp_One	; ... Yes, then send LF Clamp One
+	btfsc	LF__Buffer,0			; Check if Data Bit = 1
+	Call	LF__Send_Clamp_One	; ... Yes, then send LF Clamp One
 	
-	banksel LF.Buffer
-	btfss	LF.Buffer,0			; Check if Data Bit = 0
-	Call	LF.Send_Clamp_Zero	; ... Yes, then send LF Clamp Zero
-	banksel LF.Buffer
-	rrf		LF.Buffer,1			; Right Rotate Data Register to get next bit
-	decfsz	LF.COUNTER, f		; Decrement receive count register by one
+	banksel LF__Buffer
+	btfss	LF__Buffer,0			; Check if Data Bit = 0
+	Call	LF__Send_Clamp_Zero	; ... Yes, then send LF Clamp Zero
+	banksel LF__Buffer
+	rrf		LF__Buffer,1			; Right Rotate Data Register to get next bit
+	decfsz	LF__COUNTER, f		; Decrement receive count register by one
 	goto	SendNext			; ... no, then receive next bit
-	AFE.SendCMDClampOFF
+	AFE__SendCMDClampOFF
 	return					
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    LF.SendBuffer( w  FSR )                                                   |
+;    LF__SendBuffer( w  FSR )                                                   |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -427,23 +427,23 @@ SendNext
 ;                                                                              |
 ;                                                                              |
 ;                                                                              |
-;    Used SFRs: Delay.Returned                                                 |
+;    Used SFRs: DELAY__Returned                                                 |
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |
-;    LF.Send8                                                                  |
-;        LF.Send_Clamp_One                                                     |
-;            AFE.SendCMDClampON                                                |
-;                SPI.Write                                                     |
-;            Delay.WaitFor                                                     |
-;            AFE.SendCMDClampOFF                                               |
-;                SPI.Write                                                     |
-;        LF.Send_Clamp_Zero                                                    |
-;            AFE.SendCMDClampON                                                |
-;                SPI.Write                                                     |
-;            Delay.WaitFor                                                     |
-;            AFE.SendCMDClampOFF                                               |
-;                SPI.Write                                                     |
+;    LF__Send8                                                                  |
+;        LF__Send_Clamp_One                                                     |
+;            AFE__SendCMDClampON                                                |
+;                SPI__Write                                                     |
+;            DELAY__WaitFor                                                     |
+;            AFE__SendCMDClampOFF                                               |
+;                SPI__Write                                                     |
+;        LF__Send_Clamp_Zero                                                    |
+;            AFE__SendCMDClampON                                                |
+;                SPI__Write                                                     |
+;            DELAY__WaitFor                                                     |
+;            AFE__SendCMDClampOFF                                               |
+;                SPI__Write                                                     |
 ;                                                                              |
 ;                                                                              |
 ;    Stacklevel: 4                                                             |
@@ -453,27 +453,27 @@ SendNext
 ;    movlw   SerialNumber    ;move start address to w                          |
 ;    movwf   FSR             ;write start address to fsr                       |
 ;    movlw   0x04            ;move number of bytes to transmit to w            |
-;    call    AFE.SendBuffer  ;send it via LF-Talkback                          |
+;    call    AFE__SendBuffer  ;send it via LF-Talkback                          |
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
 ;        This sends 4 bytes of the buffer "SerialNumber" to the air            |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-LF.SendBuffer
-	banksel	LF.TEMP
-	movwf	LF.TEMP
-LF.SendBuffer.loop
+LF__SendBuffer
+	banksel	LF__TEMP
+	movwf	LF__TEMP
+LF__SendBuffer.loop
 	bankisel	PORTA
 	movf	INDF,w
-	call	LF.Send8
+	call	LF__Send8
 	incf	FSR,f
-	decfsz	LF.TEMP,f
-	goto	LF.SendBuffer.loop
+	decfsz	LF__TEMP,f
+	goto	LF__SendBuffer.loop
 	return
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    LF.DetectFalling()                                                        |
+;    LF__DetectFalling()                                                        |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -489,24 +489,24 @@ LF.SendBuffer.loop
 ;    Stacklevel: 1                                                             |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-LF.DetectFalling
+LF__DetectFalling
 		banksel Counter
-		movlw	(LF.T_NOISE_MAX/(LF.T_INST*.9))+1
+		movlw	(LF__T_NOISE_MAX/(LF__T_INST*.9))+1
 		movwf	Counter								; initialize debounce counter
-		movlw	(.115*LF.T_PERIOD_MAX/(.100*LF.T_INST*PRESCALER))+1	; 
+		movlw	(.115*LF__T_PERIOD_MAX/(.100*LF__T_INST*PRESCALER))+1	; 
 		banksel TMR0
 		subwf	TMR0,w								; over maximum period time?
 		btfsc	STATUS,C
 		goto	Return.Fail							; yes, then return 0
 		btfsc	INTCON,T0IF							; As there is a resonant frequency in this routine
 		goto	Return.Fail							; Check also absolute timing
-LF.DetectFalling.Debounce
-		banksel LF.PORT
+LF__DetectFalling.Debounce
+		banksel LF__PORT
 		btfsc	LFDATA								; is pin low?
-		goto	LF.DetectFalling					; no, then start from beginning
+		goto	LF__DetectFalling					; no, then start from beginning
 		banksel Counter
 		decfsz	Counter,f							; was the pin low for T_NOISE_MAX?
-		goto	LF.DetectFalling.Debounce			; no, then test again
+		goto	LF__DetectFalling.Debounce			; no, then test again
 		banksel TMR0
 		movf	TMR0,w								; store TMR0 value
 		banksel Time
@@ -515,7 +515,7 @@ LF.DetectFalling.Debounce
 		return
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    LF.DetectRising()                                                         |
+;    LF__DetectRising()                                                         |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -531,24 +531,24 @@ LF.DetectFalling.Debounce
 ;    Stacklevel: 1                                                             |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-LF.DetectRising
+LF__DetectRising
 		banksel Counter
-		movlw	(LF.T_NOISE_MAX/(LF.T_INST*.9))+1
+		movlw	(LF__T_NOISE_MAX/(LF__T_INST*.9))+1
 		movwf	Counter								; initialize debounce counter
-		movlw	(.115*LF.T_PERIOD_MAX/(.100*LF.T_INST*PRESCALER))+1	; 
+		movlw	(.115*LF__T_PERIOD_MAX/(.100*LF__T_INST*PRESCALER))+1	; 
 		banksel TMR0
 		subwf	TMR0,w								; over maximum period time?
 		btfsc	STATUS,C
 		goto	Return.Fail							; yes, then return 0
 		btfsc	INTCON,T0IF							; As there is a resonant frequency in this routine
 		goto	Return.Fail							; Check also absolute timing
-LF.DetectRising.Debounce
-		banksel LF.PORT
+LF__DetectRising.Debounce
+		banksel LF__PORT
 		btfss	LFDATA								; is pin low?
-		goto	LF.DetectRising						; no, then start from beginning
+		goto	LF__DetectRising						; no, then start from beginning
 		banksel Counter
 		decfsz	Counter,f							; was the pin low for T_NOISE_MAX?
-		goto	LF.DetectRising.Debounce			; no, then test again
+		goto	LF__DetectRising.Debounce			; no, then test again
 		banksel TMR0
 		movf	TMR0,w								; store TMR0 value
 		clrf	TMR0

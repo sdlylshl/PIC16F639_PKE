@@ -1,7 +1,7 @@
 #ifndef EEPROM_INC
 #define EEPROM_INC
 
-	#define EEPROM.RamAddress
+	#define EEPROM__RamAddress
 
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -13,12 +13,12 @@
 ;                                                                              |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-	extern EEPROM.ADDRESS
-	extern EEPROM.ByteCount
-	extern EEPROM.Write, EEPROM.WriteBytes, EEPROM.Read, EEPROM.ReadBytes
+	extern EEPROM__ADDRESS
+	extern EEPROM__ByteCount
+	extern EEPROM__Write, EEPROM__WriteBytes, EEPROM__Read, EEPROM__ReadBytes
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    EEPROM.Init()                                                             |
+;    EEPROM__Init()                                                             |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -33,14 +33,14 @@
 ;                                                                              |
 ;                                                                              |
 ;    Example:                                                                  |
-;    EEPROM.Init     ;initialises the EEPROM module                            |
+;    EEPROM__Init     ;initialises the EEPROM module                            |
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
 ;        That's it                                                             |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-EEPROM.Init	macro
+EEPROM__Init	macro
 	banksel	EEADR
 	CLRF	EEDAT
 	CLRF	EEADR

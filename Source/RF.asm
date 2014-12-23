@@ -23,19 +23,19 @@
 ;------------------------------------------------------------------------------+
 #include "Project.inc"
 #include "Delay.inc"
-#ifndef RF.PIN
-	#define RF.PIN		5		; RF Modulation Output
-	#define RF.PORT		PORTC
+#ifndef RF__PIN
+	#define RF__PIN		5		; RF Modulation Output
+	#define RF__PORT		PORTC
 #endif
 RF_ovr	udata_ovr
 Parity			res 1
-RF.COUNTER		res 1
-RF.Byte_Counter	res 1
-RF.Data_REG		res 1
-	ifndef RF.T_HDR_INIT
+RF__COUNTER		res 1
+RF__Byte_Counter	res 1
+RF__Data_REG		res 1
+	ifndef RF__T_HDR_INIT
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    Constant RF.T_HDR_INIT                                                    |
+;    Constant RF__T_HDR_INIT                                                    |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -50,12 +50,12 @@ RF.Data_REG		res 1
 ;        ___|               |_____________|                                    |
 ;        |__________________|                                                  |
 ;------------------------------------------------------------------------------+
-#define RF.T_HDR_INIT .4100
+#define RF__T_HDR_INIT .4100
 	endif
-	ifndef RF.T_HDR_GAP
+	ifndef RF__T_HDR_GAP
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    Constant RF.T_HDR_GAP                                                     |
+;    Constant RF__T_HDR_GAP                                                     |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -63,12 +63,12 @@ RF.Data_REG		res 1
 ;                                                                              |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-#define RF.T_HDR_GAP .550
+#define RF__T_HDR_GAP .550
 	endif
-	ifndef RF.T_HDR_HIGH
+	ifndef RF__T_HDR_HIGH
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    Constant RF.T_HDR_HIGH                                                    |
+;    Constant RF__T_HDR_HIGH                                                    |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -76,12 +76,12 @@ RF.Data_REG		res 1
 ;                                                                              |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-#define RF.T_HDR_HIGH .2100
+#define RF__T_HDR_HIGH .2100
 	endif
-	ifndef RF.T_HDR_LOW
+	ifndef RF__T_HDR_LOW
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    Constant RF.T_HDR_LOW                                                     |
+;    Constant RF__T_HDR_LOW                                                     |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -89,12 +89,12 @@ RF.Data_REG		res 1
 ;                                                                              |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-#define RF.T_HDR_LOW .2100
+#define RF__T_HDR_LOW .2100
 	endif
-	ifndef RF.T_STEP
+	ifndef RF__T_STEP
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    Constant RF.T_STEP                                                        |
+;    Constant RF__T_STEP                                                        |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -106,17 +106,17 @@ RF.Data_REG		res 1
 ;          _____________                                                       |
 ;        _|             |___________________________|                          |
 ;------------------------------------------------------------------------------+
-#define RF.T_STEP .250
+#define RF__T_STEP .250
 	endif
 	
 	
 	
 	
-	global RF.Send_Header, RF.Send_Data, RF.SendBuffer
+	global RF__Send_Header, RF__Send_Data, RF__SendBuffer
 	code
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    RF.SendBuffer( w  FSR )                                                   |
+;    RF__SendBuffer( w  FSR )                                                   |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -134,28 +134,28 @@ RF.Data_REG		res 1
 ;                                                                              |
 ;                                                                              |
 ;    Example:                                                                  |
-;    movlw   AFE.ConfData                                                      |
+;    movlw   AFE__ConfData                                                      |
 ;    movwf   FSR                                                               |
 ;    movlw   0x07                                                              |
-;    call    RF.SendBuffer                                                     |
+;    call    RF__SendBuffer                                                     |
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
-;        This sends 7 bytes of the buffer "AFE.ConfMap" to the air             |
+;        This sends 7 bytes of the buffer "AFE__ConfMap" to the air             |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-RF.SendBuffer
-	banksel	RF.Byte_Counter
-	movwf	RF.Byte_Counter
-	call	RF.Send_Header
-RF.SendBuffer.loop
+RF__SendBuffer
+	banksel	RF__Byte_Counter
+	movwf	RF__Byte_Counter
+	call	RF__Send_Header
+RF__SendBuffer.loop
 	bankisel	PORTA
 	movf	INDF,w
-	call	RF.Send_Data
+	call	RF__Send_Data
 	incf	FSR,f
-	banksel RF.Byte_Counter
-	decfsz	RF.Byte_Counter,f
-	goto	RF.SendBuffer.loop
+	banksel RF__Byte_Counter
+	decfsz	RF__Byte_Counter,f
+	goto	RF__SendBuffer.loop
 	return
 	
 ;----------------------------------------------------
@@ -164,7 +164,7 @@ RF.SendBuffer.loop
 ; ---------------------------------------------------
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    RF.Send_Data( w )                                                         |
+;    RF__Send_Data( w )                                                         |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -181,8 +181,8 @@ RF.SendBuffer.loop
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |
-;    Delay.start                                                               |
-;    Delay.wait                                                                |
+;    DELAY__start                                                               |
+;    DELAY__wait                                                                |
 ;                                                                              |
 ;                                                                              |
 ;    Stacklevel: 2                                                             |
@@ -190,59 +190,59 @@ RF.SendBuffer.loop
 ;                                                                              |
 ;    Example:                                                                  |
 ;    movlw   0xf0                                                              |
-;    call    RF.Send_Data                                                      |
+;    call    RF__Send_Data                                                      |
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
 ;        This sends 0xf0 over the RF antenna                                   |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-RF.Send_Data
-	banksel RF.Data_REG
-	movwf	RF.Data_REG		; Load Data to Send
+RF__Send_Data
+	banksel RF__Data_REG
+	movwf	RF__Data_REG		; Load Data to Send
 	clrf	Parity
 	; Send Byte using UHF transmitter
 Transmit8	
-	banksel RF.COUNTER
+	banksel RF__COUNTER
 	movlw	.8
-	movwf	RF.COUNTER	; initialize count register
+	movwf	RF__COUNTER	; initialize count register
 TransmitNext
-	banksel RF.Data_REG
-	rrf		RF.Data_REG, f		; rotate receive register
+	banksel RF__Data_REG
+	rrf		RF__Data_REG, f		; rotate receive register
 	btfsc	STATUS, C		; test bit to be transmited
 	goto	SendOne			; send high value
 SendZero
-	call 	Delay.Wait
-	banksel RF.PORT
-	bsf		RF.PORT,RF.PIN	; rf modulation on
-	movlw	((2*RF.T_STEP)/.50)
-	call 	Delay.start
-	call 	Delay.Wait
-	banksel RF.PORT
-	bcf		RF.PORT,RF.PIN	; rf modulation off
-	movlw	(RF.T_STEP/.50)
-	call 	Delay.start
+	call 	DELAY__Wait
+	banksel RF__PORT
+	bsf		RF__PORT,RF__PIN	; rf modulation on
+	movlw	((2*RF__T_STEP)/.50)
+	call 	DELAY__start
+	call 	DELAY__Wait
+	banksel RF__PORT
+	bcf		RF__PORT,RF__PIN	; rf modulation off
+	movlw	(RF__T_STEP/.50)
+	call 	DELAY__start
 	goto	SendNextBit		; send next bit
 SendOne
-	call 	Delay.Wait
-	banksel RF.PORT
-	bsf		RF.PORT,RF.PIN	; rf modulation on
-	movlw	(RF.T_STEP/.50)
-	call 	Delay.start
-	call 	Delay.Wait
-	banksel RF.PORT
-	bcf		RF.PORT,RF.PIN	; rf modulation off
-	movlw	((2*RF.T_STEP)/.50)
-	call 	Delay.start
+	call 	DELAY__Wait
+	banksel RF__PORT
+	bsf		RF__PORT,RF__PIN	; rf modulation on
+	movlw	(RF__T_STEP/.50)
+	call 	DELAY__start
+	call 	DELAY__Wait
+	banksel RF__PORT
+	bcf		RF__PORT,RF__PIN	; rf modulation off
+	movlw	((2*RF__T_STEP)/.50)
+	call 	DELAY__start
 	banksel	Parity
 	incf	Parity,f
 ;	goto	SendNextBit		; send next bit
 SendNextBit	
-	banksel RF.COUNTER
-	movf	RF.COUNTER,f
+	banksel RF__COUNTER
+	movf	RF__COUNTER,f
 	btfsc	STATUS,Z
 	goto	EndTX
-	decfsz	RF.COUNTER, f	; decrement counter register
+	decfsz	RF__COUNTER, f	; decrement counter register
 	goto	TransmitNext 	; transmit next bit
 SendParity
 ;	btfsc	Parity,7
@@ -254,7 +254,7 @@ SendParity
 	btfsc	Parity,0
 	goto	SendZero
 EndTX
-	call 	Delay.Wait
+	call 	DELAY__Wait
 	retlw	0x00			; return to main routine
 ;----------------------------------------------------
 ;	Same as the LF data
@@ -262,7 +262,7 @@ EndTX
 ; ---------------------------------------------------
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    RF.Send_Header()                                                          |
+;    RF__Send_Header()                                                          |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -276,41 +276,41 @@ EndTX
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |
-;    Delay.start                                                               |
-;    Delay.wait                                                                |
+;    DELAY__start                                                               |
+;    DELAY__wait                                                                |
 ;                                                                              |
 ;                                                                              |
 ;    Stacklevel: 2                                                             |
 ;                                                                              |
 ;                                                                              |
 ;    Example:                                                                  |
-;    call    RF.Send_Header                                                    |
+;    call    RF__Send_Header                                                    |
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
 ;        This sends the header                                                 |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-RF.Send_Header
-	banksel	RF.PORT
-	bsf		RF.PORT,RF.PIN	; modulation data for rf
-	movlw	(RF.T_HDR_INIT/.50)
-	call	Delay.start
-	call	Delay.Wait
-	banksel	RF.PORT
-	bcf		RF.PORT,RF.PIN	; turn off modulation data for rf
-	movlw	(RF.T_HDR_GAP/.50)
-	call	Delay.start
-	call	Delay.Wait
-	banksel	RF.PORT
-	bsf		RF.PORT,RF.PIN	; modulation data for rf
-	MOVLW	(RF.T_HDR_HIGH/.50)
-	call	Delay.start
-	call	Delay.Wait
-	banksel	RF.PORT
-	bcf		RF.PORT,RF.PIN	; turn off modulation data for rf
-	movlw	(RF.T_HDR_LOW/.50)
-	call	Delay.start
+RF__Send_Header
+	banksel	RF__PORT
+	bsf		RF__PORT,RF__PIN	; modulation data for rf
+	movlw	(RF__T_HDR_INIT/.50)
+	call	DELAY__start
+	call	DELAY__Wait
+	banksel	RF__PORT
+	bcf		RF__PORT,RF__PIN	; turn off modulation data for rf
+	movlw	(RF__T_HDR_GAP/.50)
+	call	DELAY__start
+	call	DELAY__Wait
+	banksel	RF__PORT
+	bsf		RF__PORT,RF__PIN	; modulation data for rf
+	MOVLW	(RF__T_HDR_HIGH/.50)
+	call	DELAY__start
+	call	DELAY__Wait
+	banksel	RF__PORT
+	bcf		RF__PORT,RF__PIN	; turn off modulation data for rf
+	movlw	(RF__T_HDR_LOW/.50)
+	call	DELAY__start
 	return	
 ;****************************************************** 
 ;	END OF FILE : UHF_TX.ASM

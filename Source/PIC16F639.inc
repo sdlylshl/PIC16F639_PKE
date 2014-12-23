@@ -64,7 +64,7 @@
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    Referrence to the DATA in the EEPROM.                                     |
+;    Referrence to the DATA in the EEPROM__                                     |
 ;    The first four bytes are the Serial number                                |
 ;    The next eight bytes are the Encryption Key                               |
 ;                                                                              |

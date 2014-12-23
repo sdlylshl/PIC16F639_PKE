@@ -1,5 +1,5 @@
 ;------------------------------------------------------------------------------
-;	EEPROM.ASM --- PIC16F636/9 EEPROM Functions
+;	EEPROM.asm --- PIC16F636/9 EEPROM Functions
 ;
 ;	Jan Ornter
 ;
@@ -58,25 +58,25 @@
 ;------------------------------------------------------------------------------+
 #include Project.inc
 	udata
-EEPROM.ADDRESS		res 1
-EEPROM.ByteCount	res 1
-	global EEPROM.ADDRESS, EEPROM.ByteCount
-	global EEPROM.Write, EEPROM.WriteBytes, EEPROM.Read, EEPROM.ReadBytes
+EEPROM__ADDRESS		res 1
+EEPROM__ByteCount	res 1
+	global EEPROM__ADDRESS, EEPROM__ByteCount
+	global EEPROM__Write, EEPROM__WriteBytes, EEPROM__Read, EEPROM__ReadBytes
 	
 flag_ovr	udata_ovr
 flag res 1		;using bit 1 of flag register
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    EEPROM.Write( w  EEPROM.ADDRESS )                                         |
+;    EEPROM__Write( w  EEPROM__ADDRESS )                                         |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    This function writes one byte of data to the EEPROM.                      |
+;    This function writes one byte of data to the EEPROM__                      |
 ;                                                                              |
 ;                                                                              |
 ;    Parameters:                                                               |
 ;    w - The byte of data                                                      |
-;    EEPROM.ADDRESS - The address in the EEPROM memory                         |
+;    EEPROM__ADDRESS - The address in the EEPROM memory                         |
 ;                                                                              |
 ;                                                                              |
 ;                                                                              |
@@ -88,10 +88,10 @@ flag res 1		;using bit 1 of flag register
 ;                                                                              |
 ;    Example:                                                                  |
 ;    movlw   0x00                                                              |
-;    banksel EEPROM.ADDRESS                                                    |
-;    movwf   EEPROM.ADDRESS                                                    |
+;    banksel EEPROM__ADDRESS                                                    |
+;    movwf   EEPROM__ADDRESS                                                    |
 ;    movlw   0x12                                                              |
-;    call    EEPROM.Write                                                      |
+;    call    EEPROM__Write                                                      |
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
@@ -99,11 +99,11 @@ flag res 1		;using bit 1 of flag register
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 	code
-EEPROM.Write
+EEPROM__Write
 	banksel	EEDATA
 	MOVWF	EEDATA			; Data value to write
-	banksel	EEPROM.ADDRESS
-	movfw	EEPROM.ADDRESS	; GET EEPROM ADDRESS
+	banksel	EEPROM__ADDRESS
+	movfw	EEPROM__ADDRESS	; GET EEPROM ADDRESS
 	
 	banksel	EEADR
 	MOVWF	EEADR			; Data memory to write
@@ -121,25 +121,25 @@ WR_WAIT
 ; ******* EEPROM WRITE DISABLE ****************
 EEWRITE3
 	BCF		EECON1,WREN			; Disable writes
-	banksel	EEPROM.ADDRESS
-	INCF	EEPROM.ADDRESS,F	; Auto-increase Address Pointer
+	banksel	EEPROM__ADDRESS
+	INCF	EEPROM__ADDRESS,F	; Auto-increase Address Pointer
 	banksel	flag
 	btfss	flag,1
 	RETLW	0H
 	goto	return_write
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    EEPROM.WriteBytes( w  EEPROM.ADDRESS  FSR )                               |
+;    EEPROM__WriteBytes( w  EEPROM__ADDRESS  FSR )                               |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    This function writes several bytes of data to the EEPROM.                 |
+;    This function writes several bytes of data to the EEPROM__                 |
 ;    The buffer has to be within bank0 or bank1.                               |
 ;                                                                              |
 ;                                                                              |
 ;    Parameters:                                                               |
 ;    w - The the number of bytes                                               |
-;    EEPROM.ADDRESS - The first address in the EEPROM memory                   |
+;    EEPROM__ADDRESS - The first address in the EEPROM memory                   |
 ;    FSR - The first address of the data in your RAM                           |
 ;                                                                              |
 ;                                                                              |
@@ -154,45 +154,45 @@ EEWRITE3
 ;    movlw   0x70                                                              |
 ;    movwf   FSR                                                               |
 ;    movlw   0x00                                                              |
-;    banksel EEPROM.ADDRESS                                                    |
-;    movwf   EEPROM.ADDRESS                                                    |
+;    banksel EEPROM__ADDRESS                                                    |
+;    movwf   EEPROM__ADDRESS                                                    |
 ;    movlw   0x2                                                               |
-;    call    EEPROM.WriteBytes                                                 |
+;    call    EEPROM__WriteBytes                                                 |
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
-;        This writes the data in 0x70 to the address 0x00 in the EEPROM. And   |
-;        the data in 0x71 to the address 0x01 in EEPROM.                       |
+;        This writes the data in 0x70 to the address 0x00 in the EEPROM__ And   |
+;        the data in 0x71 to the address 0x01 in EEPROM__                       |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-EEPROM.WriteBytes
+EEPROM__WriteBytes
 	banksel	flag
 	bsf		flag,1
-	banksel EEPROM.ByteCount
-	movwf	EEPROM.ByteCount
-EEPROM.WriteBytes.loop
+	banksel EEPROM__ByteCount
+	movwf	EEPROM__ByteCount
+EEPROM__WriteBytes.loop
 	bankisel	PORTA
 	movf 	INDF,w
-	goto	EEPROM.Write
+	goto	EEPROM__Write
 return_write
 	incf	FSR,f
-	banksel	EEPROM.ByteCount
-	decfsz	EEPROM.ByteCount,f
-	goto	EEPROM.WriteBytes.loop
+	banksel	EEPROM__ByteCount
+	decfsz	EEPROM__ByteCount,f
+	goto	EEPROM__WriteBytes.loop
 	banksel	flag
 	bcf		flag,1
 	return
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;     w EEPROM.Read( EEPROM.ADDRESS )                                          |
+;     w EEPROM__Read( EEPROM__ADDRESS )                                          |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    This function reads one byte of data from the EEPROM.                     |
+;    This function reads one byte of data from the EEPROM__                     |
 ;                                                                              |
 ;                                                                              |
 ;    Parameters:                                                               |
-;    EEPROM.ADDRESS - The Address of the EEPROM Memory                         |
+;    EEPROM__ADDRESS - The Address of the EEPROM Memory                         |
 ;                                                                              |
 ;                                                                              |
 ;    Returns:                                                                  |
@@ -207,10 +207,10 @@ return_write
 ;                                                                              |
 ;    Example:                                                                  |
 ;    movlw   0x00                                                              |
-;    banksel EEPROM.ADDRESS                                                    |
-;    movwf   EEPROM.ADDRESS                                                    |
+;    banksel EEPROM__ADDRESS                                                    |
+;    movwf   EEPROM__ADDRESS                                                    |
 ;    movlw   0x12                                                              |
-;    call    EEPROM.Read                                                       |
+;    call    EEPROM__Read                                                       |
 ;    movwf   Register                                                          |
 ;                                                                              |
 ;                                                                              |
@@ -219,31 +219,31 @@ return_write
 ;        Register                                                              |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-EEPROM.Read
-	banksel	EEPROM.ADDRESS
-    MOVFW   EEPROM.ADDRESS
+EEPROM__Read
+	banksel	EEPROM__ADDRESS
+    MOVFW   EEPROM__ADDRESS
 	banksel	EEADR
 	MOVWF	EEADR				; Data memory address to read
 	BSF		EECON1,RD			; Command read
 	MOVF	EEDATA,W			; Get data
-	banksel	EEPROM.ADDRESS
-	INCF	EEPROM.ADDRESS,F	; Auto-increase Address Pointer
+	banksel	EEPROM__ADDRESS
+	INCF	EEPROM__ADDRESS,F	; Auto-increase Address Pointer
 	banksel	flag
 	btfss	flag,1
 	RETURN						; Return without changing w-register
 	goto	return_read
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    EEPROM.ReadBytes( EEPROM.ADDRESS  FSR  w )                                |
+;    EEPROM__ReadBytes( EEPROM__ADDRESS  FSR  w )                                |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    This function reads one byte of data from the EEPROM.                     |
+;    This function reads one byte of data from the EEPROM__                     |
 ;    The buffer has to be within bank0 or bank1.                               |
 ;                                                                              |
 ;                                                                              |
 ;    Parameters:                                                               |
-;    EEPROM.ADDRESS - The address of the EEPROM memory                         |
+;    EEPROM__ADDRESS - The address of the EEPROM memory                         |
 ;    FSR - The address in the RAM, that should be written                      |
 ;    w - The number of bytes to read                                           |
 ;                                                                              |
@@ -259,35 +259,35 @@ EEPROM.Read
 ;    movlw   0x70                                                              |
 ;    movwf   FSR                                                               |
 ;    movlw   0x00                                                              |
-;    banksel EEPROM.ADDRESS                                                    |
-;    movwf   EEPROM.ADDRESS                                                    |
+;    banksel EEPROM__ADDRESS                                                    |
+;    movwf   EEPROM__ADDRESS                                                    |
 ;    movlw   0x2                                                               |
-;    call    EEPROM.WriteBytes                                                 |
+;    call    EEPROM__WriteBytes                                                 |
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
 ;        This reads the address 0x00 in the EEPROM and stores the data in 0x70.|
-;         The data of 0x01 will be stored in 0x71 in the EEPROM.               |
+;         The data of 0x01 will be stored in 0x71 in the EEPROM__               |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-EEPROM.ReadBytes
+EEPROM__ReadBytes
 	banksel	flag
 	bsf		flag,1
-	banksel EEPROM.ByteCount
-	movwf	EEPROM.ByteCount
-EEPROM.ReadBytes.loop
-	goto	EEPROM.Read
+	banksel EEPROM__ByteCount
+	movwf	EEPROM__ByteCount
+EEPROM__ReadBytes.loop
+	goto	EEPROM__Read
 return_read
 	bankisel	PORTA
 	movwf 	INDF
 	incf	FSR,f
-	banksel	EEPROM.ByteCount
-	decfsz	EEPROM.ByteCount,f
-	goto	EEPROM.ReadBytes.loop
+	banksel	EEPROM__ByteCount
+	decfsz	EEPROM__ByteCount,f
+	goto	EEPROM__ReadBytes.loop
 	banksel	flag
 	bcf		flag,1
 	return
 ;****************************************************** 
-;	END OF FILE : EEPROM.ASM
+;	END OF FILE : EEPROM.asm
 ;******************************************************	
 	END

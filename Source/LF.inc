@@ -1,10 +1,10 @@
 #ifndef	LF_INC
 #define LF_INC
 
-	extern	LF.Send8, LF.Receive8, LF.ReadBuffer, LF.SendBuffer
+	extern	LF__Send8, LF__Receive8, LF__ReadBuffer, LF__SendBuffer
 
 
-	#define	LF.DATAIN		PORTC,3
+	#define	LF__DATAIN		PORTC,3
 
 
 #endif

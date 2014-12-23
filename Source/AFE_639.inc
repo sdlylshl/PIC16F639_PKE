@@ -16,24 +16,24 @@
 ;                                                                              |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-	extern AFE.ConfMap
-	extern AFE.Buffer
-	extern AFE.LoadCfg, AFE.SafeCfg, AFE.ReadCfg, AFE.WriteCfg, AFE.WriteRegister, AFE.ReadRegister, AFE.WriteNVerifyRegister
-	extern AFE.CalcColumnParity
-	#define	AFE.Alert			PORTC,2		; SPI Clock Output
-	#define	AFE.CMDClampOn		B'00000000'
-	#define AFE.CMDClampOff		B'00100000'
-	#define AFE.CMDSleep		B'01000000'
-	#define AFE.CMDAGCOn		B'01100000'
-	#define AFE.CMDAGCOff		B'10000000'
-	#define	AFE.CMDSR			B'10100000'
-	#define AFE.ModDepth12		B'00110000'
-	#define AFE.ModDepth25		B'00100000'
-	#define AFE.ModDepth75		B'00010000'
-	#define AFE.ModDepth50		B'00000000'
+	extern AFE__ConfMap
+	extern AFE__Buffer
+	extern AFE__LoadCfg, AFE__SafeCfg, AFE__ReadCfg, AFE__WriteCfg, AFE__WriteRegister, AFE__ReadRegister, AFE__WriteNVerifyRegister
+	extern AFE__CalcColumnParity
+	#define	AFE__Alert			PORTC,2		; SPI Clock Output
+	#define	AFE__CMDClampOn		B'00000000'
+	#define AFE__CMDClampOff		B'00100000'
+	#define AFE__CMDSleep		B'01000000'
+	#define AFE__CMDAGCOn		B'01100000'
+	#define AFE__CMDAGCOff		B'10000000'
+	#define	AFE__CMDSR			B'10100000'
+	#define AFE__ModDepth12		B'00110000'
+	#define AFE__ModDepth25		B'00100000'
+	#define AFE__ModDepth75		B'00010000'
+	#define AFE__ModDepth50		B'00000000'
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    AFE.Init()                                                                |
+;    AFE__Init()                                                                |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -41,18 +41,18 @@
 ;                                                                              |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-AFE.Init macro
-	call AFE.LoadCfg
-	call AFE.WriteCfg
-;	call AFE.ReadCfg
-	AFE.SendCMDSoftReset
+AFE__Init macro
+	call AFE__LoadCfg
+	call AFE__WriteCfg
+;	call AFE__ReadCfg
+	AFE__SendCMDSoftReset
 	banksel	PORTA			;just debugging
-	btfss	AFE.Alert
+	btfss	AFE__Alert
 	goto	$-1
 	endm
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    AFE.SendCMDClampON()                                                      |
+;    AFE__SendCMDClampON()                                                      |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -67,29 +67,29 @@ AFE.Init macro
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |
-;    SPI.Write                                                                 |
+;    SPI__Write                                                                 |
 ;                                                                              |
 ;                                                                              |
 ;    Stacklevel: 1                                                             |
 ;                                                                              |
 ;                                                                              |
 ;    Example:                                                                  |
-;    AFE.SendCMDClampOn                                                        |
+;    AFE__SendCMDClampOn                                                        |
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
 ;        This sends the command                                                |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-AFE.SendCMDClampON macro
-	banksel SPI.BufferH
-	movlw	AFE.CMDClampOn
-	movwf	SPI.BufferH
-	call	SPI.Write
+AFE__SendCMDClampON macro
+	banksel SPI__BufferH
+	movlw	AFE__CMDClampOn
+	movwf	SPI__BufferH
+	call	SPI__Write
 	endm
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    AFE.SendCMDClampOFF()                                                     |
+;    AFE__SendCMDClampOFF()                                                     |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -104,29 +104,29 @@ AFE.SendCMDClampON macro
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |
-;    SPI.Write                                                                 |
+;    SPI__Write                                                                 |
 ;                                                                              |
 ;                                                                              |
 ;    Stacklevel: 1                                                             |
 ;                                                                              |
 ;                                                                              |
 ;    Example:                                                                  |
-;    AFE.SendCMDClampOff                                                       |
+;    AFE__SendCMDClampOff                                                       |
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
 ;        This sends the command                                                |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-AFE.SendCMDClampOFF macro
-	banksel SPI.BufferH
-	movlw	AFE.CMDClampOff
-	movwf	SPI.BufferH
-	call	SPI.Write
+AFE__SendCMDClampOFF macro
+	banksel SPI__BufferH
+	movlw	AFE__CMDClampOff
+	movwf	SPI__BufferH
+	call	SPI__Write
 	endm
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    AFE.SendCMDSleep()                                                        |
+;    AFE__SendCMDSleep()                                                        |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -140,29 +140,29 @@ AFE.SendCMDClampOFF macro
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |
-;    SPI.Write                                                                 |
+;    SPI__Write                                                                 |
 ;                                                                              |
 ;                                                                              |
 ;    Stacklevel: 1                                                             |
 ;                                                                              |
 ;                                                                              |
 ;    Example:                                                                  |
-;    AFE.SendCMDSleep                                                          |
+;    AFE__SendCMDSleep                                                          |
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
 ;        This sends the command                                                |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-AFE.SendCMDSleep macro
-	banksel SPI.BufferH
-	movlw	AFE.CMDSleep
-	movwf	SPI.BufferH
-	call	SPI.Write
+AFE__SendCMDSleep macro
+	banksel SPI__BufferH
+	movlw	AFE__CMDSleep
+	movwf	SPI__BufferH
+	call	SPI__Write
 	endm
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    AFE.SendCMDAGCPresON()                                                    |
+;    AFE__SendCMDAGCPresON()                                                    |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -175,29 +175,29 @@ AFE.SendCMDSleep macro
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |
-;    SPI.Write                                                                 |
+;    SPI__Write                                                                 |
 ;                                                                              |
 ;                                                                              |
 ;    Stacklevel: 1                                                             |
 ;                                                                              |
 ;                                                                              |
 ;    Example:                                                                  |
-;    AFE.SendCMDAGCPresON                                                      |
+;    AFE__SendCMDAGCPresON                                                      |
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
 ;        This sends the command                                                |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-AFE.SendCMDAGCPresON macro
-	banksel SPI.BufferH
-	movlw	AFE.CMDAGCOn
-	movwf	SPI.BufferH
-	call	SPI.Write
+AFE__SendCMDAGCPresON macro
+	banksel SPI__BufferH
+	movlw	AFE__CMDAGCOn
+	movwf	SPI__BufferH
+	call	SPI__Write
 	endm
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    AFE.SendCMDAGCPresOFF()                                                   |
+;    AFE__SendCMDAGCPresOFF()                                                   |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -210,29 +210,29 @@ AFE.SendCMDAGCPresON macro
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |
-;    SPI.Write                                                                 |
+;    SPI__Write                                                                 |
 ;                                                                              |
 ;                                                                              |
 ;    Stacklevel: 1                                                             |
 ;                                                                              |
 ;                                                                              |
 ;    Example:                                                                  |
-;    AFE.SendCMDAGCPresOFF                                                     |
+;    AFE__SendCMDAGCPresOFF                                                     |
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
 ;        This sends the command                                                |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-AFE.SendCMDAGCPresOFF macro
-	banksel SPI.BufferH
-	movlw	AFE.CMDAGCOff
-	movwf	SPI.BufferH
-	call	SPI.Write
+AFE__SendCMDAGCPresOFF macro
+	banksel SPI__BufferH
+	movlw	AFE__CMDAGCOff
+	movwf	SPI__BufferH
+	call	SPI__Write
 	endm
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    AFE.SendCMDSoftReset()                                                    |
+;    AFE__SendCMDSoftReset()                                                    |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -244,33 +244,33 @@ AFE.SendCMDAGCPresOFF macro
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |
-;    SPI.Write                                                                 |
+;    SPI__Write                                                                 |
 ;                                                                              |
 ;                                                                              |
 ;    Stacklevel: 1                                                             |
 ;                                                                              |
 ;                                                                              |
 ;    Example:                                                                  |
-;    AFE.SendCMDSoftReset                                                      |
+;    AFE__SendCMDSoftReset                                                      |
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
 ;        This sends the command                                                |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-AFE.SendCMDSoftReset macro
-	banksel SPI.BufferH
-	movlw	AFE.CMDSR
-	movwf	SPI.BufferH
-	call	SPI.Write
+AFE__SendCMDSoftReset macro
+	banksel SPI__BufferH
+	movlw	AFE__CMDSR
+	movwf	SPI__BufferH
+	call	SPI__Write
 	endm
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    AFE.EnableChannelX()                                                      |
+;    AFE__EnableChannelX()                                                      |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    This macro enables the LF Channel X at the AFE.                           |
+;    This macro enables the LF Channel X at the AFE__                           |
 ;                                                                              |
 ;                                                                              |
 ;                                                                              |
@@ -278,43 +278,43 @@ AFE.SendCMDSoftReset macro
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |
-;    AFE.WriteRegister                                                         |
-;        AFE.CalcParity                                                        |
-;        SPI.Write                                                             |
-;    AFE.updateColumnParity                                                    |
-;        AFE.WriteRegister                                                     |
-;            AFE.CalcParity                                                    |
-;            SPI.Write                                                         |
-;        AFE.CalcColumnParity                                                  |
+;    AFE__WriteRegister                                                         |
+;        AFE__CalcParity                                                        |
+;        SPI__Write                                                             |
+;    AFE__updateColumnParity                                                    |
+;        AFE__WriteRegister                                                     |
+;            AFE__CalcParity                                                    |
+;            SPI__Write                                                         |
+;        AFE__CalcColumnParity                                                  |
 ;                                                                              |
 ;                                                                              |
 ;    Stacklevel: 2                                                             |
 ;                                                                              |
 ;                                                                              |
 ;    Example:                                                                  |
-;    AFE.EnableChannelX                                                        |
+;    AFE__EnableChannelX                                                        |
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
 ;        This enables Channel X                                                |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-AFE.EnableChannelX macro
-	banksel	AFE.ConfMap
-	movf	AFE.ConfMap,w
+AFE__EnableChannelX macro
+	banksel	AFE__ConfMap
+	movf	AFE__ConfMap,w
 	andlw	b'11111110'
-	movwf	AFE.ConfMap
+	movwf	AFE__ConfMap
 	movlw	0x00
-	call	AFE.WriteRegister
-	AFE.updateColumnParity
+	call	AFE__WriteRegister
+	AFE__updateColumnParity
 	endm
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    AFE.EnableChannelY()                                                      |
+;    AFE__EnableChannelY()                                                      |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    This macro enables the LF Channel Y at the AFE.                           |
+;    This macro enables the LF Channel Y at the AFE__                           |
 ;                                                                              |
 ;                                                                              |
 ;                                                                              |
@@ -322,43 +322,43 @@ AFE.EnableChannelX macro
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |
-;    AFE.WriteRegister                                                         |
-;        AFE.CalcParity                                                        |
-;        SPI.Write                                                             |
-;    AFE.updateColumnParity                                                    |
-;        AFE.WriteRegister                                                     |
-;            AFE.CalcParity                                                    |
-;            SPI.Write                                                         |
-;        AFE.CalcColumnParity                                                  |
+;    AFE__WriteRegister                                                         |
+;        AFE__CalcParity                                                        |
+;        SPI__Write                                                             |
+;    AFE__updateColumnParity                                                    |
+;        AFE__WriteRegister                                                     |
+;            AFE__CalcParity                                                    |
+;            SPI__Write                                                         |
+;        AFE__CalcColumnParity                                                  |
 ;                                                                              |
 ;                                                                              |
 ;    Stacklevel: 2                                                             |
 ;                                                                              |
 ;                                                                              |
 ;    Example:                                                                  |
-;    AFE.EnableChannelY                                                        |
+;    AFE__EnableChannelY                                                        |
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
 ;        This enables Channel Y                                                |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-AFE.EnableChannelY macro
-	banksel	AFE.ConfMap
-	movf	AFE.ConfMap,w
+AFE__EnableChannelY macro
+	banksel	AFE__ConfMap
+	movf	AFE__ConfMap,w
 	andlw	b'11111101'
-	movwf	AFE.ConfMap
+	movwf	AFE__ConfMap
 	movlw	0x00
-	call	AFE.WriteRegister
-	AFE.updateColumnParity
+	call	AFE__WriteRegister
+	AFE__updateColumnParity
 	endm
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    AFE.EnableChannelZ()                                                      |
+;    AFE__EnableChannelZ()                                                      |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    This macro enables the LF Channel Z at the AFE.                           |
+;    This macro enables the LF Channel Z at the AFE__                           |
 ;                                                                              |
 ;                                                                              |
 ;                                                                              |
@@ -366,43 +366,43 @@ AFE.EnableChannelY macro
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |
-;    AFE.WriteRegister                                                         |
-;        AFE.CalcParity                                                        |
-;        SPI.Write                                                             |
-;    AFE.updateColumnParity                                                    |
-;        AFE.WriteRegister                                                     |
-;            AFE.CalcParity                                                    |
-;            SPI.Write                                                         |
-;        AFE.CalcColumnParity                                                  |
+;    AFE__WriteRegister                                                         |
+;        AFE__CalcParity                                                        |
+;        SPI__Write                                                             |
+;    AFE__updateColumnParity                                                    |
+;        AFE__WriteRegister                                                     |
+;            AFE__CalcParity                                                    |
+;            SPI__Write                                                         |
+;        AFE__CalcColumnParity                                                  |
 ;                                                                              |
 ;                                                                              |
 ;    Stacklevel: 2                                                             |
 ;                                                                              |
 ;                                                                              |
 ;    Example:                                                                  |
-;    AFE.EnableChannelZ                                                        |
+;    AFE__EnableChannelZ                                                        |
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
 ;        This enables Channel Z                                                |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-AFE.EnableChannelZ macro
-	banksel	AFE.ConfMap
-	movf	AFE.ConfMap,w
+AFE__EnableChannelZ macro
+	banksel	AFE__ConfMap
+	movf	AFE__ConfMap,w
 	andlw	b'11111011'
-	movwf	AFE.ConfMap
+	movwf	AFE__ConfMap
 	movlw	0x00
-	call	AFE.WriteRegister
-	AFE.updateColumnParity
+	call	AFE__WriteRegister
+	AFE__updateColumnParity
 	endm
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    AFE.DisableChannelX()                                                     |
+;    AFE__DisableChannelX()                                                     |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    This macro disables the LF Channel X at the AFE.                          |
+;    This macro disables the LF Channel X at the AFE__                          |
 ;                                                                              |
 ;                                                                              |
 ;                                                                              |
@@ -410,39 +410,39 @@ AFE.EnableChannelZ macro
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |
-;    AFE.WriteRegister                                                         |
-;        AFE.CalcParity                                                        |
-;        SPI.Write                                                             |
-;    AFE.updateColumnParity                                                    |
-;        AFE.WriteRegister                                                     |
-;            AFE.CalcParity                                                    |
-;            SPI.Write                                                         |
-;        AFE.CalcColumnParity                                                  |
+;    AFE__WriteRegister                                                         |
+;        AFE__CalcParity                                                        |
+;        SPI__Write                                                             |
+;    AFE__updateColumnParity                                                    |
+;        AFE__WriteRegister                                                     |
+;            AFE__CalcParity                                                    |
+;            SPI__Write                                                         |
+;        AFE__CalcColumnParity                                                  |
 ;                                                                              |
 ;                                                                              |
 ;    Stacklevel: 2                                                             |
 ;                                                                              |
 ;                                                                              |
 ;    Example:                                                                  |
-;    AFE.EnableChannelX                                                        |
+;    AFE__EnableChannelX                                                        |
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
 ;        This enables Channel X                                                |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-AFE.DisableChannelX macro
-	banksel	AFE.ConfMap
-	movf	AFE.ConfMap,w
+AFE__DisableChannelX macro
+	banksel	AFE__ConfMap
+	movf	AFE__ConfMap,w
 	iorlw	0x01
-	movwf	AFE.ConfMap
+	movwf	AFE__ConfMap
 	movlw	0x00
-	call	AFE.WriteRegister
-	AFE.updateColumnParity
+	call	AFE__WriteRegister
+	AFE__updateColumnParity
 	endm
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    AFE.AGCActive()                                                           |
+;    AFE__AGCActive()                                                           |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -454,39 +454,39 @@ AFE.DisableChannelX macro
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |
-;    AFE.WriteRegister                                                         |
-;        AFE.CalcParity                                                        |
-;        SPI.Write                                                             |
-;    AFE.updateColumnParity                                                    |
-;        AFE.WriteRegister                                                     |
-;            AFE.CalcParity                                                    |
-;            SPI.Write                                                         |
-;        AFE.CalcColumnParity                                                  |
+;    AFE__WriteRegister                                                         |
+;        AFE__CalcParity                                                        |
+;        SPI__Write                                                             |
+;    AFE__updateColumnParity                                                    |
+;        AFE__WriteRegister                                                     |
+;            AFE__CalcParity                                                    |
+;            SPI__Write                                                         |
+;        AFE__CalcColumnParity                                                  |
 ;                                                                              |
 ;                                                                              |
 ;    Stacklevel: 2                                                             |
 ;                                                                              |
 ;                                                                              |
 ;    Example:                                                                  |
-;    AFE.EnableChannelX                                                        |
+;    AFE__EnableChannelX                                                        |
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
 ;        This enables Channel X                                                |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-AFE.AGCActive macro
-	banksel	AFE.ConfMap
-	movf	AFE.ConfMap+6,w
+AFE__AGCActive macro
+	banksel	AFE__ConfMap
+	movf	AFE__ConfMap+6,w
 	iorlw	0x10
-	movwf	AFE.ConfMap+6
+	movwf	AFE__ConfMap+6
 	movlw	0x06
-	call	AFE.WriteRegister
-	AFE.updateColumnParity
+	call	AFE__WriteRegister
+	AFE__updateColumnParity
 	endm
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    AFE.AGCDeactive()                                                         |
+;    AFE__AGCDeactive()                                                         |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -498,46 +498,46 @@ AFE.AGCActive macro
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |
-;    AFE.WriteRegister                                                         |
-;        AFE.CalcParity                                                        |
-;        SPI.Write                                                             |
-;    AFE.updateColumnParity                                                    |
-;        AFE.WriteRegister                                                     |
-;            AFE.CalcParity                                                    |
-;            SPI.Write                                                         |
-;        AFE.CalcColumnParity                                                  |
+;    AFE__WriteRegister                                                         |
+;        AFE__CalcParity                                                        |
+;        SPI__Write                                                             |
+;    AFE__updateColumnParity                                                    |
+;        AFE__WriteRegister                                                     |
+;            AFE__CalcParity                                                    |
+;            SPI__Write                                                         |
+;        AFE__CalcColumnParity                                                  |
 ;                                                                              |
 ;                                                                              |
 ;    Stacklevel: 2                                                             |
 ;                                                                              |
 ;                                                                              |
 ;    Example:                                                                  |
-;    AFE.EnableChannelX                                                        |
+;    AFE__EnableChannelX                                                        |
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
 ;        This enables Channel X                                                |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-AFE.AGCDeactive macro
-	banksel	AFE.ConfMap
-	movf	AFE.ConfMap+6,w
+AFE__AGCDeactive macro
+	banksel	AFE__ConfMap
+	movf	AFE__ConfMap+6,w
 	andlw	0xef
-	movwf	AFE.ConfMap+6
+	movwf	AFE__ConfMap+6
 	movlw	0x06
-	call	AFE.WriteRegister
-	AFE.updateColumnParity
+	call	AFE__WriteRegister
+	AFE__updateColumnParity
 	endm
 	
 	
 	
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    AFE.DisableChannelY()                                                     |
+;    AFE__DisableChannelY()                                                     |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    This macro disables the LF Channel Y at the AFE.                          |
+;    This macro disables the LF Channel Y at the AFE__                          |
 ;                                                                              |
 ;                                                                              |
 ;                                                                              |
@@ -545,43 +545,43 @@ AFE.AGCDeactive macro
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |
-;    AFE.WriteRegister                                                         |
-;        AFE.CalcParity                                                        |
-;        SPI.Write                                                             |
-;    AFE.updateColumnParity                                                    |
-;        AFE.WriteRegister                                                     |
-;            AFE.CalcParity                                                    |
-;            SPI.Write                                                         |
-;        AFE.CalcColumnParity                                                  |
+;    AFE__WriteRegister                                                         |
+;        AFE__CalcParity                                                        |
+;        SPI__Write                                                             |
+;    AFE__updateColumnParity                                                    |
+;        AFE__WriteRegister                                                     |
+;            AFE__CalcParity                                                    |
+;            SPI__Write                                                         |
+;        AFE__CalcColumnParity                                                  |
 ;                                                                              |
 ;                                                                              |
 ;    Stacklevel: 2                                                             |
 ;                                                                              |
 ;                                                                              |
 ;    Example:                                                                  |
-;    AFE.EnableChannelY                                                        |
+;    AFE__EnableChannelY                                                        |
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
 ;        This enables Channel Y                                                |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-AFE.DisableChannelY macro
-	banksel	AFE.ConfMap
-	movf	AFE.ConfMap,w
+AFE__DisableChannelY macro
+	banksel	AFE__ConfMap
+	movf	AFE__ConfMap,w
 	iorlw	0x02
-	movwf	AFE.ConfMap
+	movwf	AFE__ConfMap
 	movlw	0x00
-	call	AFE.WriteRegister
-	AFE.updateColumnParity
+	call	AFE__WriteRegister
+	AFE__updateColumnParity
 	endm
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    AFE.DisableChannelZ()                                                     |
+;    AFE__DisableChannelZ()                                                     |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    This macro disables the LF Channel Z at the AFE.                          |
+;    This macro disables the LF Channel Z at the AFE__                          |
 ;                                                                              |
 ;                                                                              |
 ;                                                                              |
@@ -589,39 +589,39 @@ AFE.DisableChannelY macro
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |
-;    AFE.WriteRegister                                                         |
-;        AFE.CalcParity                                                        |
-;        SPI.Write                                                             |
-;    AFE.updateColumnParity                                                    |
-;        AFE.WriteRegister                                                     |
-;            AFE.CalcParity                                                    |
-;            SPI.Write                                                         |
-;        AFE.CalcColumnParity                                                  |
+;    AFE__WriteRegister                                                         |
+;        AFE__CalcParity                                                        |
+;        SPI__Write                                                             |
+;    AFE__updateColumnParity                                                    |
+;        AFE__WriteRegister                                                     |
+;            AFE__CalcParity                                                    |
+;            SPI__Write                                                         |
+;        AFE__CalcColumnParity                                                  |
 ;                                                                              |
 ;                                                                              |
 ;    Stacklevel: 2                                                             |
 ;                                                                              |
 ;                                                                              |
 ;    Example:                                                                  |
-;    AFE.EnableChannelZ                                                        |
+;    AFE__EnableChannelZ                                                        |
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
 ;        This enables Channel Z                                                |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-AFE.DisableChannelZ macro	;save some code with bsf :)
-	banksel	AFE.ConfMap
-	movf	AFE.ConfMap,w
+AFE__DisableChannelZ macro	;save some code with bsf :)
+	banksel	AFE__ConfMap
+	movf	AFE__ConfMap,w
 	iorlw	0x04
-	movwf	AFE.ConfMap
+	movwf	AFE__ConfMap
 	movlw	0x00
-	call	AFE.WriteRegister
-	AFE.updateColumnParity
+	call	AFE__WriteRegister
+	AFE__updateColumnParity
 	endm
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    AFE.setOutputData()                                                       |
+;    AFE__setOutputData()                                                       |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -633,38 +633,38 @@ AFE.DisableChannelZ macro	;save some code with bsf :)
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |
-;    AFE.WriteRegister                                                         |
-;        AFE.CalcParity                                                        |
-;        SPI.Write                                                             |
-;    AFE.updateColumnParity                                                    |
-;        AFE.WriteRegister                                                     |
-;            AFE.CalcParity                                                    |
-;            SPI.Write                                                         |
-;        AFE.CalcColumnParity                                                  |
+;    AFE__WriteRegister                                                         |
+;        AFE__CalcParity                                                        |
+;        SPI__Write                                                             |
+;    AFE__updateColumnParity                                                    |
+;        AFE__WriteRegister                                                     |
+;            AFE__CalcParity                                                    |
+;            SPI__Write                                                         |
+;        AFE__CalcColumnParity                                                  |
 ;                                                                              |
 ;                                                                              |
 ;    Stacklevel: 2                                                             |
 ;                                                                              |
 ;                                                                              |
 ;    Example:                                                                  |
-;    AFE.setOutputData                                                         |
+;    AFE__setOutputData                                                         |
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
 ;        This sets the LFData output to data mode                              |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-AFE.setOutputData	macro
-	banksel AFE.ConfMap
-	bcf		(AFE.ConfMap+1),7
-	bcf		(AFE.ConfMap+1),6
+AFE__setOutputData	macro
+	banksel AFE__ConfMap
+	bcf		(AFE__ConfMap+1),7
+	bcf		(AFE__ConfMap+1),6
 	movlw	0x01
-	call	AFE.WriteRegister
-	AFE.updateColumnParity
+	call	AFE__WriteRegister
+	AFE__updateColumnParity
 	endm
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    AFE.setOutputClk()                                                        |
+;    AFE__setOutputClk()                                                        |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -677,38 +677,38 @@ AFE.setOutputData	macro
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |
-;    AFE.WriteRegister                                                         |
-;        AFE.CalcParity                                                        |
-;        SPI.Write                                                             |
-;    AFE.updateColumnParity                                                    |
-;        AFE.WriteRegister                                                     |
-;            AFE.CalcParity                                                    |
-;            SPI.Write                                                         |
-;        AFE.CalcColumnParity                                                  |
+;    AFE__WriteRegister                                                         |
+;        AFE__CalcParity                                                        |
+;        SPI__Write                                                             |
+;    AFE__updateColumnParity                                                    |
+;        AFE__WriteRegister                                                     |
+;            AFE__CalcParity                                                    |
+;            SPI__Write                                                         |
+;        AFE__CalcColumnParity                                                  |
 ;                                                                              |
 ;                                                                              |
 ;    Stacklevel: 2                                                             |
 ;                                                                              |
 ;                                                                              |
 ;    Example:                                                                  |
-;    AFE.setOutputClk                                                          |
+;    AFE__setOutputClk                                                          |
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
 ;        This sets the LFData output to clock mode                             |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-AFE.setOutputClk	macro
-	banksel AFE.ConfMap
-	bcf		(AFE.ConfMap+1),7
-	bsf		(AFE.ConfMap+1),6
+AFE__setOutputClk	macro
+	banksel AFE__ConfMap
+	bcf		(AFE__ConfMap+1),7
+	bsf		(AFE__ConfMap+1),6
 	movlw	0x01
-	call	AFE.WriteRegister
-	AFE.updateColumnParity
+	call	AFE__WriteRegister
+	AFE__updateColumnParity
 	endm
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    AFE.setOutputRSSI()                                                       |
+;    AFE__setOutputRSSI()                                                       |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -722,37 +722,37 @@ AFE.setOutputClk	macro
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |
-;    AFE.WriteRegister                                                         |
-;        AFE.CalcParity                                                        |
-;        SPI.Write                                                             |
-;    AFE.updateColumnParity                                                    |
-;        AFE.WriteRegister                                                     |
-;            AFE.CalcParity                                                    |
-;            SPI.Write                                                         |
-;        AFE.CalcColumnParity                                                  |
+;    AFE__WriteRegister                                                         |
+;        AFE__CalcParity                                                        |
+;        SPI__Write                                                             |
+;    AFE__updateColumnParity                                                    |
+;        AFE__WriteRegister                                                     |
+;            AFE__CalcParity                                                    |
+;            SPI__Write                                                         |
+;        AFE__CalcColumnParity                                                  |
 ;                                                                              |
 ;                                                                              |
 ;    Stacklevel: 2                                                             |
 ;                                                                              |
 ;                                                                              |
 ;    Example:                                                                  |
-;    AFE.setOutputRSSI                                                         |
+;    AFE__setOutputRSSI                                                         |
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
 ;        This sets the LFData output to RSSI mode                              |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-AFE.setOutputRSSI	macro
-	banksel AFE.ConfMap
-	bsf		(AFE.ConfMap+1),7
+AFE__setOutputRSSI	macro
+	banksel AFE__ConfMap
+	bsf		(AFE__ConfMap+1),7
 	movlw	0x01
-	call	AFE.WriteRegister
-	AFE.updateColumnParity
+	call	AFE__WriteRegister
+	AFE__updateColumnParity
 	endm
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    AFE.setXTuningCap( w )                                                    |
+;    AFE__setXTuningCap( w )                                                    |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -769,14 +769,14 @@ AFE.setOutputRSSI	macro
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |
-;    AFE.WriteRegister                                                         |
-;        AFE.CalcParity                                                        |
-;        SPI.Write                                                             |
-;    AFE.updateColumnParity                                                    |
-;        AFE.WriteRegister                                                     |
-;            AFE.CalcParity                                                    |
-;            SPI.Write                                                         |
-;        AFE.CalcColumnParity                                                  |
+;    AFE__WriteRegister                                                         |
+;        AFE__CalcParity                                                        |
+;        SPI__Write                                                             |
+;    AFE__updateColumnParity                                                    |
+;        AFE__WriteRegister                                                     |
+;            AFE__CalcParity                                                    |
+;            SPI__Write                                                         |
+;        AFE__CalcColumnParity                                                  |
 ;                                                                              |
 ;                                                                              |
 ;    Stacklevel: 2                                                             |
@@ -784,27 +784,27 @@ AFE.setOutputRSSI	macro
 ;                                                                              |
 ;    Example:                                                                  |
 ;    movlw   D'33'                                                             |
-;    AFE.setXTuningCap                                                         |
+;    AFE__setXTuningCap                                                         |
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
 ;        This sets the tuning capacitor of channel X to 33pF(typ)              |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-AFE.setXTuningCap	macro	;make function out of it? Let's have a look at the running Code. The Stacklevel may be more critical
-	banksel AFE.Buffer
-	movwf	AFE.Buffer
-	movf	(AFE.ConfMap+1),w
+AFE__setXTuningCap	macro	;make function out of it? Let's have a look at the running Code. The Stacklevel may be more critical
+	banksel AFE__Buffer
+	movwf	AFE__Buffer
+	movf	(AFE__ConfMap+1),w
 	andlw	B'11000000'
-	iorwf	AFE.Buffer,w
-	movwf	(AFE.ConfMap+1)
+	iorwf	AFE__Buffer,w
+	movwf	(AFE__ConfMap+1)
 	movlw	0x01
-	call	AFE.WriteRegister
-	AFE.updateColumnParity
+	call	AFE__WriteRegister
+	AFE__updateColumnParity
 	endm
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    AFE.setYTuningCap( w )                                                    |
+;    AFE__setYTuningCap( w )                                                    |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -821,14 +821,14 @@ AFE.setXTuningCap	macro	;make function out of it? Let's have a look at the runni
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |
-;    AFE.WriteRegister                                                         |
-;        AFE.CalcParity                                                        |
-;        SPI.Write                                                             |
-;    AFE.updateColumnParity                                                    |
-;        AFE.WriteRegister                                                     |
-;            AFE.CalcParity                                                    |
-;            SPI.Write                                                         |
-;        AFE.CalcColumnParity                                                  |
+;    AFE__WriteRegister                                                         |
+;        AFE__CalcParity                                                        |
+;        SPI__Write                                                             |
+;    AFE__updateColumnParity                                                    |
+;        AFE__WriteRegister                                                     |
+;            AFE__CalcParity                                                    |
+;            SPI__Write                                                         |
+;        AFE__CalcColumnParity                                                  |
 ;                                                                              |
 ;                                                                              |
 ;    Stacklevel: 2                                                             |
@@ -836,27 +836,27 @@ AFE.setXTuningCap	macro	;make function out of it? Let's have a look at the runni
 ;                                                                              |
 ;    Example:                                                                  |
 ;    movlw   D'33'                                                             |
-;    AFE.setYTuningCap                                                         |
+;    AFE__setYTuningCap                                                         |
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
 ;        This sets the tuning capacitor of channel Y to 33pF(typ)              |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-AFE.setYTuningCap	macro
-	banksel AFE.Buffer
-	movwf	AFE.Buffer
-	movf	(AFE.ConfMap+2),w
+AFE__setYTuningCap	macro
+	banksel AFE__Buffer
+	movwf	AFE__Buffer
+	movf	(AFE__ConfMap+2),w
 	andlw	B'11000000'
-	iorwf	AFE.Buffer,w
-	movwf	(AFE.ConfMap+2)
+	iorwf	AFE__Buffer,w
+	movwf	(AFE__ConfMap+2)
 	movlw	0x02
-	call	AFE.WriteRegister
-	AFE.updateColumnParity
+	call	AFE__WriteRegister
+	AFE__updateColumnParity
 	endm
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    AFE.setZTuningCap( w )                                                    |
+;    AFE__setZTuningCap( w )                                                    |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -873,14 +873,14 @@ AFE.setYTuningCap	macro
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |
-;    AFE.WriteRegister                                                         |
-;        AFE.CalcParity                                                        |
-;        SPI.Write                                                             |
-;    AFE.updateColumnParity                                                    |
-;        AFE.WriteRegister                                                     |
-;            AFE.CalcParity                                                    |
-;            SPI.Write                                                         |
-;        AFE.CalcColumnParity                                                  |
+;    AFE__WriteRegister                                                         |
+;        AFE__CalcParity                                                        |
+;        SPI__Write                                                             |
+;    AFE__updateColumnParity                                                    |
+;        AFE__WriteRegister                                                     |
+;            AFE__CalcParity                                                    |
+;            SPI__Write                                                         |
+;        AFE__CalcColumnParity                                                  |
 ;                                                                              |
 ;                                                                              |
 ;    Stacklevel: 2                                                             |
@@ -888,27 +888,27 @@ AFE.setYTuningCap	macro
 ;                                                                              |
 ;    Example:                                                                  |
 ;    movlw   D'33'                                                             |
-;    AFE.setZTuningCap                                                         |
+;    AFE__setZTuningCap                                                         |
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
 ;        This sets the tuning capacitor of channel Z to 33pF(typ)              |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-AFE.setZTuningCap	macro
-	banksel AFE.Buffer
-	movwf	AFE.Buffer
-	movf	(AFE.ConfMap+3),w
+AFE__setZTuningCap	macro
+	banksel AFE__Buffer
+	movwf	AFE__Buffer
+	movf	(AFE__ConfMap+3),w
 	andlw	B'11000000'
-	iorwf	AFE.Buffer,w
-	movwf	(AFE.ConfMap+3)
+	iorwf	AFE__Buffer,w
+	movwf	(AFE__ConfMap+3)
 	movlw	0x03
-	call	AFE.WriteRegister
-	AFE.updateColumnParity
+	call	AFE__WriteRegister
+	AFE__updateColumnParity
 	endm
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    AFE.setXSensitivity( w )                                                  |
+;    AFE__setXSensitivity( w )                                                  |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -925,14 +925,14 @@ AFE.setZTuningCap	macro
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |
-;    AFE.WriteRegister                                                         |
-;        AFE.CalcParity                                                        |
-;        SPI.Write                                                             |
-;    AFE.updateColumnParity                                                    |
-;        AFE.WriteRegister                                                     |
-;            AFE.CalcParity                                                    |
-;            SPI.Write                                                         |
-;        AFE.CalcColumnParity                                                  |
+;    AFE__WriteRegister                                                         |
+;        AFE__CalcParity                                                        |
+;        SPI__Write                                                             |
+;    AFE__updateColumnParity                                                    |
+;        AFE__WriteRegister                                                     |
+;            AFE__CalcParity                                                    |
+;            SPI__Write                                                         |
+;        AFE__CalcColumnParity                                                  |
 ;                                                                              |
 ;                                                                              |
 ;    Stacklevel: 2                                                             |
@@ -940,28 +940,28 @@ AFE.setZTuningCap	macro
 ;                                                                              |
 ;    Example:                                                                  |
 ;    movlw   D'12'                                                             |
-;    AFE.setXSensitivity                                                       |
+;    AFE__setXSensitivity                                                       |
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
 ;        This sets the attenuation for channel X to 24dB                       |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-AFE.setXSensitivity	macro
-	banksel AFE.Buffer
-	movwf	AFE.Buffer
-	swapf	AFE.Buffer,f
-	movf	(AFE.ConfMap+4),w
+AFE__setXSensitivity	macro
+	banksel AFE__Buffer
+	movwf	AFE__Buffer
+	swapf	AFE__Buffer,f
+	movf	(AFE__ConfMap+4),w
 	andlw	B'00001111'
-	iorwf	AFE.Buffer,w
-	movwf	(AFE.ConfMap+4)
+	iorwf	AFE__Buffer,w
+	movwf	(AFE__ConfMap+4)
 	movlw	0x04
-	call	AFE.WriteRegister
-	AFE.updateColumnParity
+	call	AFE__WriteRegister
+	AFE__updateColumnParity
 	endm
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    AFE.setYSensitivity( w )                                                  |
+;    AFE__setYSensitivity( w )                                                  |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -978,14 +978,14 @@ AFE.setXSensitivity	macro
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |
-;    AFE.WriteRegister                                                         |
-;        AFE.CalcParity                                                        |
-;        SPI.Write                                                             |
-;    AFE.updateColumnParity                                                    |
-;        AFE.WriteRegister                                                     |
-;            AFE.CalcParity                                                    |
-;            SPI.Write                                                         |
-;        AFE.CalcColumnParity                                                  |
+;    AFE__WriteRegister                                                         |
+;        AFE__CalcParity                                                        |
+;        SPI__Write                                                             |
+;    AFE__updateColumnParity                                                    |
+;        AFE__WriteRegister                                                     |
+;            AFE__CalcParity                                                    |
+;            SPI__Write                                                         |
+;        AFE__CalcColumnParity                                                  |
 ;                                                                              |
 ;                                                                              |
 ;    Stacklevel: 2                                                             |
@@ -993,27 +993,27 @@ AFE.setXSensitivity	macro
 ;                                                                              |
 ;    Example:                                                                  |
 ;    movlw   D'12'                                                             |
-;    AFE.setYSensitivity                                                       |
+;    AFE__setYSensitivity                                                       |
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
 ;        This sets the attenuation for channel Y to 24dB                       |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-AFE.setYSensitivity	macro
-	banksel AFE.Buffer
-	movwf	AFE.Buffer
-	movf	(AFE.ConfMap+4),w
+AFE__setYSensitivity	macro
+	banksel AFE__Buffer
+	movwf	AFE__Buffer
+	movf	(AFE__ConfMap+4),w
 	andlw	B'11110000'
-	iorwf	AFE.Buffer,w
-	movwf	(AFE.ConfMap+4)
+	iorwf	AFE__Buffer,w
+	movwf	(AFE__ConfMap+4)
 	movlw	0x04
-	call	AFE.WriteRegister
-	AFE.updateColumnParity
+	call	AFE__WriteRegister
+	AFE__updateColumnParity
 	endm
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    AFE.setZSensitivity( w )                                                  |
+;    AFE__setZSensitivity( w )                                                  |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -1030,14 +1030,14 @@ AFE.setYSensitivity	macro
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |
-;    AFE.WriteRegister                                                         |
-;        AFE.CalcParity                                                        |
-;        SPI.Write                                                             |
-;    AFE.updateColumnParity                                                    |
-;        AFE.WriteRegister                                                     |
-;            AFE.CalcParity                                                    |
-;            SPI.Write                                                         |
-;        AFE.CalcColumnParity                                                  |
+;    AFE__WriteRegister                                                         |
+;        AFE__CalcParity                                                        |
+;        SPI__Write                                                             |
+;    AFE__updateColumnParity                                                    |
+;        AFE__WriteRegister                                                     |
+;            AFE__CalcParity                                                    |
+;            SPI__Write                                                         |
+;        AFE__CalcColumnParity                                                  |
 ;                                                                              |
 ;                                                                              |
 ;    Stacklevel: 2                                                             |
@@ -1045,27 +1045,27 @@ AFE.setYSensitivity	macro
 ;                                                                              |
 ;    Example:                                                                  |
 ;    movlw   D'12'                                                             |
-;    AFE.setZSensitivity                                                       |
+;    AFE__setZSensitivity                                                       |
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
 ;        This sets the attenuation for channel Z to 24dB                       |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-AFE.setZSensitivity	macro
-	banksel AFE.Buffer
-	movwf	AFE.Buffer
-	movf	(AFE.ConfMap+5),w
+AFE__setZSensitivity	macro
+	banksel AFE__Buffer
+	movwf	AFE__Buffer
+	movf	(AFE__ConfMap+5),w
 	andlw	B'11110000'
-	iorwf	AFE.Buffer,w
-	movwf	(AFE.ConfMap+5)
+	iorwf	AFE__Buffer,w
+	movwf	(AFE__ConfMap+5)
 	movlw	0x05
-	call	AFE.WriteRegister
-	AFE.updateColumnParity
+	call	AFE__WriteRegister
+	AFE__updateColumnParity
 	endm
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    AFE.setModDepth( w )                                                      |
+;    AFE__setModDepth( w )                                                      |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -1081,43 +1081,43 @@ AFE.setZSensitivity	macro
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |
-;    AFE.WriteRegister                                                         |
-;        AFE.CalcParity                                                        |
-;        SPI.Write                                                             |
-;    AFE.updateColumnParity                                                    |
-;        AFE.WriteRegister                                                     |
-;            AFE.CalcParity                                                    |
-;            SPI.Write                                                         |
-;        AFE.CalcColumnParity                                                  |
+;    AFE__WriteRegister                                                         |
+;        AFE__CalcParity                                                        |
+;        SPI__Write                                                             |
+;    AFE__updateColumnParity                                                    |
+;        AFE__WriteRegister                                                     |
+;            AFE__CalcParity                                                    |
+;            SPI__Write                                                         |
+;        AFE__CalcColumnParity                                                  |
 ;                                                                              |
 ;                                                                              |
 ;    Stacklevel: 2                                                             |
 ;                                                                              |
 ;                                                                              |
 ;    Example:                                                                  |
-;    movlw   AFE.ModDepth50                                                    |
-;    AFE.setModDepth                                                           |
+;    movlw   AFE__ModDepth50                                                    |
+;    AFE__setModDepth                                                           |
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
 ;        This sets the modulation depth to 50%.                                |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-AFE.setModDepth macro
-	banksel AFE.Buffer
-	movwf	AFE.Buffer
-	swapf	AFE.Buffer,f
-	movf	(AFE.ConfMap+5),w
+AFE__setModDepth macro
+	banksel AFE__Buffer
+	movwf	AFE__Buffer
+	swapf	AFE__Buffer,f
+	movf	(AFE__ConfMap+5),w
 	andlw	B'11001111'
-	iorwf	AFE.Buffer,w
-	movwf	(AFE.ConfMap+5)
+	iorwf	AFE__Buffer,w
+	movwf	(AFE__ConfMap+5)
 	movlw	0x05
-	call	AFE.WriteRegister
-	AFE.updateColumnParity
+	call	AFE__WriteRegister
+	AFE__updateColumnParity
 	endm
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    AFE.confOEFilter( TOEH  TOEL )                                            |
+;    AFE__confOEFilter( TOEH  TOEL )                                            |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -1135,40 +1135,40 @@ AFE.setModDepth macro
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |
-;    AFE.WriteRegister                                                         |
-;        AFE.CalcParity                                                        |
-;        SPI.Write                                                             |
-;    AFE.updateColumnParity                                                    |
-;        AFE.WriteRegister                                                     |
-;            AFE.CalcParity                                                    |
-;            SPI.Write                                                         |
-;        AFE.CalcColumnParity                                                  |
+;    AFE__WriteRegister                                                         |
+;        AFE__CalcParity                                                        |
+;        SPI__Write                                                             |
+;    AFE__updateColumnParity                                                    |
+;        AFE__WriteRegister                                                     |
+;            AFE__CalcParity                                                    |
+;            SPI__Write                                                         |
+;        AFE__CalcColumnParity                                                  |
 ;                                                                              |
 ;                                                                              |
 ;    Stacklevel: 2                                                             |
 ;                                                                              |
 ;                                                                              |
 ;    Example:                                                                  |
-;    AFE.confOEFilter    2,2                                                   |
+;    AFE__confOEFilter    2,2                                                   |
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
 ;        This sets the high and low time to 2 ms                               |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-AFE.confOEFilter macro	TOEH, TOEL
-	banksel AFE.ConfMap
-	movf	AFE.ConfMap,w
+AFE__confOEFilter macro	TOEH, TOEL
+	banksel AFE__ConfMap
+	movf	AFE__ConfMap,w
 	andlw	B'00001111'
 	iorlw	(((TOEH<<6)&&B'11000000')||((TOEL<<4)&&B'00110000'))	;ensure that he does what I want
-	movwf	AFE.ConfMap
+	movwf	AFE__ConfMap
 	movlw	0x00
-	call	AFE.WriteRegister
-	AFE.updateColumnParity
+	call	AFE__WriteRegister
+	AFE__updateColumnParity
 	endm
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;     w AFE.getStatus()                                                        |
+;     w AFE__getStatus()                                                        |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -1183,18 +1183,18 @@ AFE.confOEFilter macro	TOEH, TOEL
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |
-;    AFE.ReadRegister                                                          |
-;        SPI.Read                                                              |
+;    AFE__ReadRegister                                                          |
+;        SPI__Read                                                              |
 ;                                                                              |
 ;                                                                              |
 ;    Stacklevel: 2                                                             |
 ;                                                                              |
 ;                                                                              |
 ;    Example:                                                                  |
-;    AFE.getStatus           ;get status register of AFE                       |
+;    AFE__getStatus           ;get status register of AFE                       |
 ;    andlw 0x01              ;mask parity error bit                            |
 ;    btfss   STATUS,Z        ;error occured?                                   |
-;    call    AFE.writeCfg    ;write back RAM Map to AFE (Parity will be        |
+;    call    AFE__writeCfg    ;write back RAM Map to AFE (Parity will be        |
 ;    calculated)                                                               |
 ;                                                                              |
 ;                                                                              |
@@ -1202,15 +1202,15 @@ AFE.confOEFilter macro	TOEH, TOEL
 ;        This example checks whether a parity error occured or not.            |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-AFE.getStatus	macro
+AFE__getStatus	macro
 	movlw	0x07
-	call	AFE.ReadRegister
-	banksel	AFE.ConfMap
-	movf	(AFE.ConfMap+7),w
+	call	AFE__ReadRegister
+	banksel	AFE__ConfMap
+	movf	(AFE__ConfMap+7),w
 	endm
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;     w AFE.updateColumnParity()                                               |
+;     w AFE__updateColumnParity()                                               |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -1225,10 +1225,10 @@ AFE.getStatus	macro
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |
-;    AFE.WriteRegister                                                         |
-;        AFE.CalcParity                                                        |
-;        SPI.Write                                                             |
-;    AFE.CalcColumnParity                                                      |
+;    AFE__WriteRegister                                                         |
+;        AFE__CalcParity                                                        |
+;        SPI__Write                                                             |
+;    AFE__CalcColumnParity                                                      |
 ;                                                                              |
 ;                                                                              |
 ;    Stacklevel: 2                                                             |
@@ -1236,18 +1236,18 @@ AFE.getStatus	macro
 ;                                                                              |
 ;    Example:                                                                  |
 ;    movlw   0x03                                                              |
-;    call    AFE.WriteRegister                                                 |
-;    AFE.updateColumnParity                                                    |
+;    call    AFE__WriteRegister                                                 |
+;    AFE__updateColumnParity                                                    |
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
-;        This example writes the new column parity to the AFE.ConfMap and to   |
+;        This example writes the new column parity to the AFE__ConfMap and to   |
 ;        the device                                                            |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-AFE.updateColumnParity	macro
-	call	AFE.CalcColumnParity
+AFE__updateColumnParity	macro
+	call	AFE__CalcColumnParity
 	movlw	0x06
-	call	AFE.WriteRegister
+	call	AFE__WriteRegister
 	endm
 #endif
