@@ -19,8 +19,8 @@
 #define	SDIO		PORTC,3		; Serial output
 	
 	udata
-SPI__BufferH res 1
-SPI__BufferL res 1
+SPI_BufferH res 1
+SPI_BufferL res 1
 
 SPI_ovr	udata_ovr
 Count00 res 1
@@ -28,47 +28,47 @@ Count00 res 1
 flag_ovr	udata_ovr
 flag	res 1		;using bit 0
 
-	global SPI__BufferH, SPI__BufferL
+	global SPI_BufferH, SPI_BufferL
 	global SPI__Read, SPI__Write
 	code
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;     SPI__BufferH  SPI__BufferL SPI__Read( SPI__BufferH  SPI__BufferL )            |
+;     SPI_BufferH  SPI_BufferL SPI__Read( SPI_BufferH  SPI_BufferL )            |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
 ;    This macro reads two Bytes from the SPI-Bus.                              |
-;    Put the Read command and the address in the SPI__BufferH and SPI__BufferL   |
+;    Put the Read command and the address in the SPI_BufferH and SPI_BufferL   |
 ;    Registers.                                                                |
 ;    Then call SPI__Read.                                                       |
-;    Then read the returned values in SPI__BufferH and SPI__BufferL.             |
+;    Then read the returned values in SPI_BufferH and SPI_BufferL.             |
 ;                                                                              |
 ;                                                                              |
 ;    Parameters:                                                               |
-;    SPI__BufferH - The most significant Byte of the Data                       |
-;    SPI__BufferL - The least significant Byte of the Data                      |
+;    SPI_BufferH - The most significant Byte of the Data                       |
+;    SPI_BufferL - The least significant Byte of the Data                      |
 ;                                                                              |
 ;                                                                              |
 ;    Returns:                                                                  |
-;    SPI__BufferH - The most significant Byte of the Data                       |
-;    SPI__BufferL - The least significant Byte of the Data                      |
+;    SPI_BufferH - The most significant Byte of the Data                       |
+;    SPI_BufferL - The least significant Byte of the Data                      |
 ;                                                                              |
 ;                                                                              |
 ;    Stacklevel: 1                                                             |
 ;                                                                              |
 ;                                                                              |
 ;    Example:                                                                  |
-;    pagesel SPI__BufferH                                                       |
+;    banksel SPI_BufferH                                                       |
 ;    movlw   0xf0                                                              |
-;    movwf   SPI__BufferH                                                       |
+;    movwf   SPI_BufferH                                                       |
 ;    movlw   0x0f                                                              |
-;    movwf   SPI__BufferL                                                       |
+;    movwf   SPI_BufferL                                                       |
 ;    call    SPI__Read                                                          |
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
 ;        This sends 0xf00f over the SPI-Bus, and reads the answer to           |
-;        SPI__BufferH and SPI__BufferL.                                          |
+;        SPI_BufferH and SPI_BufferL.                                          |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 SPI__Read
@@ -77,7 +77,7 @@ SPI__Read
 	goto	SPI__ShiftOutBuffer
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    SPI__Write( SPI__BufferH  SPI__BufferL )                                     |
+;    SPI__Write( SPI_BufferH  SPI_BufferL )                                     |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -85,8 +85,8 @@ SPI__Read
 ;                                                                              |
 ;                                                                              |
 ;    Parameters:                                                               |
-;    SPI__BufferH - The most significant Byte of the Data                       |
-;    SPI__BufferL - The least significant Byte of the Data                      |
+;    SPI_BufferH - The most significant Byte of the Data                       |
+;    SPI_BufferL - The least significant Byte of the Data                      |
 ;                                                                              |
 ;                                                                              |
 ;                                                                              |
@@ -94,11 +94,11 @@ SPI__Read
 ;                                                                              |
 ;                                                                              |
 ;    Example:                                                                  |
-;    pagesel SPI__BufferH                                                       |
+;    banksel SPI_BufferH                                                       |
 ;    movlw   0xf0                                                              |
-;    movwf   SPI__BufferH                                                       |
+;    movwf   SPI_BufferH                                                       |
 ;    movlw   0x0f                                                              |
-;    movwf   SPI__BufferL                                                       |
+;    movwf   SPI_BufferL                                                       |
 ;    call    SPI__Write                                                         |
 ;                                                                              |
 ;                                                                              |
@@ -133,15 +133,15 @@ SPI__Write
 ;	This method shifts data out of the MCU through the SPI-Interface.
 ;
 ;
-;	@param SPI__BufferH The most significant Byte of the Data
-;	@param SPI__BufferL The least significant Byte of the Data
+;	@param SPI_BufferH The most significant Byte of the Data
+;	@param SPI_BufferL The least significant Byte of the Data
 ;
 ;	@example
-;	pagesel SPI__BufferH
+;	banksel SPI_BufferH
 ;	movlw	0xf0
-;	movwf	SPI__BufferH
+;	movwf	SPI_BufferH
 ;	movlw	0x0f
-;	movwf	SPI__BufferL
+;	movwf	SPI_BufferL
 ;	call	SPI__ShiftOutBuffer
 ;	@end-ex
 ;	@ex-desc This sends 0xf00f over the SPI-Bus
@@ -164,9 +164,9 @@ SPI__ShiftOutBuffer
 	bcf		SCK
 	bcf		AFECS
 ShiftOutLoop
-	banksel SPI__BufferH
-	rlf		SPI__BufferL, f
-	rlf		SPI__BufferH, f
+	banksel SPI_BufferH
+	rlf		SPI_BufferL, f
+	rlf		SPI_BufferH, f
 	banksel	PORTC
 	btfss	STATUS,C
 	bcf		SDIO
@@ -210,17 +210,17 @@ ShiftOutLoop
 ;	This method shifts data from the SPI-Bus into the MCU
 ;
 ;
-;	@return SPI__BufferH The most significant Byte of the Data
-;	@return SPI__BufferL The least significant Byte of the Data
+;	@return SPI_BufferH The most significant Byte of the Data
+;	@return SPI_BufferL The least significant Byte of the Data
 ;
 ;	@example
 ;	call	SPI__ShiftInBuffer
-;	banksel SPI__BufferH
-;	movf	SPI__BufferH,W
+;	banksel SPI_BufferH
+;	movf	SPI_BufferH,W
 ;	banksel RegH
 ;	movwf	RegH
-;	banksel SPI__BufferH
-;	movf	SPI__BufferL,W
+;	banksel SPI_BufferH
+;	movf	SPI_BufferL,W
 ;	banksel RegL
 ;	movwf	RegL
 ;	@end-ex
@@ -248,9 +248,9 @@ ShiftInLoop
 	btfsc	SDIO			
 	bsf		STATUS, C
 	bcf		SCK
-	banksel SPI__BufferL
-	rlf		SPI__BufferL, f
-	rlf		SPI__BufferH, f
+	banksel SPI_BufferL
+	rlf		SPI_BufferL, f
+	rlf		SPI_BufferH, f
 ;	CLRWDT
 	banksel Count00
 	decfsz	Count00, f

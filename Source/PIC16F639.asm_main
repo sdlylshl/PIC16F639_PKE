@@ -308,7 +308,7 @@ EndIsr
 ;        LF__ReadBuffer                                                         |
 ;            AFE__Receive8                                                      |
 ;        RF__SendBuffer                                                         |
-;        DELAY__wait_w_x_50u                                                    |
+;        DELAY__wait_w_x_50us                                                    |
 ;        _w_x_50u                                                              |
 ;    Button_Handler                                                            |
 ;                                                                              |

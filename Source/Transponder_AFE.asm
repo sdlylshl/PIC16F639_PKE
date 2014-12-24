@@ -26,7 +26,7 @@
 ;		 Software License Agreement
 ;
 ; The software supplied herewith by Microchip Technology Incorporated 
-; (the "Company") for its PICmicro® Microcontroller is intended and 
+; (the "Company") for its PICmicroï¿½ Microcontroller is intended and 
 ; supplied to you, the Company's customer, for use solely and 
 ; exclusively on Microchip PICmicro Microcontroller products. The 
 ; software is owned by the Company and/or its supplier, and is 
@@ -62,8 +62,9 @@
 #include Delay.inc
 #include SPI.inc
 #include EEPROM.inc
-AFE__ReadCMD			equ	0xC0
-AFE__WriteCMD		equ	0xE0
+;equ ç›¸å½“äºŽ #define
+AFE_READCMD			equ	0xC0
+AFE_WRITECMD		equ	0xE0
 ;
 AFE_ovr	udata
 COUNTER		res 1
@@ -71,10 +72,10 @@ TEMP		res 1
 TEMP1		res 1
 TEMP2		res 1
 TEMP3		res 1
-AFE__Buffer	res 1
-AFE__ConfMap	res 8
+AFE_Buffer	res 1
+AFE_ConfMap	res 8
 
-	global AFE__ConfMap, AFE__Buffer
+	global AFE_ConfMap, AFE_Buffer,flag
 	global AFE__LoadCfg, AFE__SafeCfg, AFE__ReadCfg, AFE__WriteCfg, AFE__WriteRegister, AFE__ReadRegister, AFE__WriteNVerifyRegister
 	global AFE__CalcColumnParity
 flag_ovr	udata_ovr
@@ -83,13 +84,13 @@ flag	res	1		;using bit 2
 ; Default Configuration stored in EEPROM
 ;-------------------------------------------
 EE_SEC	code 
-AFE__EEConfig0	DE	b'10100000'	; Wakeup => High = 2ms, Low = 2ms
-AFE__EEConfig1	DE	b'00000000'	; Demodulator output
-AFE__EEConfig2	DE	b'00000000'
-AFE__EEConfig3	DE	b'00000000'
-AFE__EEConfig4	DE	b'00000000'
-AFE__EEConfig5	DE	b'00000000'	; modulation depth = 50 % for new device
-AFE__EEConfig6	DE	b'01011111'	; column parity at defalt mode (50%)
+AFE_EEConfig0	DE	b'10100000'	; Wakeup => High = 2ms, Low = 2ms
+AFE_EEConfig1	DE	b'00000000'	; Demodulator output
+AFE_EEConfig2	DE	b'00000000'
+AFE_EEConfig3	DE	b'00000000'
+AFE_EEConfig4	DE	b'00000000'
+AFE_EEConfig5	DE	b'00000000'	; modulation depth = 50 % for new device
+AFE_EEConfig6	DE	b'01011111'	; column parity at defalt mode (50%)
 	code
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -122,12 +123,12 @@ AFE__EEConfig6	DE	b'01011111'	; column parity at defalt mode (50%)
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 AFE__LoadCfg
-	bankisel	AFE__ConfMap
-	movlw	AFE__ConfMap
+	bankisel	AFE_ConfMap
+	movlw	AFE_ConfMap
 	movwf	FSR
-	movlw	AFE__EEConfig0
-	banksel EEPROM__ADDRESS
-	movwf	EEPROM__ADDRESS
+	movlw	AFE_EEConfig0
+	banksel EEPROM_ADDRESS
+	movwf	EEPROM_ADDRESS
 	movlw	0x7
 	call	EEPROM__ReadBytes
 	return
@@ -161,18 +162,18 @@ AFE__LoadCfg
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 AFE__SafeCfg
-	bankisel	AFE__ConfMap
-	movlw	AFE__ConfMap
+	bankisel	AFE_ConfMap
+	movlw	AFE_ConfMap
 	movwf	FSR
-	movlw	AFE__EEConfig0
-	banksel EEPROM__ADDRESS
-	movwf	EEPROM__ADDRESS
+	movlw	AFE_EEConfig0
+	banksel EEPROM_ADDRESS
+	movwf	EEPROM_ADDRESS
 	movlw	0x7
 	call	EEPROM__WriteBytes
 	return
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    AFE__WriteRegister( w  AFE__ConfMap[x] )                                    |
+;    AFE__WriteRegister( w  AFE_ConfMap[x] )                                    |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -184,7 +185,7 @@ AFE__SafeCfg
 ;                                                                              |
 ;    Parameters:                                                               |
 ;    w - The AFE-Register to write                                             |
-;    AFE__ConfMap[x] - The value that should be written to the AFE-Register     |
+;    AFE_ConfMap[x] - The value that should be written to the AFE-Register     |
 ;                                                                              |
 ;                                                                              |
 ;                                                                              |
@@ -200,9 +201,9 @@ AFE__SafeCfg
 ;                                                                              |
 ;                                                                              |
 ;    Example:                                                                  |
-;        movlw   0xff                        ;move value to AFE__Buffer         |
-;        banksel AFE__ConfMap                                                   |
-;        movwf   AFE__ConfMap+4                                                 |
+;        movlw   0xff                        ;move value to AFE_Buffer         |
+;        banksel AFE_ConfMap                                                   |
+;        movwf   AFE_ConfMap+4                                                 |
 ;        movlw   0x04                        ;move register address to w       |
 ;        call    AFE__WriteRegister           ;writes the register              |
 ;                                                                              |
@@ -215,34 +216,34 @@ AFE__SafeCfg
 AFE__WriteRegister
 	banksel	TEMP
 	movwf	TEMP
-	addlw	AFE__ConfMap
+	addlw	AFE_ConfMap
 	movwf	FSR
 	rlf		TEMP,W
-	addlw	AFE__WriteCMD
-	banksel SPI__BufferH
-	movwf	SPI__BufferH
-	bankisel	AFE__ConfMap
+	addlw	AFE_WRITECMD
+	banksel SPI_BufferH
+	movwf	SPI_BufferH
+	bankisel	AFE_ConfMap
 	rlf		INDF,W
-	banksel SPI__BufferH
+	banksel SPI_BufferH
 	btfss	STATUS,C		
-	bcf		SPI__BufferH,0		
+	bcf		SPI_BufferH,0		
 	btfsc	STATUS,C		
-	bsf		SPI__BufferH,0
-	bankisel	AFE__ConfMap
+	bsf		SPI_BufferH,0
+	bankisel	AFE_ConfMap
 	rlf		INDF,W
-	banksel	SPI__BufferH
-	movwf	SPI__BufferL
-	bcf		SPI__BufferL,0
-	bankisel	AFE__ConfMap
+	banksel	SPI_BufferH
+	movwf	SPI_BufferL
+	bcf		SPI_BufferL,0
+	bankisel	AFE_ConfMap
 	movf	INDF,W
 	call	AFE__CalcParity
-	banksel	SPI__BufferH
-	iorwf	SPI__BufferL,F
+	banksel	SPI_BufferH
+	iorwf	SPI_BufferL,F
 	call	SPI__Write
 	retlw	0x00				;Debug only
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;     w  AFE__ConfMap[x] AFE__ReadRegister( w )                                  |
+;     w  AFE_ConfMap[x] AFE__ReadRegister( w )                                  |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -255,7 +256,7 @@ AFE__WriteRegister
 ;                                                                              |
 ;    Returns:                                                                  |
 ;    w - The value in the register (without parity)                            |
-;        AFE__ConfMap[x]  Writes - the value to the configuration map in RAM    |
+;        AFE_ConfMap[x]  Writes - the value to the configuration map in RAM    |
 ;                                                                              |
 ;                                                                              |
 ;    Used SFRs:  FSR                                                           |
@@ -282,22 +283,22 @@ AFE__WriteRegister
 AFE__ReadRegister
 	banksel	TEMP
 	movwf	TEMP
-	addlw	AFE__ConfMap
+	addlw	AFE_ConfMap
 	movwf	FSR
 	rlf		TEMP,W
-	addlw	AFE__ReadCMD
-	banksel	SPI__BufferH
-	movwf	SPI__BufferH
+	addlw	AFE_READCMD
+	banksel	SPI_BufferH
+	movwf	SPI_BufferH
 	call	SPI__Read
-	banksel	SPI__BufferH
-	rrf		SPI__BufferH,W	;Shift bit 0 in Carry
-	rrf		SPI__BufferL,W
-	bankisel	AFE__ConfMap
+	banksel	SPI_BufferH
+	rrf		SPI_BufferH,W	;Shift bit 0 in Carry
+	rrf		SPI_BufferL,W
+	bankisel	AFE_ConfMap
 	movwf	INDF			;synchronizing memory map with device
 	return
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;     w AFE__WriteNVerifyRegister( w  AFE__ConfMap[x] )                          |
+;     w AFE__WriteNVerifyRegister( w  AFE_ConfMap[x] )                          |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -306,7 +307,7 @@ AFE__ReadRegister
 ;                                                                              |
 ;    Parameters:                                                               |
 ;    w - The AFE-Register to write                                             |
-;    AFE__ConfMap[x] - The value that should be written to the AFE-Register     |
+;    AFE_ConfMap[x] - The value that should be written to the AFE-Register     |
 ;                                                                              |
 ;                                                                              |
 ;    Returns:                                                                  |
@@ -328,9 +329,9 @@ AFE__ReadRegister
 ;                                                                              |
 ;                                                                              |
 ;    Example:                                                                  |
-;        movlw   0xff                        ;move value to AFE__Buffer         |
-;        banksel AFE__Buffer                                                    |
-;        movwf   AFE__Buffer                                                    |
+;        movlw   0xff                        ;move value to AFE_Buffer         |
+;        banksel AFE_Buffer                                                    |
+;        movwf   AFE_Buffer                                                    |
 ;        movlw   0x04                        ;move register address to w       |
 ;        call    AFE__WriteNVerifyRegister    ;writes and verifies the register |
 ;        andlw   0xff                        ;update status register           |
@@ -348,13 +349,13 @@ AFE__WriteNVerifyRegister
 	movwf	TEMP2
 	call	AFE__WriteRegister
 	movf	INDF,W
-	banksel AFE__Buffer
-	movwf	AFE__Buffer
+	banksel AFE_Buffer
+	movwf	AFE_Buffer
 	banksel	TEMP2
 	movf	TEMP2,W
 	call	AFE__ReadRegister
-	banksel AFE__Buffer
-	xorwf	AFE__Buffer,W
+	banksel AFE_Buffer
+	xorwf	AFE_Buffer,W
 	btfss	STATUS,Z
 	retlw	0x01
 	banksel	flag
@@ -404,7 +405,7 @@ AFE__WriteCfg
 	movwf	TEMP3
 AFE__WriteCfg.loop
 	banksel	TEMP3
-	bankisel	AFE__ConfMap
+	bankisel	AFE_ConfMap
 	decf	TEMP3,W
 	goto	AFE__WriteNVerifyRegister	;reducing stacklevel
 return_write_cfg
@@ -444,7 +445,7 @@ return_write_cfg
 ;                                                                              |
 ;    Description:                                                              |
 ;        That's it. The configuration is now in your RAM at the address        |
-;        AFE__ConfMap                                                           |
+;        AFE_ConfMap                                                           |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 AFE__ReadCfg
@@ -531,8 +532,8 @@ BeginParityCalc
 ;                                                                              |
 ;    Example:                                                                  |
 ;        call    AFE__CalcColumnParity        ;Calculate the column parity     |
-;        banksel AFE__Buffer                                                   |
-;        movwf   AFE__Buffer          ;move parity to transmitbuffer           |
+;        banksel AFE_Buffer                                                   |
+;        movwf   AFE_Buffer          ;move parity to transmitbuffer           |
 ;        movlw   0x6                 ;move address of column parity register to|
 ;         w                                                                    |
 ;        call    AFE__WriteRegister   ;write the column parity to the AFE      |
@@ -544,15 +545,15 @@ BeginParityCalc
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 AFE__CalcColumnParity
-	banksel AFE__ConfMap
-	movf	AFE__ConfMap,W
-	xorwf	(AFE__ConfMap+1),w
-	xorwf	(AFE__ConfMap+2),w
-	xorwf	(AFE__ConfMap+3),w
-	xorwf	(AFE__ConfMap+4),w
-	xorwf	(AFE__ConfMap+5),w
-	xorlw	0xff				;°´Î»È¡·´
-	movwf	(AFE__ConfMap+6)
+	banksel AFE_ConfMap
+	movf	AFE_ConfMap,W
+	xorwf	(AFE_ConfMap+1),w
+	xorwf	(AFE_ConfMap+2),w
+	xorwf	(AFE_ConfMap+3),w
+	xorwf	(AFE_ConfMap+4),w
+	xorwf	(AFE_ConfMap+5),w
+	xorlw	0xff				;ï¿½ï¿½Î»È¡ï¿½ï¿½
+	movwf	(AFE_ConfMap+6)
 	return
 ;****************************************************** 
 ;	END OF FILE : AFE_639.ASM

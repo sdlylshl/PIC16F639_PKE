@@ -13,8 +13,8 @@
 ;                                                                              |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-	extern EEPROM__ADDRESS
-	extern EEPROM__ByteCount
+	extern EEPROM_ADDRESS
+	extern EEPROM_ByteCount
 	extern EEPROM__Write, EEPROM__WriteBytes, EEPROM__Read, EEPROM__ReadBytes
 ;------------------------------------------------------------------------------+
 ;                                                                              |

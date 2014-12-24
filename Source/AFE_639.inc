@@ -16,8 +16,8 @@
 ;                                                                              |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-    extern AFE__ConfMap
-    extern AFE__Buffer
+    extern AFE_ConfMap
+    extern AFE_Buffer
     extern AFE__LoadCfg, AFE__SafeCfg, AFE__ReadCfg, AFE__WriteCfg, AFE__WriteRegister, AFE__ReadRegister, AFE__WriteNVerifyRegister
     extern AFE__CalcColumnParity
 	
@@ -83,9 +83,9 @@ AFE__Init macro
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 AFE__SendCMDClampON macro
-	banksel SPI__BufferH
+	banksel SPI_BufferH
 	movlw	AFE__CMDClampOn
-	movwf	SPI__BufferH
+	movwf	SPI_BufferH
 	call	SPI__Write
 	endm
 ;------------------------------------------------------------------------------+
@@ -120,9 +120,9 @@ AFE__SendCMDClampON macro
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 AFE__SendCMDClampOFF macro
-	banksel SPI__BufferH
+	banksel SPI_BufferH
 	movlw	AFE__CMDClampOff
-	movwf	SPI__BufferH
+	movwf	SPI_BufferH
 	call	SPI__Write
 	endm
 ;------------------------------------------------------------------------------+
@@ -156,9 +156,9 @@ AFE__SendCMDClampOFF macro
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 AFE__SendCMDSleep macro
-	banksel SPI__BufferH
+	banksel SPI_BufferH
 	movlw	AFE__CMDSleep
-	movwf	SPI__BufferH
+	movwf	SPI_BufferH
 	call	SPI__Write
 	endm
 ;------------------------------------------------------------------------------+
@@ -191,9 +191,9 @@ AFE__SendCMDSleep macro
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 AFE__SendCMDAGCPresON macro
-	banksel SPI__BufferH
+	banksel SPI_BufferH
 	movlw	AFE__CMDAGCOn
-	movwf	SPI__BufferH
+	movwf	SPI_BufferH
 	call	SPI__Write
 	endm
 ;------------------------------------------------------------------------------+
@@ -226,9 +226,9 @@ AFE__SendCMDAGCPresON macro
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 AFE__SendCMDAGCPresOFF macro
-	banksel SPI__BufferH
+	banksel SPI_BufferH
 	movlw	AFE__CMDAGCOff
-	movwf	SPI__BufferH
+	movwf	SPI_BufferH
 	call	SPI__Write
 	endm
 ;------------------------------------------------------------------------------+
@@ -260,9 +260,9 @@ AFE__SendCMDAGCPresOFF macro
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 AFE__SendCMDSoftReset macro
-	banksel SPI__BufferH
+	banksel SPI_BufferH
 	movlw	AFE__CMDSR
-	movwf	SPI__BufferH
+	movwf	SPI_BufferH
 	call	SPI__Write
 	endm
 ;------------------------------------------------------------------------------+
@@ -301,10 +301,10 @@ AFE__SendCMDSoftReset macro
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 AFE__EnableChannelX macro
-	banksel	AFE__ConfMap
-	movf	AFE__ConfMap,W
+	banksel	AFE_ConfMap
+	movf	AFE_ConfMap,W
 	andlw	b'11111110'
-	movwf	AFE__ConfMap
+	movwf	AFE_ConfMap
 	movlw	0x00
 	call	AFE__WriteRegister
 	AFE__updateColumnParity
@@ -345,10 +345,10 @@ AFE__EnableChannelX macro
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 AFE__EnableChannelY macro
-	banksel	AFE__ConfMap
-	movf	AFE__ConfMap,W
+	banksel	AFE_ConfMap
+	movf	AFE_ConfMap,W
 	andlw	b'11111101'
-	movwf	AFE__ConfMap
+	movwf	AFE_ConfMap
 	movlw	0x00
 	call	AFE__WriteRegister
 	AFE__updateColumnParity
@@ -389,10 +389,10 @@ AFE__EnableChannelY macro
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 AFE__EnableChannelZ macro
-	banksel	AFE__ConfMap
-	movf	AFE__ConfMap,W
+	banksel	AFE_ConfMap
+	movf	AFE_ConfMap,W
 	andlw	b'11111011'
-	movwf	AFE__ConfMap
+	movwf	AFE_ConfMap
 	movlw	0x00
 	call	AFE__WriteRegister
 	AFE__updateColumnParity
@@ -433,10 +433,10 @@ AFE__EnableChannelZ macro
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 AFE__DisableChannelX macro
-	banksel	AFE__ConfMap
-	movf	AFE__ConfMap,W
+	banksel	AFE_ConfMap
+	movf	AFE_ConfMap,W
 	iorlw	0x01
-	movwf	AFE__ConfMap
+	movwf	AFE_ConfMap
 	movlw	0x00
 	call	AFE__WriteRegister
 	AFE__updateColumnParity
@@ -477,10 +477,10 @@ AFE__DisableChannelX macro
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 AFE__AGCActive macro
-	banksel	AFE__ConfMap
-	movf	AFE__ConfMap+6,W
+	banksel	AFE_ConfMap
+	movf	AFE_ConfMap+6,W
 	iorlw	0x10
-	movwf	AFE__ConfMap+6
+	movwf	AFE_ConfMap+6
 	movlw	0x06
 	call	AFE__WriteRegister
 	AFE__updateColumnParity
@@ -521,10 +521,10 @@ AFE__AGCActive macro
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 AFE__AGCDeactive macro
-	banksel	AFE__ConfMap
-	movf	AFE__ConfMap+6,W
+	banksel	AFE_ConfMap
+	movf	AFE_ConfMap+6,W
 	andlw	0xef
-	movwf	AFE__ConfMap+6
+	movwf	AFE_ConfMap+6
 	movlw	0x06
 	call	AFE__WriteRegister
 	AFE__updateColumnParity
@@ -568,10 +568,10 @@ AFE__AGCDeactive macro
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 AFE__DisableChannelY macro
-	banksel	AFE__ConfMap
-	movf	AFE__ConfMap,W
+	banksel	AFE_ConfMap
+	movf	AFE_ConfMap,W
 	iorlw	0x02
-	movwf	AFE__ConfMap
+	movwf	AFE_ConfMap
 	movlw	0x00
 	call	AFE__WriteRegister
 	AFE__updateColumnParity
@@ -612,10 +612,10 @@ AFE__DisableChannelY macro
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 AFE__DisableChannelZ macro	;save some code with bsf :)
-	banksel	AFE__ConfMap
-	movf	AFE__ConfMap,W
+	banksel	AFE_ConfMap
+	movf	AFE_ConfMap,W
 	iorlw	0x04
-	movwf	AFE__ConfMap
+	movwf	AFE_ConfMap
 	movlw	0x00
 	call	AFE__WriteRegister
 	AFE__updateColumnParity
@@ -656,9 +656,9 @@ AFE__DisableChannelZ macro	;save some code with bsf :)
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 AFE__setOutputData	macro
-	banksel AFE__ConfMap
-	bcf		(AFE__ConfMap+1),7
-	bcf		(AFE__ConfMap+1),6
+	banksel AFE_ConfMap
+	bcf		(AFE_ConfMap+1),7
+	bcf		(AFE_ConfMap+1),6
 	movlw	0x01
 	call	AFE__WriteRegister
 	AFE__updateColumnParity
@@ -700,9 +700,9 @@ AFE__setOutputData	macro
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 AFE__setOutputClk	macro
-	banksel AFE__ConfMap
-	bcf		(AFE__ConfMap+1),7
-	bsf		(AFE__ConfMap+1),6
+	banksel AFE_ConfMap
+	bcf		(AFE_ConfMap+1),7
+	bsf		(AFE_ConfMap+1),6
 	movlw	0x01
 	call	AFE__WriteRegister
 	AFE__updateColumnParity
@@ -745,8 +745,8 @@ AFE__setOutputClk	macro
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 AFE__setOutputRSSI	macro
-	banksel AFE__ConfMap
-	bsf		(AFE__ConfMap+1),7
+	banksel AFE_ConfMap
+	bsf		(AFE_ConfMap+1),7
 	movlw	0x01
 	call	AFE__WriteRegister
 	AFE__updateColumnParity
@@ -793,12 +793,12 @@ AFE__setOutputRSSI	macro
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 AFE__setXTuningCap	macro	;make function out of it? Let's have a look at the running Code. The Stacklevel may be more critical
-	banksel AFE__Buffer
-	movwf	AFE__Buffer
-	movf	(AFE__ConfMap+1),w
+	banksel AFE_Buffer
+	movwf	AFE_Buffer
+	movf	(AFE_ConfMap+1),w
 	andlw	B'11000000'
-	iorwf	AFE__Buffer,W
-	movwf	(AFE__ConfMap+1)
+	iorwf	AFE_Buffer,W
+	movwf	(AFE_ConfMap+1)
 	movlw	0x01
 	call	AFE__WriteRegister
 	AFE__updateColumnParity
@@ -845,12 +845,12 @@ AFE__setXTuningCap	macro	;make function out of it? Let's have a look at the runn
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 AFE__setYTuningCap	macro
-	banksel AFE__Buffer
-	movwf	AFE__Buffer
-	movf	(AFE__ConfMap+2),w
+	banksel AFE_Buffer
+	movwf	AFE_Buffer
+	movf	(AFE_ConfMap+2),w
 	andlw	B'11000000'
-	iorwf	AFE__Buffer,W
-	movwf	(AFE__ConfMap+2)
+	iorwf	AFE_Buffer,W
+	movwf	(AFE_ConfMap+2)
 	movlw	0x02
 	call	AFE__WriteRegister
 	AFE__updateColumnParity
@@ -897,12 +897,12 @@ AFE__setYTuningCap	macro
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 AFE__setZTuningCap	macro
-	banksel AFE__Buffer
-	movwf	AFE__Buffer
-	movf	(AFE__ConfMap+3),w
+	banksel AFE_Buffer
+	movwf	AFE_Buffer
+	movf	(AFE_ConfMap+3),w
 	andlw	B'11000000'
-	iorwf	AFE__Buffer,W
-	movwf	(AFE__ConfMap+3)
+	iorwf	AFE_Buffer,W
+	movwf	(AFE_ConfMap+3)
 	movlw	0x03
 	call	AFE__WriteRegister
 	AFE__updateColumnParity
@@ -949,13 +949,13 @@ AFE__setZTuningCap	macro
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 AFE__setXSensitivity	macro
-	banksel AFE__Buffer
-	movwf	AFE__Buffer
-	swapf	AFE__Buffer,F
-	movf	(AFE__ConfMap+4),w
+	banksel AFE_Buffer
+	movwf	AFE_Buffer
+	swapf	AFE_Buffer,F
+	movf	(AFE_ConfMap+4),w
 	andlw	B'00001111'
-	iorwf	AFE__Buffer,W
-	movwf	(AFE__ConfMap+4)
+	iorwf	AFE_Buffer,W
+	movwf	(AFE_ConfMap+4)
 	movlw	0x04
 	call	AFE__WriteRegister
 	AFE__updateColumnParity
@@ -1002,12 +1002,12 @@ AFE__setXSensitivity	macro
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 AFE__setYSensitivity	macro
-	banksel AFE__Buffer
-	movwf	AFE__Buffer
-	movf	(AFE__ConfMap+4),w
+	banksel AFE_Buffer
+	movwf	AFE_Buffer
+	movf	(AFE_ConfMap+4),w
 	andlw	B'11110000'
-	iorwf	AFE__Buffer,W
-	movwf	(AFE__ConfMap+4)
+	iorwf	AFE_Buffer,W
+	movwf	(AFE_ConfMap+4)
 	movlw	0x04
 	call	AFE__WriteRegister
 	AFE__updateColumnParity
@@ -1054,12 +1054,12 @@ AFE__setYSensitivity	macro
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 AFE__setZSensitivity	macro
-	banksel AFE__Buffer
-	movwf	AFE__Buffer
-	movf	(AFE__ConfMap+5),w
+	banksel AFE_Buffer
+	movwf	AFE_Buffer
+	movf	(AFE_ConfMap+5),w
 	andlw	B'11110000'
-	iorwf	AFE__Buffer,W
-	movwf	(AFE__ConfMap+5)
+	iorwf	AFE_Buffer,W
+	movwf	(AFE_ConfMap+5)
 	movlw	0x05
 	call	AFE__WriteRegister
 	AFE__updateColumnParity
@@ -1105,13 +1105,13 @@ AFE__setZSensitivity	macro
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 AFE__setModDepth macro
-	banksel AFE__Buffer
-	movwf	AFE__Buffer
-	swapf	AFE__Buffer,F
-	movf	(AFE__ConfMap+5),w
+	banksel AFE_Buffer
+	movwf	AFE_Buffer
+	swapf	AFE_Buffer,F
+	movf	(AFE_ConfMap+5),w
 	andlw	B'11001111'
-	iorwf	AFE__Buffer,W
-	movwf	(AFE__ConfMap+5)
+	iorwf	AFE_Buffer,W
+	movwf	(AFE_ConfMap+5)
 	movlw	0x05
 	call	AFE__WriteRegister
 	AFE__updateColumnParity
@@ -1158,11 +1158,11 @@ AFE__setModDepth macro
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 AFE__confOEFilter macro	TOEH, TOEL
-	banksel AFE__ConfMap
-	movf	AFE__ConfMap,W
+	banksel AFE_ConfMap
+	movf	AFE_ConfMap,W
 	andlw	B'00001111'
 	iorlw	(((TOEH<<6)&&B'11000000')||((TOEL<<4)&&B'00110000'))	;ensure that he does what I want
-	movwf	AFE__ConfMap
+	movwf	AFE_ConfMap
 	movlw	0x00
 	call	AFE__WriteRegister
 	AFE__updateColumnParity
@@ -1206,8 +1206,8 @@ AFE__confOEFilter macro	TOEH, TOEL
 AFE__getStatus	macro
 	movlw	0x07
 	call	AFE__ReadRegister
-	banksel	AFE__ConfMap
-	movf	(AFE__ConfMap+7),w
+	banksel	AFE_ConfMap
+	movf	(AFE_ConfMap+7),w
 	endm
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -1242,7 +1242,7 @@ AFE__getStatus	macro
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
-;        This example writes the new column parity to the AFE__ConfMap and to   |
+;        This example writes the new column parity to the AFE_ConfMap and to   |
 ;        the device                                                            |
 ;                                                                              |
 ;------------------------------------------------------------------------------+

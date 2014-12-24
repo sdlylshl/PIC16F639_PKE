@@ -2,9 +2,9 @@
 #define DELAY_INC
 
 
-#define DELAY__Returned	DELAY__flag,3
+#define DELAY__Returned	DELAY_flag,3
 
-	extern DELAY__wait_w_x_50us, DELAY__flag, DELAY__Counter
+	extern DELAY__wait_w_x_50us, DELAY_flag, DELAY_Counter
 	extern DELAY__start, DELAY__Wait
 ;
 ;
@@ -68,16 +68,16 @@ DELAY__WaitFor macro time, unit
 ;	movlw	0xEA				;1Cycles	1	;0x100 - 0x32 (50u) + 0x06 (static offset) + 0x07(Interrupt) + 0x0F (n first cycle)= 0xEA to compenste static Offsets
 ;	movwf	TMR0				;1Cycles	1
 ;	bsf		INTCON,T0IE
-;	banksel	DELAY__Counter		;don't care timer already started
+;	banksel	DELAY_Counter		;don't care timer already started
 ;	movlw	(us/.50)
-;	movwf	DELAY__Counter
-;	banksel	DELAY__flag
+;	movwf	DELAY_Counter
+;	banksel	DELAY_flag
 ;	bcf		DELAY__Returned
 ;	nop
 ;	endm
 
 ;DELAY__Wait macro
-;	banksel	DELAY__flag
+;	banksel	DELAY_flag
 ;	btfss	DELAY__Returned
 ;	goto	$-1				;at least 1 Cycle
 ;	bcf		INTCON,T0IE
@@ -152,10 +152,10 @@ DELAY__Isr macro
 	banksel	TMR0			;2Cycles	n
 	movlw	0xD8			;1Cycle		n	;so set 0x100-0x32+0x02+0x0E=0xDC
 	movwf	TMR0			;1Cycle		n
-	banksel	DELAY__Counter	;2Cycles	1
-	decfsz	DELAY__Counter	;1Cycle		1
+	banksel	DELAY_Counter	;2Cycles	1
+	decfsz	DELAY_Counter	;1Cycle		1
 	goto	DELAY__Isr.End	;2Cycle		0
-	banksel	DELAY__flag		;2Cycles	1
+	banksel	DELAY_flag		;2Cycles	1
 	bsf		DELAY__Returned	;1Cycle		1
 DELAY__Isr.End
 	endm

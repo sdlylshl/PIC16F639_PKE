@@ -15,10 +15,10 @@
 ;                                                                              |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-	extern SPI__BufferH
+	extern SPI_BufferH
 ;------------------------------------------------------------------------------+
 ;                                                                              |
-;    Field SPI__BufferL                                                         |
+;    Field SPI_BufferL                                                         |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -26,7 +26,7 @@
 ;                                                                              |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
-	extern SPI__BufferL
+	extern SPI_BufferL
 	extern SPI__Read, SPI__Write
 	;extern SPI__ShiftOutBuffer, SPI__ShiftInBuffer
 ;------------------------------------------------------------------------------+
@@ -50,15 +50,15 @@ SPI__Init macro
 ;	This macro shifts data out of the MCU through the SPI-Interface.
 ;
 ;
-;	@param SPI__BufferH The most significant Byte of the Data
-;	@param SPI__BufferL The least significant Byte of the Data
+;	@param SPI_BufferH The most significant Byte of the Data
+;	@param SPI_BufferL The least significant Byte of the Data
 ;
 ;	@example
-;	pagesel SPI__BufferH
+;	banksel SPI_BufferH
 ;	movlw	0xf0
-;	movwf	SPI__BufferH
+;	movwf	SPI_BufferH
 ;	movlw	0x0f
-;	movwf	SPI__BufferL
+;	movwf	SPI_BufferL
 ;	call	SPI__Write
 ;	@end-ex
 ;	@ex-desc This sends 0xf00f over the SPI-Bus
@@ -74,27 +74,27 @@ SPI__Init macro
 ;	endm
 ;
 ;	This macro reads two Bytes from the SPI-Bus.
-;	Put the Read command and the address in the SPI__BufferH and SPI__BufferL Registers.
+;	Put the Read command and the address in the SPI_BufferH and SPI_BufferL Registers.
 ;	Then call SPI__Read.
-;	Then read the returned values in SPI__BufferH and SPI__BufferL.
+;	Then read the returned values in SPI_BufferH and SPI_BufferL.
 ;
 ;
-;	@param SPI__BufferH The most significant Byte of the Data
-;	@param SPI__BufferL The least significant Byte of the Data
+;	@param SPI_BufferH The most significant Byte of the Data
+;	@param SPI_BufferL The least significant Byte of the Data
 ;
 ;
-;	@return SPI__BufferH The most significant Byte of the Data
-;	@return SPI__BufferL The least significant Byte of the Data
+;	@return SPI_BufferH The most significant Byte of the Data
+;	@return SPI_BufferL The least significant Byte of the Data
 ;
 ;	@example
-;	pagesel SPI__BufferH
+;	banksel SPI_BufferH
 ;	movlw	0xf0
-;	movwf	SPI__BufferH
+;	movwf	SPI_BufferH
 ;	movlw	0x0f
-;	movwf	SPI__BufferL
+;	movwf	SPI_BufferL
 ;	call	SPI__Read
 ;	@end-ex
-;	@ex-desc This sends 0xf00f over the SPI-Bus, and reads the answer to SPI__BufferH and SPI__BufferL.
+;	@ex-desc This sends 0xf00f over the SPI-Bus, and reads the answer to SPI_BufferH and SPI_BufferL.
 ;
 ;	@status Written
 ;

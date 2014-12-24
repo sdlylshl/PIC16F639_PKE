@@ -28,10 +28,11 @@
 	#define RF__PORT		PORTC
 #endif
 RF_ovr	udata_ovr
+RF_COUNTER		res 1
+RF_Byte_Counter	res 1
+RF_Data_REG		res 1
 Parity			res 1
-RF__COUNTER		res 1
-RF__Byte_Counter	res 1
-RF__Data_REG		res 1
+
 	ifndef RF__T_HDR_INIT
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -141,20 +142,20 @@ RF__Data_REG		res 1
 ;                                                                              |
 ;                                                                              |
 ;    Description:                                                              |
-;        This sends 7 bytes of the buffer "AFE__ConfMap" to the air             |
+;        This sends 7 bytes of the buffer "AFE_ConfMap" to the air             |
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 RF__SendBuffer
-	banksel	RF__Byte_Counter
-	movwf	RF__Byte_Counter
+	banksel	RF_Byte_Counter
+	movwf	RF_Byte_Counter
 	call	RF__Send_Header
 RF__SendBuffer.loop
 	bankisel	PORTA
 	movf	INDF,W
 	call	RF__Send_Data
 	incf	FSR,F
-	banksel RF__Byte_Counter
-	decfsz	RF__Byte_Counter,F
+	banksel RF_Byte_Counter
+	decfsz	RF_Byte_Counter,F
 	goto	RF__SendBuffer.loop
 	return
 	
@@ -198,17 +199,17 @@ RF__SendBuffer.loop
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 RF__Send_Data
-	banksel RF__Data_REG
-	movwf	RF__Data_REG		; Load Data to Send
+	banksel RF_Data_REG
+	movwf	RF_Data_REG		; Load Data to Send
 	clrf	Parity
 	; Send Byte using UHF transmitter
 Transmit8	
-	banksel RF__COUNTER
+	banksel RF_COUNTER
 	movlw	.8
-	movwf	RF__COUNTER	; initialize count register
+	movwf	RF_COUNTER	; initialize count register
 TransmitNext
-	banksel RF__Data_REG
-	rrf		RF__Data_REG, f		; rotate receive register
+	banksel RF_Data_REG
+	rrf		RF_Data_REG, f		; rotate receive register
 	btfsc	STATUS, C		; test bit to be transmited
 	goto	SendOne			; send high value
 SendZero
@@ -238,11 +239,11 @@ SendOne
 	incf	Parity,F
 ;	goto	SendNextBit		; send next bit
 SendNextBit	
-	banksel RF__COUNTER
-	movf	RF__COUNTER,F
+	banksel RF_COUNTER
+	movf	RF_COUNTER,F
 	btfsc	STATUS,Z
 	goto	EndTX
-	decfsz	RF__COUNTER, f	; decrement counter register
+	decfsz	RF_COUNTER, f	; decrement counter register
 	goto	TransmitNext 	; transmit next bit
 SendParity
 ;	btfsc	Parity,7

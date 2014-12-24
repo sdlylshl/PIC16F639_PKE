@@ -105,7 +105,7 @@ SER3	res	1
 ;    LF__ReadBuffer                                                             |
 ;        AFE__Receive8                                                          |
 ;    RF__SendBuffer                                                             |
-;    DELAY__wait_w_x_50u                                                        |
+;    DELAY__wait_w_x_50us                                                        |
 ;    _w_x_50u                                                                  |
 ;                                                                              |
 ;                                                                              |
@@ -206,8 +206,8 @@ WRITE_USR3
 	movf	LF_CMD,W			; Get LF Command Byte
 	andlw	0x3					; Mask Lower 2 bits = Address
 	addlw	EE_USER				; Add to User Memory Offset
-	banksel	EEPROM__ADDRESS			
-	movwf	EEPROM__ADDRESS		; Load offset into ADDRESS register
+	banksel	EEPROM_ADDRESS			
+	movwf	EEPROM_ADDRESS		; Load offset into ADDRESS register
 	banksel DAT0
 	movf	DAT0,W
 	nop
@@ -222,8 +222,8 @@ WRITE_USR4
 	movf	LF_CMD,W			; Get LF Command Byte
 	andlw	0x3					; Mask Lower 2 bits = Address
 	addlw	EE_USER				; Add to User Memory Offset
-	banksel	EEPROM__ADDRESS			
-	movwf	EEPROM__ADDRESS		; Load offset into ADDRESS register
+	banksel	EEPROM_ADDRESS			
+	movwf	EEPROM_ADDRESS		; Load offset into ADDRESS register
 	Call	EEPROM__Read			; Read byte from EEPROM
 	banksel DAT0
 	movwf	DAT0
@@ -231,7 +231,7 @@ WRITE_USR4
 	Call	EEPROM__Read			; Read byte from EEPROM
 	banksel DAT1
 	movwf	DAT1
-	pagesel DELAY__wait_w_x_50u
+	pagesel DELAY__wait_w_x_50us
 	DELAY__WaitFor .1,'m'
 	
 ; ******  Send LF Data Transmission back to Basestation ********
@@ -260,8 +260,8 @@ READ_USR
 	movf	LF_CMD,W			; Get LF Command Byte
 	andlw	0x3					; Mask Lower 2 bits = Address
 	addlw	EE_USER				; Add to User Memory Offset
-	banksel	EEPROM__ADDRESS			
-	movwf	EEPROM__ADDRESS		; Load offset into ADDRESS register
+	banksel	EEPROM_ADDRESS			
+	movwf	EEPROM_ADDRESS		; Load offset into ADDRESS register
 	Call	EEPROM__Read			; Read byte from EEPROM
 	banksel DAT0
 	movwf	DAT0			
@@ -270,7 +270,7 @@ READ_USR
 	movwf	DAT1
 	
 	
-	pagesel DELAY__wait_w_x_50u
+	pagesel DELAY__wait_w_x_50us
 	DELAY__WaitFor .1,'m'
 ; ******  Send LF Data Transmission back to Basestation ********
 ;READ_USR1
@@ -302,7 +302,7 @@ IFF_CMD1
 	call	LF__ReadBuffer		; Receive challenge from Basestation and store it to DAT
 	btfsc	STATUS,Z
 	goto	M_Failed
-	pagesel DELAY__wait_w_x_50u
+	pagesel DELAY__wait_w_x_50us
 	DELAY__WaitFor .1,'m'		; Wait 1ms for end of LF data transmission
 ; ******* Calculate 32-bit KeeLoq response ****************
 IFF_CMD2
@@ -351,14 +351,14 @@ RSSI_CMD2
 ; READ_SERIAL()
 ; ***********************************************************************
 READ_SERIAL
-	banksel	EEPROM__ADDRESS
+	banksel	EEPROM_ADDRESS
 	movlw	EE_DATA				; Set EEPROM Adress Offset for Serial Number
-	movwf	EEPROM__ADDRESS
+	movwf	EEPROM_ADDRESS
 	movlw	SER0
 	movwf	FSR
 	movlw	0x04
 	call	EEPROM__ReadBytes	; Read Serialnumber to SER
-	pagesel DELAY__wait_w_x_50u
+	pagesel DELAY__wait_w_x_50us
 	DELAY__WaitFor .1,'m'
 ; ******  Send LF Data Transmission back to Basestation ********
 ;READ_SERIAL1
@@ -375,7 +375,7 @@ READ_SERIAL
 ;	movfw	DAT3
 ;	Call	LF__Send8		; Transmit byte using LF Clamping
 ;	call	waitForLFEnd
-	;pagesel DELAY__wait_w_x_50u
+	;pagesel DELAY__wait_w_x_50us
 	;DELAY__WaitFor .10,'m'
 	;Call	Delay10ms		; Wait 10ms for end of LF data transmission
 ; ******  Send RF Data Transmission back to Basestation ********

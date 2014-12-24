@@ -134,12 +134,12 @@
 #define LF__T_STEP		.250
 	endif
 	udata
-LF__Buffer		res 1
-LF__COUNTER		res 1
-LF__TEMP		res 1
+LF_Parity		res 1
+LF_Buffer		res 1
+LF_COUNTER		res 1
+LF_TEMP			res 1
 Counter			res 1
 Time			res 1
-LF__Parity		res 1
 	global	LF__Send8, LF__Receive8, LF__ReadBuffer, LF__SendBuffer
 	variable PRE_BITS = B'00000000'
 	variable TMP_PRESCALER = ( LF__T_PERIOD_MAX / (.220 * LF__T_INST) ) + .1
@@ -258,13 +258,13 @@ LF__Receive8
 	
 	banksel TMR0
 	clrf	TMR0			; Rising edge detected, Reset Timer 
-	banksel	LF__Buffer
-	clrf	LF__Buffer		; clear receive register
-	clrf	LF__Parity
+	banksel	LF_Buffer
+	clrf	LF_Buffer		; clear receive register
+	clrf	LF_Parity
 	
 	bcf		INTCON,T0IF		; Reset Timer #0 Interrupt Flag
 	movlw	.8				; number of bits to receive
-	movwf	LF__COUNTER		; load number of bits into counter register
+	movwf	LF_COUNTER		; load number of bits into counter register
 	
 ReceiveNext
 	call	LF__DetectFalling
@@ -279,31 +279,31 @@ ReceiveNext2
 	goto	Return.Fail
 	movlw	(3*LF__T_PERIOD_MAX)/(4*PRESCALER*LF__T_INST);0x9C			; Determine Bit value Time>156, then Zero else One
 	subwf	Time,W
-	banksel LF__Buffer	
-	movf	LF__COUNTER,W
+	banksel LF_Buffer	
+	movf	LF_COUNTER,W
 	btfsc	STATUS,Z
 	goto	ParityCheck
 	btfsc	STATUS,C
-	incf	LF__Parity,F
-	rrf		LF__Buffer,F		; Rotate bit received bit, now in carry, into receive buffer
-;	banksel LF__COUNTER
-	decf	LF__COUNTER, f		; Decrement receive count register by one
+	incf	LF_Parity,F
+	rrf		LF_Buffer,F		; Rotate bit received bit, now in carry, into receive buffer
+;	banksel LF_COUNTER
+	decf	LF_COUNTER, f		; Decrement receive count register by one
 	goto	ReceiveNext		; ... no, then receive next bit
 ParityCheck
 	btfss	STATUS,C
 	goto	Receive.ParityZero
 ;	goto	Receive.ParityOne
 Receive.ParityOne
-	btfss	LF__Parity,0
+	btfss	LF_Parity,0
 	goto	Receive.Success
 	goto	Return.Fail
 Receive.ParityZero
-	btfsc	LF__Parity,0
+	btfsc	LF_Parity,0
 	goto	Receive.Success
 	goto	Return.Fail
-;	banksel LF__Buffer
+;	banksel LF_Buffer
 Receive.Success
-	movf 	LF__Buffer,W		; Move received data byte into WREG
+	movf 	LF_Buffer,W		; Move received data byte into WREG
 	bcf		STATUS,Z
 	return					
 ;------------------------------------------------------------------------------+
@@ -345,8 +345,8 @@ Receive.Success
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 LF__ReadBuffer
-	banksel	LF__TEMP
-	movwf	LF__TEMP
+	banksel	LF_TEMP
+	movwf	LF_TEMP
 	call	LF__DetectRising		;Adjusting delay of first bit
 LF__ReadBuffer.loop
 	call	LF__Receive8
@@ -355,7 +355,7 @@ LF__ReadBuffer.loop
 	bankisel	PORTA
 	movwf	INDF
 	incf	FSR,F
-	decfsz	LF__TEMP,F
+	decfsz	LF_TEMP,F
 	goto	LF__ReadBuffer.loop
 	bcf		STATUS,Z
 	return
@@ -394,20 +394,20 @@ LF__ReadBuffer.loop
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 LF__Send8
-	banksel	LF__Buffer
-	movwf	LF__Buffer
+	banksel	LF_Buffer
+	movwf	LF_Buffer
 	movlw	.8					; number of bits to receive
-	movwf	LF__COUNTER			; load number of bits into counter register
+	movwf	LF_COUNTER			; load number of bits into counter register
 SendNext
-	btfsc	LF__Buffer,0			; Check if Data Bit = 1
+	btfsc	LF_Buffer,0			; Check if Data Bit = 1
 	Call	LF__Send_Clamp_One	; ... Yes, then send LF Clamp One
 	
-	banksel LF__Buffer
-	btfss	LF__Buffer,0			; Check if Data Bit = 0
+	banksel LF_Buffer
+	btfss	LF_Buffer,0			; Check if Data Bit = 0
 	Call	LF__Send_Clamp_Zero	; ... Yes, then send LF Clamp Zero
-	banksel LF__Buffer
-	rrf		LF__Buffer,1			; Right Rotate Data Register to get next bit
-	decfsz	LF__COUNTER, f		; Decrement receive count register by one
+	banksel LF_Buffer
+	rrf		LF_Buffer,1			; Right Rotate Data Register to get next bit
+	decfsz	LF_COUNTER, f		; Decrement receive count register by one
 	goto	SendNext			; ... no, then receive next bit
 	AFE__SendCMDClampOFF
 	return					
@@ -461,14 +461,14 @@ SendNext
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 LF__SendBuffer
-	banksel	LF__TEMP
-	movwf	LF__TEMP
+	banksel	LF_TEMP
+	movwf	LF_TEMP
 LF__SendBuffer.loop
 	bankisel	PORTA
 	movf	INDF,W
 	call	LF__Send8
 	incf	FSR,F
-	decfsz	LF__TEMP,F
+	decfsz	LF_TEMP,F
 	goto	LF__SendBuffer.loop
 	return
 ;------------------------------------------------------------------------------+

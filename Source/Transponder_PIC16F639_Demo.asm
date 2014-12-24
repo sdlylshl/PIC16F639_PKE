@@ -76,7 +76,8 @@
 #include AFE_639.inc
 #include Massage_Handler.inc
 #include Button_Handler.inc
- __CONFIG   _CP_OFF & _MCLRE_OFF & _WDT_OFF & _PWRTE_ON & _INTRC_OSC_NOCLKOUT 
+   	__CONFIG _FOSC_INTOSCIO & _WDTE_OFF & _PWRTE_ON & _MCLRE_OFF & _CP_OFF & _CPD_OFF & _BOREN_ON & _IESO_ON & _FCMEN_ON & _WURE_OFF
+    __idlocs	0x1234
 ;-----------------------------------------|
 ;
 #define		BANK0	banksel	0X00	; SELECT BANK0
@@ -120,6 +121,7 @@
     ifndef MSG_INTERRUPT
     #define	MSG_INTERRUPT	(1<<REC_EVENT)
     endif
+
 ;uninitialized data
 u_3	udata
 PORTA_LAST		res 1
@@ -312,7 +314,7 @@ EndIsr
 ;        LF__ReadBuffer                                                         |
 ;            AFE__Receive8                                                      |
 ;        RF__SendBuffer                                                         |
-;        DELAY__wait_w_x_50u                                                    |
+;        DELAY__wait_w_x_50us                                                    |
 ;        _w_x_50u                                                              |
 ;    Button_Handler                                                            |
 ;                                                                              |
@@ -363,6 +365,14 @@ MAIN
 	banksel flag
 	clrf	flag
 	EEPROM__Init
+	
+    movlw   0x00                                                           
+    banksel EEPROM_ADDRESS                                                
+    movwf   EEPROM_ADDRESS 
+	
+    movlw   0x12                                                           
+    call    EEPROM__Write     
+	
 	RF__Init
 	SPI__Init
 	AFE__Init
