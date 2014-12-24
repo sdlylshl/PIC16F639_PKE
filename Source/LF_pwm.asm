@@ -173,7 +173,7 @@ PRESCALER*=.2
 ;                                                                              |
 ;                                                                              |
 ;    Used SFRs:                                                                |
-;    DELAY__Returned                                                            |
+;    DELAY_Returned                                                            |
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |
@@ -207,7 +207,7 @@ LF__Send_Clamp_One
 ;                                                                              |
 ;                                                                              |
 ;    Used SFRs:                                                                |
-;    DELAY__Returned                                                            |
+;    DELAY_Returned                                                            |
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |
@@ -372,7 +372,7 @@ LF__ReadBuffer.loop
 ;                                                                              |
 ;                                                                              |
 ;                                                                              |
-;    Used SFRs: DELAY__Returned                                                 |
+;    Used SFRs: DELAY_Returned                                                 |
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |
@@ -427,7 +427,7 @@ SendNext
 ;                                                                              |
 ;                                                                              |
 ;                                                                              |
-;    Used SFRs: DELAY__Returned                                                 |
+;    Used SFRs: DELAY_Returned                                                 |
 ;                                                                              |
 ;                                                                              |
 ;    Calls subroutines:                                                        |

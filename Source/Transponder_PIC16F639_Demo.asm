@@ -281,7 +281,7 @@ EndIsr
 ;                                                                              |
 ;                                                                              |
 ;                                                                              |
-;    Used SFRs: OPTION_REG INTCON DELAY__Returned EECON1 EEADR, EEDATA, TMR0    |
+;    Used SFRs: OPTION_REG INTCON DELAY_Returned EECON1 EEADR, EEDATA, TMR0    |
 ;      PORTC                                                                   |
 ;      ,                                                                       |
 ;     _w_x_50u                                                                 |

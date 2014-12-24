@@ -59,7 +59,7 @@
 ;                                                                              |
 ;------------------------------------------------------------------------------+
 #include "Project.inc"
-#define DELAY__Returned	DELAY_flag,3
+#define DELAY_Returned	DELAY_flag,3
 wait macro Cyc
 	local tmp = Cyc
 	while tmp > .0
@@ -96,7 +96,7 @@ DELAY_flag	res	1			;using bit 3
 ;                                                                              |
 ;                                                                              |
 ;                                                                              |
-;    Used SFRs:  DELAY__Returned                                                |
+;    Used SFRs:  DELAY_Returned                                                |
 ;                                                                              |
 ;                                                                              |
 ;    Stacklevel: 0                                                             |
@@ -123,7 +123,7 @@ DELAY__wait_w_x_50us
 									;2 Cycles for call		(1)
 									;+ 1 Cycle for movlw	(1)
 	banksel DELAY_flag				;0-2 Cycles				(1)
-	bcf		DELAY__Returned			;1 Cycle				(1)
+	bcf		DELAY_Returned			;1 Cycle				(1)
 	banksel	DELAY_TEMP2
 	movwf	DELAY_TEMP2			;1 Cycle				(1)
 BaseDelay
@@ -139,7 +139,7 @@ lastloop
 	decfsz	DELAY_TEMP2,F			;1 Cycle				(TEMP2)
 	goto	BaseDelay				;2 Cycles				(TEMP2)
 	banksel	DELAY_flag
-	bsf		DELAY__Returned			;1 Cycle  + 1 Cycle nop	(1)
+	bsf		DELAY_Returned			;1 Cycle  + 1 Cycle nop	(1)
 	return							;2 Cycles				(1)
 						
 Delay50us							; time=((X*3)+6)*(1/(Fosc/4))		
@@ -198,7 +198,7 @@ DELAY__start
 	bcf		INTCON,T0IF			;this and below: dont't care timer already started
 	bsf		INTCON,T0IE
 	banksel	DELAY_flag
-	bcf		DELAY__Returned
+	bcf		DELAY_Returned
 	return
 ;------------------------------------------------------------------------------+
 ;                                                                              |
@@ -236,7 +236,7 @@ DELAY__start
 ;------------------------------------------------------------------------------+
 DELAY__Wait
 	banksel	DELAY_flag
-	btfss	DELAY__Returned
+	btfss	DELAY_Returned
 	goto	$-1				;at least 2 Cycles	1
 	bcf		INTCON,T0IE		;1Cycle				1
 	return

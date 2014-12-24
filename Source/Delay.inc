@@ -2,7 +2,7 @@
 #define DELAY_INC
 
 
-#define DELAY__Returned	DELAY_flag,3
+#define DELAY_Returned	DELAY_flag,3
 
 	extern DELAY__wait_w_x_50us, DELAY_flag, DELAY_Counter
 	extern DELAY__start, DELAY__Wait
@@ -42,7 +42,7 @@
 ;
 ;	@stacklevel +1
 ;
-;	@registers DELAY__Returned
+;	@registers DELAY_Returned
 ;
 ;*/
 
@@ -72,13 +72,13 @@ DELAY__WaitFor macro time, unit
 ;	movlw	(us/.50)
 ;	movwf	DELAY_Counter
 ;	banksel	DELAY_flag
-;	bcf		DELAY__Returned
+;	bcf		DELAY_Returned
 ;	nop
 ;	endm
 
 ;DELAY__Wait macro
 ;	banksel	DELAY_flag
-;	btfss	DELAY__Returned
+;	btfss	DELAY_Returned
 ;	goto	$-1				;at least 1 Cycle
 ;	bcf		INTCON,T0IE
 ;	endm
@@ -156,7 +156,7 @@ DELAY__Isr macro
 	decfsz	DELAY_Counter	;1Cycle		1
 	goto	DELAY__Isr.End	;2Cycle		0
 	banksel	DELAY_flag		;2Cycles	1
-	bsf		DELAY__Returned	;1Cycle		1
+	bsf		DELAY_Returned	;1Cycle		1
 DELAY__Isr.End
 	endm
 #endif
