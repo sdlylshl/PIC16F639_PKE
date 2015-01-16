@@ -83,7 +83,7 @@ MP_LINKER_DEBUG_OPTION=
 # Rules for buildStep: assemble
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
 ${OBJECTDIR}/Source/Button_Handler.o: Source/Button_Handler.asm  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/Source 
+	@${MKDIR} "${OBJECTDIR}/Source" 
 	@${RM} ${OBJECTDIR}/Source/Button_Handler.o.d 
 	@${RM} ${OBJECTDIR}/Source/Button_Handler.o 
 	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/Source/Button_Handler.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG  -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/Source/Button_Handler.lst\" -e\"${OBJECTDIR}/Source/Button_Handler.err\" $(ASM_OPTIONS)   -o\"${OBJECTDIR}/Source/Button_Handler.o\" \"Source/Button_Handler.asm\" 
@@ -91,7 +91,7 @@ ${OBJECTDIR}/Source/Button_Handler.o: Source/Button_Handler.asm  nbproject/Makef
 	@${FIXDEPS} "${OBJECTDIR}/Source/Button_Handler.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
 	
 ${OBJECTDIR}/Source/DELAY.o: Source/DELAY.asm  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/Source 
+	@${MKDIR} "${OBJECTDIR}/Source" 
 	@${RM} ${OBJECTDIR}/Source/DELAY.o.d 
 	@${RM} ${OBJECTDIR}/Source/DELAY.o 
 	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/Source/DELAY.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG  -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/Source/DELAY.lst\" -e\"${OBJECTDIR}/Source/DELAY.err\" $(ASM_OPTIONS)   -o\"${OBJECTDIR}/Source/DELAY.o\" \"Source/DELAY.asm\" 
@@ -99,7 +99,7 @@ ${OBJECTDIR}/Source/DELAY.o: Source/DELAY.asm  nbproject/Makefile-${CND_CONF}.mk
 	@${FIXDEPS} "${OBJECTDIR}/Source/DELAY.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
 	
 ${OBJECTDIR}/Source/EEPROM.o: Source/EEPROM.asm  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/Source 
+	@${MKDIR} "${OBJECTDIR}/Source" 
 	@${RM} ${OBJECTDIR}/Source/EEPROM.o.d 
 	@${RM} ${OBJECTDIR}/Source/EEPROM.o 
 	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/Source/EEPROM.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG  -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/Source/EEPROM.lst\" -e\"${OBJECTDIR}/Source/EEPROM.err\" $(ASM_OPTIONS)   -o\"${OBJECTDIR}/Source/EEPROM.o\" \"Source/EEPROM.asm\" 
@@ -107,7 +107,7 @@ ${OBJECTDIR}/Source/EEPROM.o: Source/EEPROM.asm  nbproject/Makefile-${CND_CONF}.
 	@${FIXDEPS} "${OBJECTDIR}/Source/EEPROM.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
 	
 ${OBJECTDIR}/Source/LF_pwm.o: Source/LF_pwm.asm  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/Source 
+	@${MKDIR} "${OBJECTDIR}/Source" 
 	@${RM} ${OBJECTDIR}/Source/LF_pwm.o.d 
 	@${RM} ${OBJECTDIR}/Source/LF_pwm.o 
 	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/Source/LF_pwm.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG  -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/Source/LF_pwm.lst\" -e\"${OBJECTDIR}/Source/LF_pwm.err\" $(ASM_OPTIONS)   -o\"${OBJECTDIR}/Source/LF_pwm.o\" \"Source/LF_pwm.asm\" 
@@ -115,7 +115,7 @@ ${OBJECTDIR}/Source/LF_pwm.o: Source/LF_pwm.asm  nbproject/Makefile-${CND_CONF}.
 	@${FIXDEPS} "${OBJECTDIR}/Source/LF_pwm.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
 	
 ${OBJECTDIR}/Source/Message_Handler.o: Source/Message_Handler.asm  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/Source 
+	@${MKDIR} "${OBJECTDIR}/Source" 
 	@${RM} ${OBJECTDIR}/Source/Message_Handler.o.d 
 	@${RM} ${OBJECTDIR}/Source/Message_Handler.o 
 	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/Source/Message_Handler.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG  -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/Source/Message_Handler.lst\" -e\"${OBJECTDIR}/Source/Message_Handler.err\" $(ASM_OPTIONS)   -o\"${OBJECTDIR}/Source/Message_Handler.o\" \"Source/Message_Handler.asm\" 
@@ -123,7 +123,7 @@ ${OBJECTDIR}/Source/Message_Handler.o: Source/Message_Handler.asm  nbproject/Mak
 	@${FIXDEPS} "${OBJECTDIR}/Source/Message_Handler.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
 	
 ${OBJECTDIR}/Source/RF.o: Source/RF.asm  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/Source 
+	@${MKDIR} "${OBJECTDIR}/Source" 
 	@${RM} ${OBJECTDIR}/Source/RF.o.d 
 	@${RM} ${OBJECTDIR}/Source/RF.o 
 	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/Source/RF.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG  -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/Source/RF.lst\" -e\"${OBJECTDIR}/Source/RF.err\" $(ASM_OPTIONS)   -o\"${OBJECTDIR}/Source/RF.o\" \"Source/RF.asm\" 
@@ -131,7 +131,7 @@ ${OBJECTDIR}/Source/RF.o: Source/RF.asm  nbproject/Makefile-${CND_CONF}.mk
 	@${FIXDEPS} "${OBJECTDIR}/Source/RF.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
 	
 ${OBJECTDIR}/Source/SPI.o: Source/SPI.asm  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/Source 
+	@${MKDIR} "${OBJECTDIR}/Source" 
 	@${RM} ${OBJECTDIR}/Source/SPI.o.d 
 	@${RM} ${OBJECTDIR}/Source/SPI.o 
 	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/Source/SPI.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG  -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/Source/SPI.lst\" -e\"${OBJECTDIR}/Source/SPI.err\" $(ASM_OPTIONS)   -o\"${OBJECTDIR}/Source/SPI.o\" \"Source/SPI.asm\" 
@@ -139,7 +139,7 @@ ${OBJECTDIR}/Source/SPI.o: Source/SPI.asm  nbproject/Makefile-${CND_CONF}.mk
 	@${FIXDEPS} "${OBJECTDIR}/Source/SPI.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
 	
 ${OBJECTDIR}/Source/Transponder_AFE.o: Source/Transponder_AFE.asm  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/Source 
+	@${MKDIR} "${OBJECTDIR}/Source" 
 	@${RM} ${OBJECTDIR}/Source/Transponder_AFE.o.d 
 	@${RM} ${OBJECTDIR}/Source/Transponder_AFE.o 
 	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/Source/Transponder_AFE.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG  -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/Source/Transponder_AFE.lst\" -e\"${OBJECTDIR}/Source/Transponder_AFE.err\" $(ASM_OPTIONS)   -o\"${OBJECTDIR}/Source/Transponder_AFE.o\" \"Source/Transponder_AFE.asm\" 
@@ -147,7 +147,7 @@ ${OBJECTDIR}/Source/Transponder_AFE.o: Source/Transponder_AFE.asm  nbproject/Mak
 	@${FIXDEPS} "${OBJECTDIR}/Source/Transponder_AFE.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
 	
 ${OBJECTDIR}/Source/Transponder_PIC16F639_Demo.o: Source/Transponder_PIC16F639_Demo.asm  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/Source 
+	@${MKDIR} "${OBJECTDIR}/Source" 
 	@${RM} ${OBJECTDIR}/Source/Transponder_PIC16F639_Demo.o.d 
 	@${RM} ${OBJECTDIR}/Source/Transponder_PIC16F639_Demo.o 
 	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/Source/Transponder_PIC16F639_Demo.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG  -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/Source/Transponder_PIC16F639_Demo.lst\" -e\"${OBJECTDIR}/Source/Transponder_PIC16F639_Demo.err\" $(ASM_OPTIONS)   -o\"${OBJECTDIR}/Source/Transponder_PIC16F639_Demo.o\" \"Source/Transponder_PIC16F639_Demo.asm\" 
@@ -156,7 +156,7 @@ ${OBJECTDIR}/Source/Transponder_PIC16F639_Demo.o: Source/Transponder_PIC16F639_D
 	
 else
 ${OBJECTDIR}/Source/Button_Handler.o: Source/Button_Handler.asm  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/Source 
+	@${MKDIR} "${OBJECTDIR}/Source" 
 	@${RM} ${OBJECTDIR}/Source/Button_Handler.o.d 
 	@${RM} ${OBJECTDIR}/Source/Button_Handler.o 
 	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/Source/Button_Handler.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/Source/Button_Handler.lst\" -e\"${OBJECTDIR}/Source/Button_Handler.err\" $(ASM_OPTIONS)   -o\"${OBJECTDIR}/Source/Button_Handler.o\" \"Source/Button_Handler.asm\" 
@@ -164,7 +164,7 @@ ${OBJECTDIR}/Source/Button_Handler.o: Source/Button_Handler.asm  nbproject/Makef
 	@${FIXDEPS} "${OBJECTDIR}/Source/Button_Handler.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
 	
 ${OBJECTDIR}/Source/DELAY.o: Source/DELAY.asm  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/Source 
+	@${MKDIR} "${OBJECTDIR}/Source" 
 	@${RM} ${OBJECTDIR}/Source/DELAY.o.d 
 	@${RM} ${OBJECTDIR}/Source/DELAY.o 
 	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/Source/DELAY.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/Source/DELAY.lst\" -e\"${OBJECTDIR}/Source/DELAY.err\" $(ASM_OPTIONS)   -o\"${OBJECTDIR}/Source/DELAY.o\" \"Source/DELAY.asm\" 
@@ -172,7 +172,7 @@ ${OBJECTDIR}/Source/DELAY.o: Source/DELAY.asm  nbproject/Makefile-${CND_CONF}.mk
 	@${FIXDEPS} "${OBJECTDIR}/Source/DELAY.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
 	
 ${OBJECTDIR}/Source/EEPROM.o: Source/EEPROM.asm  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/Source 
+	@${MKDIR} "${OBJECTDIR}/Source" 
 	@${RM} ${OBJECTDIR}/Source/EEPROM.o.d 
 	@${RM} ${OBJECTDIR}/Source/EEPROM.o 
 	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/Source/EEPROM.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/Source/EEPROM.lst\" -e\"${OBJECTDIR}/Source/EEPROM.err\" $(ASM_OPTIONS)   -o\"${OBJECTDIR}/Source/EEPROM.o\" \"Source/EEPROM.asm\" 
@@ -180,7 +180,7 @@ ${OBJECTDIR}/Source/EEPROM.o: Source/EEPROM.asm  nbproject/Makefile-${CND_CONF}.
 	@${FIXDEPS} "${OBJECTDIR}/Source/EEPROM.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
 	
 ${OBJECTDIR}/Source/LF_pwm.o: Source/LF_pwm.asm  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/Source 
+	@${MKDIR} "${OBJECTDIR}/Source" 
 	@${RM} ${OBJECTDIR}/Source/LF_pwm.o.d 
 	@${RM} ${OBJECTDIR}/Source/LF_pwm.o 
 	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/Source/LF_pwm.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/Source/LF_pwm.lst\" -e\"${OBJECTDIR}/Source/LF_pwm.err\" $(ASM_OPTIONS)   -o\"${OBJECTDIR}/Source/LF_pwm.o\" \"Source/LF_pwm.asm\" 
@@ -188,7 +188,7 @@ ${OBJECTDIR}/Source/LF_pwm.o: Source/LF_pwm.asm  nbproject/Makefile-${CND_CONF}.
 	@${FIXDEPS} "${OBJECTDIR}/Source/LF_pwm.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
 	
 ${OBJECTDIR}/Source/Message_Handler.o: Source/Message_Handler.asm  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/Source 
+	@${MKDIR} "${OBJECTDIR}/Source" 
 	@${RM} ${OBJECTDIR}/Source/Message_Handler.o.d 
 	@${RM} ${OBJECTDIR}/Source/Message_Handler.o 
 	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/Source/Message_Handler.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/Source/Message_Handler.lst\" -e\"${OBJECTDIR}/Source/Message_Handler.err\" $(ASM_OPTIONS)   -o\"${OBJECTDIR}/Source/Message_Handler.o\" \"Source/Message_Handler.asm\" 
@@ -196,7 +196,7 @@ ${OBJECTDIR}/Source/Message_Handler.o: Source/Message_Handler.asm  nbproject/Mak
 	@${FIXDEPS} "${OBJECTDIR}/Source/Message_Handler.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
 	
 ${OBJECTDIR}/Source/RF.o: Source/RF.asm  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/Source 
+	@${MKDIR} "${OBJECTDIR}/Source" 
 	@${RM} ${OBJECTDIR}/Source/RF.o.d 
 	@${RM} ${OBJECTDIR}/Source/RF.o 
 	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/Source/RF.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/Source/RF.lst\" -e\"${OBJECTDIR}/Source/RF.err\" $(ASM_OPTIONS)   -o\"${OBJECTDIR}/Source/RF.o\" \"Source/RF.asm\" 
@@ -204,7 +204,7 @@ ${OBJECTDIR}/Source/RF.o: Source/RF.asm  nbproject/Makefile-${CND_CONF}.mk
 	@${FIXDEPS} "${OBJECTDIR}/Source/RF.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
 	
 ${OBJECTDIR}/Source/SPI.o: Source/SPI.asm  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/Source 
+	@${MKDIR} "${OBJECTDIR}/Source" 
 	@${RM} ${OBJECTDIR}/Source/SPI.o.d 
 	@${RM} ${OBJECTDIR}/Source/SPI.o 
 	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/Source/SPI.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/Source/SPI.lst\" -e\"${OBJECTDIR}/Source/SPI.err\" $(ASM_OPTIONS)   -o\"${OBJECTDIR}/Source/SPI.o\" \"Source/SPI.asm\" 
@@ -212,7 +212,7 @@ ${OBJECTDIR}/Source/SPI.o: Source/SPI.asm  nbproject/Makefile-${CND_CONF}.mk
 	@${FIXDEPS} "${OBJECTDIR}/Source/SPI.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
 	
 ${OBJECTDIR}/Source/Transponder_AFE.o: Source/Transponder_AFE.asm  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/Source 
+	@${MKDIR} "${OBJECTDIR}/Source" 
 	@${RM} ${OBJECTDIR}/Source/Transponder_AFE.o.d 
 	@${RM} ${OBJECTDIR}/Source/Transponder_AFE.o 
 	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/Source/Transponder_AFE.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/Source/Transponder_AFE.lst\" -e\"${OBJECTDIR}/Source/Transponder_AFE.err\" $(ASM_OPTIONS)   -o\"${OBJECTDIR}/Source/Transponder_AFE.o\" \"Source/Transponder_AFE.asm\" 
@@ -220,7 +220,7 @@ ${OBJECTDIR}/Source/Transponder_AFE.o: Source/Transponder_AFE.asm  nbproject/Mak
 	@${FIXDEPS} "${OBJECTDIR}/Source/Transponder_AFE.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
 	
 ${OBJECTDIR}/Source/Transponder_PIC16F639_Demo.o: Source/Transponder_PIC16F639_Demo.asm  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/Source 
+	@${MKDIR} "${OBJECTDIR}/Source" 
 	@${RM} ${OBJECTDIR}/Source/Transponder_PIC16F639_Demo.o.d 
 	@${RM} ${OBJECTDIR}/Source/Transponder_PIC16F639_Demo.o 
 	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/Source/Transponder_PIC16F639_Demo.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/Source/Transponder_PIC16F639_Demo.lst\" -e\"${OBJECTDIR}/Source/Transponder_PIC16F639_Demo.err\" $(ASM_OPTIONS)   -o\"${OBJECTDIR}/Source/Transponder_PIC16F639_Demo.o\" \"Source/Transponder_PIC16F639_Demo.asm\" 

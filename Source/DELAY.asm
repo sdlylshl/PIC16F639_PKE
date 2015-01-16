@@ -68,15 +68,16 @@ tmp -= .1
 	endw
 	endm
 	
+	global DELAY_flag, DELAY_Counter
+	global DELAY__wait_w_x_50us, DELAY__start, DELAY__Wait
+	
 Delay_ovr	udata_ovr	;May do some overlay
 DELAY_Counter	res 1
 DELAY_TEMP1	res 1
 DELAY_TEMP2	res 1
-	
-	global DELAY__wait_w_x_50us, DELAY_Counter
-	global DELAY_flag, DELAY__start, DELAY__Wait
+
 flag_ovr	udata_ovr
-DELAY_flag	res	1			;using bit 3
+DELAY_flag	res	1			;using bit 3 set true to define timeout
 ;------------------------------------------------------------------------------+
 ;                                                                              |
 ;    DELAY__wait_w_x_50us( w )                                                  |
@@ -117,17 +118,17 @@ DELAY_flag	res	1			;using bit 3
 ;------------------------------------------------------------------------------+
 	code
 DELAY__wait_w_x_50us					
-;time = ( 9[11] - n + TEMP2 * ( 12 + n + m + TEMP1 * 3 ) ) * ( 4 / Fosc )
+;time = ( 9[11] - n + TEMP2 * ( 12 + n + m + TEMP1 * 3 ) ) * ( 4 / Fosc(M) )
 ;so set n equal to constant part (10[12]) depending on the bankselection code for Delay_Returned (see disassembly for exact values)
 ;use m to get an int, when dividing by 3.
 									;2 Cycles for call		(1)
 									;+ 1 Cycle for movlw	(1)
 	banksel DELAY_flag				;0-2 Cycles				(1)
 	bcf		DELAY_Returned			;1 Cycle				(1)
-	banksel	DELAY_TEMP2
-	movwf	DELAY_TEMP2			;1 Cycle				(1)
+	banksel	DELAY_TEMP2				;[2] Cycle
+	movwf	DELAY_TEMP2				;1 Cycle				(1)
 BaseDelay
-	call	Delay50us				;see Delay50us
+	call	Delay40us				;see Delay40us
 	movlw	0x01					;1 Cycle				(TEMP2)
 	subwf	DELAY_TEMP2,W			;1 Cycle				(TEMP2)
 	btfsc	STATUS,Z				;1 Cycle				(TEMP2)
@@ -138,11 +139,11 @@ lastloop
 	wait 	.2						;m Cycles				(TEMP2)
 	decfsz	DELAY_TEMP2,F			;1 Cycle				(TEMP2)
 	goto	BaseDelay				;2 Cycles				(TEMP2)
-	banksel	DELAY_flag
+	banksel	DELAY_flag				;[2] Cycle
 	bsf		DELAY_Returned			;1 Cycle  + 1 Cycle nop	(1)
 	return							;2 Cycles				(1)
 						
-Delay50us							; time=((X*3)+6)*(1/(Fosc/4))		
+Delay40us							; time=((X*3)+6)*(1/(Fosc/4))		
 	movlw	.25						; 1 cycle + 2 cycles for CALL		(TEMP2)
 	movwf	DELAY_TEMP1				; 1 cycle							(TEMP2)
 	decfsz	DELAY_TEMP1, f			; 1 cycle							(TEMP1*TEMP2)

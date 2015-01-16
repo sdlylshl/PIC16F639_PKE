@@ -135,6 +135,7 @@ W_TEMP			res 1
 STATUS_TEMP		res 1
 PCLATH_TEMP		res 1
 FSR_TEMP		res 1
+
 EVENT_REG		res 1
 IDLE_COUNTER	res 1
 BUTTON_DELAY	res 1
@@ -178,7 +179,7 @@ INT	code	0x04
 ;------------------------------------------------------------------------------+
 INTERRUPT_SERVICE_ROUTINE
 TIMER0_INT		
-	btfss	INTCON,T0IE		; Check if TMR0 Interrupt Enabled
+	btfss	INTCON,T0IE		;[1]TM0 Check if TMR0 Interrupt Enabled
 	goto	TIMER1_INT		; ... No, then continue search
 	btfss	INTCON,T0IF		; Check if TMR0 Interrupt Flag Set
 	goto	TIMER1_INT		; ... No, then continue search
@@ -189,8 +190,8 @@ TIMER0_INT
 	goto	EndIsr			;end interrupt (to ensure maximum precision delay)
 TIMER1_INT
 	banksel	PIE1			
-	btfss	PIE1,TMR1IE			; Check if Timer1 Interrupt Enabled
-	goto	PORTA_INT			; ... No, then continue search
+	btfss	PIE1,TMR1IE			;[2]TM1 Check if Timer1 Interrupt Enabled
+	goto	PORTA_INT			;[3]PA ... No, then continue search
 	banksel	PIR1
 	btfss	PIR1,TMR1IF			; Check if Timer 1 Interrupt Flag Set?
 	goto	PORTA_INT			; ... No, then continue search
@@ -289,32 +290,32 @@ EndIsr
 ;                                                                              |
 ;    Calls subroutines:                                                        |
 ;    MESSAGE_HANDLER                                                           |
-;        LF__Receive8                                                           |
-;        EEPROM__Write                                                          |
-;        EEPROM__Read                                                           |
-;        LF__Send8                                                              |
-;            LF__Send_Clamp_One                                                 |
-;                AFE__SendCMDClampON                                            |
-;                    SPI__Write                                                 |
-;                DELAY__WaitFor                                                 |
-;                AFE__SendCMDClampOFF                                           |
-;                    SPI__Write                                                 |
-;            LF__Send_Clamp_Zero                                                |
-;                AFE__SendCMDClampON                                            |
-;                    SPI__Write                                                 |
-;                DELAY__WaitFor                                                 |
-;                AFE__SendCMDClampOFF                                           |
-;                    SPI__Write                                                 |
-;        RF__Send_Header                                                        |
-;            DELAY__start                                                       |
-;            DELAY__wait                                                        |
-;        RF__Send_Data                                                          |
-;            DELAY__start                                                       |
-;            DELAY__wait                                                        |
-;        LF__ReadBuffer                                                         |
-;            AFE__Receive8                                                      |
-;        RF__SendBuffer                                                         |
-;        DELAY__wait_w_x_50us                                                    |
+;        LF__Receive8                                                          |
+;        EEPROM__Write                                                         |
+;        EEPROM__Read                                                          |
+;        LF__Send8                                                             |
+;            LF__Send_Clamp_One                                                |
+;                AFE__SendCMDClampON                                           |
+;                    SPI__Write                                                |
+;                DELAY__WaitFor                                                |
+;                AFE__SendCMDClampOFF                                          |
+;                    SPI__Write                                                |
+;            LF__Send_Clamp_Zero                                               |
+;                AFE__SendCMDClampON                                           |
+;                    SPI__Write                                                |
+;                DELAY__WaitFor                                                |
+;                AFE__SendCMDClampOFF                                          |
+;                    SPI__Write                                                |
+;        RF__Send_Header                                                       |
+;            DELAY__start                                                      |
+;            DELAY__wait                                                       |
+;        RF__Send_Data                                                         |
+;            DELAY__start                                                      |
+;            DELAY__wait                                                       |
+;        LF__ReadBuffer                                                        |
+;            AFE__Receive8                                                     |
+;        RF__SendBuffer                                                        |
+;        DELAY__wait_w_x_50us                                                  |
 ;        _w_x_50u                                                              |
 ;    Button_Handler                                                            |
 ;                                                                              |

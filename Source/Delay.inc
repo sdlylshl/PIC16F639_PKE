@@ -154,9 +154,9 @@ DELAY__Isr macro
 	movwf	TMR0			;1Cycle		n
 	banksel	DELAY_Counter	;2Cycles	1
 	decfsz	DELAY_Counter	;1Cycle		1
-	goto	DELAY__Isr.End	;2Cycle		0
+	goto	DELAY__Isr_End	;2Cycle		0
 	banksel	DELAY_flag		;2Cycles	1
 	bsf		DELAY_Returned	;1Cycle		1
-DELAY__Isr.End
+DELAY__Isr_End
 	endm
 #endif
